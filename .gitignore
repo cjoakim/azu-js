@@ -1,3 +1,14 @@
+# cj
+
+**/dist/
+**/node_modules/
+**/tmp/
+**/*.tgz
+**/npm_pack.txt
+**/package-lock.json
+
+# -----------------------------------------------------------------------------
+
 # Logs
 logs
 *.log
