@@ -1,6 +1,6 @@
 {
     "name":    "azu-js-examples",
-    "version": "0.9.0",
+    "version": "1.0.0",
     "description": "Example use of the azu-js package, with TypeScript.",
     "homepage": "https://github.com/cjoakim/azu-js/examples",
     "engines": {
@@ -14,7 +14,7 @@
     "author": "Chris Joakim",
     "license": "MIT",
     "dependencies": {
-        "azu-js": "^0.9.0"
+        "azu-js": "file:../azu-js-0.9.0.tgz"
     },
     "devDependencies": {
         "typescript": "^5.2.2",

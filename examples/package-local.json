@@ -1,8 +1,8 @@
 {
-    "name":    "m26-js-examples",
+    "name":    "azu-js-examples",
     "version": "1.0.0",
-    "description": "Example use of the m26-js package, with TypeScript.",
-    "homepage": "https://github.com/cjoakim/m26-js/examples",
+    "description": "Example use of the azu-js package, with TypeScript.",
+    "homepage": "https://github.com/cjoakim/azu-js/examples",
     "engines": {
         "node": ">=18.7.0"
     },
@@ -14,7 +14,7 @@
     "author": "Chris Joakim",
     "license": "MIT",
     "dependencies": {
-        "m26-js": "file:../m26-js-1.0.0.tgz"
+        "azu-js": "file:../azu-js-0.9.0.tgz"
     },
     "devDependencies": {
         "typescript": "^5.2.2",
