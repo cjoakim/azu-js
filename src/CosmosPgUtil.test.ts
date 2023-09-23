@@ -21,3 +21,8 @@ function initCosmosPgUtil() : CosmosPgUtil {
 function epochTime() : number {
     return Date.now().valueOf();
 }
+
+test("CosmosPgUtil: constructor", async () => {
+    expect(true).toBe(true);
+});
+

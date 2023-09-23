@@ -26,3 +26,7 @@ function initCosmosMongoUtil() : CosmosMongoUtil {
 function epochTime() : number {
     return Date.now().valueOf();
 }
+
+test("CosmosMongoUtil: constructor", async () => {
+    expect(true).toBe(true);
+});

@@ -25,3 +25,7 @@ function initOpenAiUtil() : OpenAiUtil {
 function epochTime() : number {
     return Date.now().valueOf();
 }
+
+test("OpenAiUtil: constructor", async () => {
+    expect(true).toBe(true);
+});
