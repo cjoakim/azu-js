@@ -5,8 +5,10 @@ The focus is on **Azure Cosmos DB, Azure Blob Storage, and Azure OpenAI**.
 
 The intent of this package is to:
 - Provide Azure and Cosmos DB users a fast and working on-ramp codebase to use
-- Provide a reusable codebase/classes for myself for various Cosmos DB projects and demos
+- Provide a reusable codebase for myself, for various Cosmos DB projects and demos
+  - The above two are the **azu-js package** itself, at https://www.npmjs.com/package/azu-js
 - Provide example apps for customers, with simple and reliable deployment in minutes
+  - These will be in this GitHub repo, but not embedded into the azu-js package at npmjs.com
 
 ## Npm Dependencies Links
 
@@ -34,9 +36,10 @@ The intent of this package is to:
 
 - **Create example applications that use the azu-js package**
   - The example apps will only be in this GitHub repo, and NOT embedded in the azu-js npm package
-  - Add a non-trivial example containerized **Express web application** for deployment to:
+  - Create a non-trivial containerized **Express web application** for deployment to:
     - **Azure App Service, Azure Container Instances (ACI), and Azure Container Apps (ACA)**
     - Provide Docker containerization scripts
-    - Provide a public image on DockerHub for customer use
+    - Provide a public image on DockerHub
     - Provide az CLI deployment scripts
   - Add an example **Azure Function** triggered by the Cosmos DB Change-Feed
+  - Intented users of these apps are both customers and Microsoft teammates
