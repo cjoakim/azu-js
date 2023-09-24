@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  web:
+    image: cjoakim/espresso
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./data:/data:rw
+    environment:
+      DEBUG: expresso:*
+    command: node ./bin/www
+
+
+# docker compose -f .\docker-compose-web.yml up
