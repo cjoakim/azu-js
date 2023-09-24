@@ -15,8 +15,10 @@ export class OpenAiUtil {
 
     acctUrlEnvVar : string;
     acctKeyEnvVar : string;
+    embDepEnvVar  : string;
     acctUrl       : string;
     acctKey       : string;
+    embDeployment : string;
     oaiClient     : OpenAIClient;
     verbose : boolean = false;
 
@@ -25,6 +27,7 @@ export class OpenAiUtil {
     constructor(
         acctUrlEnvVar : string,
         acctKeyEnvVar : string,
+        embDepEnvVar  : string,
         verbose?: boolean) {
 
         try {
@@ -32,10 +35,12 @@ export class OpenAiUtil {
             // example environment variable names; AZURE_OPENAI_URL and AZURE_OPENAI_KEY1 
             this.acctUrlEnvVar = acctUrlEnvVar;
             this.acctKeyEnvVar = acctKeyEnvVar;
+            this.embDepEnvVar  = embDepEnvVar;
             this.verbose = verbose;
             // read given environment variables
             this.acctUrl = process.env[acctUrlEnvVar] as string;
             this.acctKey = process.env[acctKeyEnvVar] as string;
+            this.embDeployment = process.env[embDepEnvVar] as string;
             // validate
             if (!this.acctUrl) {
                 throw Error(
@@ -45,9 +50,14 @@ export class OpenAiUtil {
                 throw Error(
                     util.format('OpenAI acctKey not populated per env var: %s', this.acctKeyEnvVar));
             }
+            if (!this.embDeployment) {
+                throw Error(
+                    util.format('OpenAI embeddings deployment not populated per env var: %s', this.embDepEnvVar));
+            }
             if (this.verbose == true) {
                 console.log(util.format('  url: %s -> %s', this.acctUrlEnvVar, this.acctUrl));
                 console.log(util.format('  key: %s -> %s', this.acctKeyEnvVar, this.acctKey));
+                console.log(util.format('  emb: %s -> %s', this.embDepEnvVar,  this.embDeployment));
             }
             this.oaiClient = new OpenAIClient(this.acctUrl, new AzureKeyCredential(this.acctKey));
         }
@@ -62,12 +72,11 @@ export class OpenAiUtil {
 
     async generateEmbeddings(
         input: string[],
-        deploymentName: string = 'text-embedding-ada-002',
         options: GetEmbeddingsOptions = { requestOptions: {} }
       ): Promise<Embeddings> {
         try {
             // See https://github.com/Azure/azure-sdk-for-js/blob/%40azure/openai_1.0.0-beta.5/sdk/openai/openai/src/OpenAIClient.ts
-            return await this.oaiClient.getEmbeddings(deploymentName, input, options);
+            return await this.oaiClient.getEmbeddings(this.embDeployment, input, options);
         }
         catch (error) {
             console.log(error);

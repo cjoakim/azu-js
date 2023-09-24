@@ -7,7 +7,7 @@ The intent of the **azu-js npm package** is to:
 - Provide Azure and Cosmos DB users a solid codebase to reference and use
 - The intended audience for the azu-js npm package is **Software Developers**
 
-The intent of **this GitHub repo** is to:
+The intent of **the GitHub repo** is to:
 - Be the home of the azu-js package
 - Provide examples, or **reference apps**, which use azu-js
   - Provide simple and reliable **az CLI** deployment scripts
@@ -15,17 +15,21 @@ The intent of **this GitHub repo** is to:
   - Target Azure Container Instances (ACS) and Azure Container Apps (ACA)
   - The reference apps are intended for customer POCs as well as peer Microsoft Specialists and CSAs
 
+---
+
 ## azu-js Current Implementation State and Roadmap
 
-| Functionality                   | v0.9.0 Support    | Codebase State    | Implementation Class   |
+| Functionality                   | v0.9.2 Support    | Codebase State    | Implementation Class   |
 | ------------------------------- | ----------------- | ----------------- | ---------------------- |
 | Azure Cosmos DB NoSQL API       | yes               | Implemented       | CosmosNoSqlUtil        |
 | Azure Cosmos DB Mongo API       | no                | work-in-progress  | CosmosMongoUtil        |
 | Azure Cosmos DB PostgreSQL API  | no                | work-in-progress  | CosmosPgUtil           |
-| Azure OpenAI                    | no                | work-in-progress  | OpenAiUtil             |
+| Azure OpenAI                    | no                | Implemented(1)    | OpenAiUtil             |
 | Azure Blob Storage              | yes               | Implemented       | BlobUtil               |
 | Local Filesystem                | yes               | Implemented       | FileUtil               |
 | PaaS Service Provisioning       | no                | Not Planned       | use az CLI, Bicep, etc |
+
+---
 
 ## Reference Application State and Roadmap
 
@@ -35,6 +39,8 @@ The intent of **this GitHub repo** is to:
 | Express Web App w/Cosmos NoSql     | started           | apps/espresso     | TBD             |
 | Express Web App also with w/OpenAI | planned           | TBD               | TBD             |
 | Change-Feed Azure Function         | planned           | TBD               | TBD             |
+
+(1) = embeddings implemented
 
 ---
 
@@ -62,7 +68,9 @@ The intent of **this GitHub repo** is to:
   - https://www.npmjs.com/package/@azure/storage-blob
   - https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/storage/storage-blob
 
-## Other Links
+---
+
+## Other Links and Documentation
 
 ### TypeScript, VSC, GitHub Co-Pilot
 
@@ -77,7 +85,7 @@ The intent of **this GitHub repo** is to:
 - https://learn.microsoft.com/en-us/azure/cosmos-db/change-feed
 - https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-custom-container
 
-## Related Repos and Presentations
+### Related Repos and Presentations
 
 - **Cosmos DB, OpenAI, and Vector Search, Python Day**
   - https://github.com/cjoakim/azure-cosmos-db-vector-search-openai-python

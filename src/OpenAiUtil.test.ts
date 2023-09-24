@@ -11,6 +11,7 @@ import { FileUtil } from "./FileUtil";
 // State retained across tests
 let acctUriEnvVar : string = 'AZURE_OPENAI_URL';
 let acctKeyEnvVar : string = 'AZURE_OPENAI_KEY1';
+let embDepEnvVar  : string = 'AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT';
 
 let oaiUtil : OpenAiUtil = null;
 
@@ -19,7 +20,7 @@ beforeAll(() => {
 });
 
 function initOpenAiUtil() : OpenAiUtil {
-    return new OpenAiUtil(acctUriEnvVar, acctKeyEnvVar);
+    return new OpenAiUtil(acctUriEnvVar, acctKeyEnvVar, embDepEnvVar);
 }
 
 function epochTime() : number {
@@ -35,9 +36,16 @@ test("OpenAiUtil: generateEmbeddings", async () => {
     let text = fu.readTextFileSync('data/gettysburg-address.txt');
     expect(text.length).toBeGreaterThan(1400);
     expect(text.length).toBeLessThan(1500);
-    console.log(text);
 
     let e = await oaiUtil.generateEmbeddings([text]);
-    console.log(e);
-    //console.log(e.usage);
+    //console.log(e);
+    // {
+    //     data: [ { embedding: [Array], index: 0 } ],
+    //     usage: { promptTokens: 329, totalTokens: 329 }
+    // }
+    let embeddingsArray = e.data[0]['embedding'];
+    let tokens = e.usage['totalTokens']
+    expect(embeddingsArray.length).toBe(1536);
+    expect(tokens).toBeGreaterThan(300);
+    expect(tokens).toBeLessThan(400);
 });

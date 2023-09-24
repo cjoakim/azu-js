@@ -1,6 +1,6 @@
 {
     "name": "azu-js",
-    "version": "0.9.1",
+    "version": "0.9.2",
     "description": "Azure Utilities, such as for Cosmos DB",
     "homepage": "https://github.com/cjoakim/azu-js",
     "main": "dist/index.js",
