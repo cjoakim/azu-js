@@ -2,7 +2,8 @@
 import {
     BlobUtil,
     FileUtil,
-    CosmosNoSqlUtil
+    CosmosNoSqlUtil,
+    OpenAiUtil
 } from "azu-js";
 
 import fs from "fs";
@@ -56,7 +57,30 @@ function storage() {
 
 }
 
-function embeddings() {
+async function embeddings() {
+
+    console.log('--- embeddings');
+
+    let acctUriEnvVar : string = 'AZURE_OPENAI_URL';
+    let acctKeyEnvVar : string = 'AZURE_OPENAI_KEY1';
+    let embDepEnvVar  : string = 'AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT';
+    let oaiUtil = new OpenAiUtil(acctUriEnvVar, acctKeyEnvVar, embDepEnvVar);
+    let fu = new FileUtil();
+    let text = fu.readTextFileSync('data/gettysburg-address.txt');
+    expect(text.length).toBeGreaterThan(1400);
+    expect(text.length).toBeLessThan(1500);
+
+    let e = await oaiUtil.generateEmbeddings([text]);
+    //console.log(e);
+    // {
+    //     data: [ { embedding: [Array], index: 0 } ],
+    //     usage: { promptTokens: 329, totalTokens: 329 }
+    // }
+    let embeddingsArray = e.data[0]['embedding'];
+    let tokens = e.usage['totalTokens']
+    expect(embeddingsArray.length).toBe(1536);
+    expect(tokens).toBeGreaterThan(300);
+    expect(tokens).toBeLessThan(400);
 
 }
 
