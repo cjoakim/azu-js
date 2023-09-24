@@ -21,10 +21,10 @@
         "@azure/cosmos": "4.0.0",
         "@azure/openai": "^1.0.0-beta.6",
         "@azure/storage-blob": "^12.16.0",
+        "azu-js": "^0.9.1",
         "mongodb": "^6.1.0",
         "pg": "^8.11.3",
-        "uuid": "^9.0.1",
-        "azu-js": "0.9.0"
+        "uuid": "^9.0.1"
     },
     "devDependencies": {
         "@types/jest": "^29.5.4",
