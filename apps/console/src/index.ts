@@ -35,17 +35,21 @@ function files() {
     let outfile : string = util.format('tmp%stest-file-%s.txt', path.sep, epoch);
     let content : string = util.format("this is a test file.\n%s", epoch);
 
+    console.log('--- writeTextFileSync');
     let successful : boolean = fu.writeTextFileSync(outfile, content);
-    console.log(util.format("writeTextFileSync, outfile: %s, successful: %s", outfile, successful));
+    console.log(successful);
 
+    console.log('--- readTextFileSync');
     let data : string = fu.readTextFileSync(outfile);
     console.log(data);
 
+    console.log('--- readJsonObjectFile');
     let obj = fu.readJsonObjectFile('../../data/usa-states.json');
     console.log(obj);
 
+    console.log('--- readJsonArrayFile');
     let airports = fu.readJsonArrayFile('../../data/world-airports-50.json');
-    console.log(airports);
+    console.log(airports[0]);
 }
 
 function storage() {
