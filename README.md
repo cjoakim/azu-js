@@ -29,6 +29,8 @@ The intent of **the GitHub repo** is to:
 | Local Filesystem                | yes               | Implemented       | FileUtil               |
 | PaaS Service Provisioning       | no                | Not Planned       | use az CLI, Bicep, etc |
 
+(1) = embeddings implemented
+
 ---
 
 ## Reference Application State and Roadmap
@@ -39,8 +41,6 @@ The intent of **the GitHub repo** is to:
 | Express Web App w/Cosmos NoSql     | started           | apps/espresso     | TBD             |
 | Express Web App also with w/OpenAI | planned           | TBD               | TBD             |
 | Change-Feed Azure Function         | planned           | TBD               | TBD             |
-
-(1) = embeddings implemented
 
 ---
 
