@@ -31,8 +31,8 @@ The intent of **this GitHub repo** is to:
 
 | Functionality                      | Codebase State    | Impl Directory    | DockerHub Image |
 | ---------------------------------- | ----------------- | ----------------- | --------------- |
-| Console App                        | planned           | apps/console      | N/A             |
-| Express Web App w/Cosmos NoSql     | planned           | apps/espresso     | TBD             |
+| Console App                        | started           | apps/console      | N/A             |
+| Express Web App w/Cosmos NoSql     | started           | apps/espresso     | TBD             |
 | Express Web App also with w/OpenAI | planned           | TBD               | TBD             |
 | Change-Feed Azure Function         | planned           | TBD               | TBD             |
 
@@ -64,6 +64,17 @@ The intent of **this GitHub repo** is to:
 
 ## Other Links
 
+### TypeScript, VSC, GitHub Co-Pilot
+
+- https://www.typescriptlang.org
+- https://www.typescriptlang.org/docs/handbook/intro.html
+- https://www.typescriptlang.org/docs/
+- https://code.visualstudio.com/docs/languages/typescript
+- https://code.visualstudio.com/blogs/2023/03/30/vscode-copilot
+
+### Cosmos DB Change-Feed and Azure Functions
+
+- https://learn.microsoft.com/en-us/azure/cosmos-db/change-feed
 - https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-custom-container
 
 ## Related Repos and Presentations
