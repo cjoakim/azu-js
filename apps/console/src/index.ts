@@ -66,22 +66,16 @@ async function embeddings() {
     let embDepEnvVar  : string = 'AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT';
     let oaiUtil = new OpenAiUtil(acctUriEnvVar, acctKeyEnvVar, embDepEnvVar);
     let fu = new FileUtil();
-    let text = fu.readTextFileSync('data/gettysburg-address.txt');
-    expect(text.length).toBeGreaterThan(1400);
-    expect(text.length).toBeLessThan(1500);
+    let text = fu.readTextFileSync('../../data/gettysburg-address.txt');
+    console.log(text);
 
     let e = await oaiUtil.generateEmbeddings([text]);
-    //console.log(e);
-    // {
-    //     data: [ { embedding: [Array], index: 0 } ],
-    //     usage: { promptTokens: 329, totalTokens: 329 }
-    // }
+    console.log(e);
     let embeddingsArray = e.data[0]['embedding'];
     let tokens = e.usage['totalTokens']
-    expect(embeddingsArray.length).toBe(1536);
-    expect(tokens).toBeGreaterThan(300);
-    expect(tokens).toBeLessThan(400);
-
+    console.log(embeddingsArray);
+    console.log(tokens);
+    console.log(embeddingsArray.length);
 }
 
 function xxx() {
