@@ -31,6 +31,8 @@
         "@azure/identity": "3.3.0",
         "@azure/openai": "^1.0.0-beta.6",
         "@azure/storage-blob": "^12.16.0",
+        "mongodb": "^6.1.0",
+        "pg": "^8.11.3",
         "uuid": "^9.0.1"
     },
     "devDependencies": {

@@ -1,14 +1,42 @@
 # azu-js
 
-Project bootstrapping code, implemented in TypeScript, for fast Development in Azure.
-The focus is on **Azure Cosmos DB, Azure Blob Storage, and Azure OpenAI**.
+Reusable code, implemented in TypeScript, for rapid application Development in **Azure**.
+The focus is on the **Azure Cosmos DB, Azure Blob Storage, and Azure OpenAI** PaaS services.
 
-The intent of this package is to:
-- Provide Azure and Cosmos DB users a fast and working on-ramp codebase to use
-- Provide a reusable codebase for myself, for various Cosmos DB projects and demos
-  - The above two are the **azu-js package** itself, at https://www.npmjs.com/package/azu-js
-- Provide example apps for customers, with simple and reliable deployment in minutes
-  - These will be in this GitHub repo, but not embedded into the azu-js package at npmjs.com
+The intent of the **azu-js npm package** is to:
+- Provide Azure and Cosmos DB users a solid codebase to reference and use
+- The intended audience for the azu-js npm package is **Software Developers**
+
+The intent of **this GitHub repo** is to:
+- Be the home of the azu-js package
+- Provide examples, or **reference apps**, which use azu-js
+  - Provide simple and reliable **az CLI** deployment scripts
+  - Leverage Docker and public container images on DockerHub
+  - Target Azure Container Instances (ACS) and Azure Container Apps (ACA)
+  - The reference apps are intended for customer POCs as well as peer Microsoft Specialists and CSAs
+
+## azu-js Current Implementation State and Roadmap
+
+| Functionality                   | v0.9.0 Support    | Codebase State    | Implementation Class   |
+| ------------------------------- | ----------------- | ----------------- | ---------------------- |
+| Azure Cosmos DB NoSQL API       | yes               | Implemented       | CosmosNoSqlUtil        |
+| Azure Cosmos DB Mongo API       | no                | work-in-progress  | CosmosMongoUtil        |
+| Azure Cosmos DB PostgreSQL API  | no                | work-in-progress  | CosmosPgUtil           |
+| Azure OpenAI                    | no                | work-in-progress  | OpenAiUtil             |
+| Azure Blob Storage              | yes               | Implemented       | BlobUtil               |
+| Local Filesystem                | yes               | Implemented       | FileUtil               |
+| PaaS Service Provisioning       | no                | Not Planned       | use az CLI, Bicep, etc |
+
+## Reference Application State and Roadmap
+
+| Functionality                      | Codebase State    | Impl Directory    | DockerHub Image |
+| ---------------------------------- | ----------------- | ----------------- | --------------- |
+| Console App                        | planned           | apps/console      | N/A             |
+| Express Web App w/Cosmos NoSql     | planned           | apps/espresso     | TBD             |
+| Express Web App also with w/OpenAI | planned           | TBD               | TBD             |
+| Change-Feed Azure Function         | planned           | TBD               | TBD             |
+
+---
 
 ## Npm Dependencies Links
 
@@ -19,27 +47,35 @@ The intent of this package is to:
   - https://devblogs.microsoft.com/cosmosdb/announcing-javascript-sdk-v4/
   - https://github.com/Azure/azure-sdk-for-js
 
+- **pg**
+  - https://learn.microsoft.com/en-us/azure/cosmos-db/postgresql/quickstart-app-stacks-nodejs
+  - https://node-postgres.com
+  - https://www.npmjs.com/package/pg
+
+- **mongodb**
+  - https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/vcore/tutorial-nodejs-web-app
+  - https://github.com/Azure-Samples/msdocs-azure-cosmos-db-mongodb-mern-web-app
+  - https://www.npmjs.com/package/mongodb
+  - https://github.com/mongodb/node-mongodb-native
+
 - **@azure/storage-blob**
   - https://www.npmjs.com/package/@azure/storage-blob
   - https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/storage/storage-blob
 
-## Project Roadmap
+## Other Links
 
-- **azu-js package functionality**
-  - Add support for **Azure OpenAI**
-    - https://learn.microsoft.com/en-us/javascript/api/overview/azure/openai-readme?view=azure-node-preview
-  - Add support for the **Cosmos DB PostgreSQL API**
-  - Add support for the **Cosmos DB Mongo vCore API**
-  - Generally focus on the free Azure Services for Developers and startups
-    - https://azure.microsoft.com/en-us/pricing/free-services
-  - All provisioning functionality is out-of-scope; use the az CLI, ARM, Bicep, etc. instead
+- https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-custom-container
 
-- **Create example applications that use the azu-js package**
-  - The example apps will only be in this GitHub repo, and NOT embedded in the azu-js npm package
-  - Create a non-trivial containerized **Express web application** for deployment to:
-    - **Azure App Service, Azure Container Instances (ACI), and Azure Container Apps (ACA)**
-    - Provide Docker containerization scripts
-    - Provide a public image on DockerHub
-    - Provide az CLI deployment scripts
-  - Add an example **Azure Function** triggered by the Cosmos DB Change-Feed
-  - Intented users of these apps are both customers and Microsoft teammates
+## Related Repos and Presentations
+
+- **Cosmos DB, OpenAI, and Vector Search, Python Day**
+  - https://github.com/cjoakim/azure-cosmos-db-vector-search-openai-python
+- **AltGraph with Cosmos DB NoSQL API**
+  - https://github.com/cjoakim/azure-cosmosdb-altgraph
+- **Azure Synapse Link**
+  - https://github.com/cjoakim/azure-cosmosdb-synapse-link
+- **Azure Cognitive Search**
+  - https://github.com/cjoakim/azure-cognitive-examples
+- **m26-js**
+  - https://www.npmjs.com/package/m26-js
+  - https://github.com/cjoakim/m26-js
