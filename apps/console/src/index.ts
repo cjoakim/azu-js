@@ -11,6 +11,8 @@ import path from "path";
 import util from "util";
 
 let func = process.argv[2];
+let fu   = new FileUtil();
+
 console.log('========================================');
 console.log(util.format('func: %s', func));
 
@@ -21,6 +23,15 @@ switch (func) {
     case "storage":
         storage();
         break;
+    case "cosmos_nosql":
+        cosmos_nosql();
+        break;
+    case "cosmos_mongo":
+        cosmos_mongo();
+        break;
+    case "cosmos_pg":
+        cosmos_pg();
+        break;
     case "embeddings":
         embeddings();
         break;
@@ -30,8 +41,6 @@ switch (func) {
 }
 
 function files() {
-
-    let fu = new FileUtil();
     let epoch : number = epochTime();
     let outfile : string = util.format('tmp%stest-file-%s.txt', path.sep, epoch);
     let content : string = util.format("this is a test file.\n%s", epoch);
@@ -54,32 +63,37 @@ function files() {
 }
 
 function storage() {
-
+    console.log('TODO - implement');
 }
 
 async function embeddings() {
-
-    console.log('--- embeddings');
-
     let acctUriEnvVar : string = 'AZURE_OPENAI_URL';
     let acctKeyEnvVar : string = 'AZURE_OPENAI_KEY1';
     let embDepEnvVar  : string = 'AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT';
     let oaiUtil = new OpenAiUtil(acctUriEnvVar, acctKeyEnvVar, embDepEnvVar);
     let fu = new FileUtil();
     let text = fu.readTextFileSync('../../data/gettysburg-address.txt');
-    console.log(text);
 
     let e = await oaiUtil.generateEmbeddings([text]);
     console.log(e);
     let embeddingsArray = e.data[0]['embedding'];
     let tokens = e.usage['totalTokens']
-    console.log(embeddingsArray);
-    console.log(tokens);
-    console.log(embeddingsArray.length);
+    console.log(util.format(" tokens:\n%s",tokens));
+    console.log(util.format('  embeddings length: %s',embeddingsArray.length));
+    fu.writeTextFileSync('tmp/embeddings_str.txt', text);
+    fu.writeTextFileSync('tmp/embeddings.json', JSON.stringify(e, null, 4));
 }
 
-function xxx() {
-    console.log(util.format('  xxx; count: %s', 1));
+function cosmos_nosql() {
+    console.log('TODO - implement');
+}
+
+function cosmos_mongo() {
+    console.log('TODO - implement');
+}
+
+function cosmos_pg() {
+    console.log('TODO - implement');
 }
 
 function epochTime() : number {
@@ -90,6 +104,9 @@ function displayCommandLineExamples() {
     console.log('');
     console.log("node .\\dist\\index.js files");
     console.log("node .\\dist\\index.js storage");
+    console.log("node .\\dist\\index.js cosmos_nosql");
+    console.log("node .\\dist\\index.js cosmos_mongo");
+    console.log("node .\\dist\\index.js cosmos_pg");
     console.log("node .\\dist\\index.js embeddings");
     console.log('');
 }
