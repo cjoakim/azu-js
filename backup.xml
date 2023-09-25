@@ -54,7 +54,7 @@
 
         <zip zipfile="${_zipFilename}"
              basedir="${_projectDir}"
-             excludes="**/.git, **/.idea/, **/bin/, **/node_modules/, **/tmp/" />
+             excludes="**/.git, **/.idea/, **/bin/, **/coverage/, **/dist/, **/node_modules/, **/tmp/" />
 
         <echo message="file created: ${_zipFilename}" />
         <echo message="done." />
