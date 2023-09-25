@@ -11,8 +11,8 @@ The intent of **the GitHub repo** is to:
 - Be the home of the azu-js package
 - Provide examples, or **reference apps**, which use azu-js
   - Provide simple and reliable **az CLI** deployment scripts
-  - Leverage Docker and public container images on DockerHub
-  - Target Azure Container Instances (ACS) and Azure Container Apps (ACA)
+  - Leverage **Docker**, and public container images on DockerHub
+  - Target **Azure Container Instances (ACS) and Azure Container Apps (ACA)**
   - The reference apps are intended for customer POCs as well as peer Microsoft Specialists and CSAs
 
 ---
@@ -24,10 +24,10 @@ The intent of **the GitHub repo** is to:
 | Azure Cosmos DB NoSQL API       | yes               | Implemented       | CosmosNoSqlUtil        |
 | Azure Cosmos DB Mongo API       | no                | work-in-progress  | CosmosMongoUtil        |
 | Azure Cosmos DB PostgreSQL API  | no                | work-in-progress  | CosmosPgUtil           |
-| Azure OpenAI                    | no                | Implemented(1)    | OpenAiUtil             |
+| Azure OpenAI                    | yes               | Implemented(1)    | OpenAiUtil             |
 | Azure Blob Storage              | yes               | Implemented       | BlobUtil               |
 | Local Filesystem                | yes               | Implemented       | FileUtil               |
-| PaaS Service Provisioning       | no                | Not Planned       | use az CLI, Bicep, etc |
+| PaaS Service Provisioning       | no                | NOT Planned       | use az CLI, Bicep, etc |
 
 (1) = embeddings implemented
 

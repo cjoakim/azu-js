@@ -22,7 +22,10 @@
     "keywords": [
         "azure",
         "cosmosdb",
-        "storage"
+        "openai",
+        "storage",
+        "typescript",
+        "reference_apps"
     ],
     "author": "Chris Joakim",
     "license": "MIT",
