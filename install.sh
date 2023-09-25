@@ -4,6 +4,8 @@
 #
 # Chris Joakim, 2023
 
+mkdir -p ./tmp
+
 npm install
 
 npm list

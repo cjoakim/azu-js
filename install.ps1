@@ -3,6 +3,8 @@
 #
 # Chris Joakim, 2023
 
+New-Item -ItemType Directory -Force -Path .\tmp | out-null
+
 npm install
 
 npm list
