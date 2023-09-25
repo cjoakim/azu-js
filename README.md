@@ -8,7 +8,7 @@ The intent of the **azu-js npm package** is to:
 - The intended audience for the azu-js npm package is **Software Developers**
 
 The intent of **the GitHub repo** is to:
-- Be the home of the azu-js package
+- Be the home of the [azu-js](https://www.npmjs.com/package/azu-js) package
 - Provide examples, or **reference apps**, which use azu-js
   - Provide simple and reliable **az CLI** deployment scripts
   - Leverage **Docker**, and public container images on DockerHub
