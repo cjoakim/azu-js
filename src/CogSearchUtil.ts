@@ -1,16 +1,21 @@
 
 // Utility class for Azure Cognitive Search
 // Chris Joakim, Microsoft, 2023
+//
+// See https://learn.microsoft.com/en-us/javascript/api/overview/azure/search-documents-readme?view=azure-node-latest
+// See https://www.npmjs.com/package/@azure/search-documents
 
 import util from "util";
 
-export class CogSearchUtil {
+import {
+    SearchClient,
+    SearchIndexClient,
+    SearchIndexerClient,
+    AzureKeyCredential,
+} from '@azure/search-documents';
 
-    acctUriEnvVar : string;
-    acctKeyEnvVar : string;
-    acctUri       : string;
-    acctKey       : string;
-    verbose       : boolean;
+
+export class CogSearchUtil {
 
     // Pass in the names of the environment variables that contain the
     // Azure Cosmos DB account URI and Key.
