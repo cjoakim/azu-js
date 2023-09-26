@@ -1,7 +1,7 @@
 # azu-js
 
 Reusable code, implemented in TypeScript, for rapid application Development in **Azure**.
-The focus is on the **Azure Cosmos DB, Azure Blob Storage, and Azure OpenAI** PaaS services.
+The focus is on the **Azure Cosmos DB, Azure OpenAI, Azure Cognitive Search, and Azure Blob Storage** PaaS services.
 
 The intent of the **azu-js npm package** is to:
 - Provide Azure and Cosmos DB users a solid codebase to reference and use
@@ -19,12 +19,13 @@ The intent of **the GitHub repo** is to:
 
 ## azu-js Current Implementation State and Roadmap
 
-| Functionality                   | v0.9.2 Support    | Codebase State    | Implementation Class   |
+| Functionality                   | v0.9.3 Support    | Codebase State    | Implementation Class   |
 | ------------------------------- | ----------------- | ----------------- | ---------------------- |
 | Azure Cosmos DB NoSQL API       | yes               | Implemented       | CosmosNoSqlUtil        |
 | Azure Cosmos DB Mongo API       | no                | work-in-progress  | CosmosMongoUtil        |
 | Azure Cosmos DB PostgreSQL API  | no                | work-in-progress  | CosmosPgUtil           |
 | Azure OpenAI                    | yes               | Implemented(1)    | OpenAiUtil             |
+| Azure Cognitive Search          | no                | work-in-progress  | CogSearchUtil          |
 | Azure Blob Storage              | yes               | Implemented       | BlobUtil               |
 | Local Filesystem                | yes               | Implemented       | FileUtil               |
 | PaaS Service Provisioning       | no                | NOT Planned       | use az CLI, Bicep, etc |
@@ -63,6 +64,10 @@ The intent of **the GitHub repo** is to:
   - https://github.com/Azure-Samples/msdocs-azure-cosmos-db-mongodb-mern-web-app
   - https://www.npmjs.com/package/mongodb
   - https://github.com/mongodb/node-mongodb-native
+
+- **@azure/search-documents**
+  - https://learn.microsoft.com/en-us/javascript/api/overview/azure/search-documents-readme?view=azure-node-latest
+  - https://www.npmjs.com/package/@azure/search-documents
 
 - **@azure/storage-blob**
   - https://www.npmjs.com/package/@azure/storage-blob
