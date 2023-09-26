@@ -1,5 +1,6 @@
 
-// TODO - implement
+// Utility class for Azure Cosmos DB PostgreSQL APIs
+// Chris Joakim, Microsoft, 2023
 
 import util from "util";
 

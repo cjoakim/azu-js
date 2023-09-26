@@ -1,5 +1,6 @@
 
-// TODO - implement
+// Unit tests for class Config
+// Chris Joakim, Microsoft, 2023
 
 import fs from "fs";
 import path from "path";

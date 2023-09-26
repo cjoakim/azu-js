@@ -1,4 +1,7 @@
 
+// Unit tests for class CosmosNoSqlUtil
+// Chris Joakim, Microsoft, 2023
+
 import fs from "fs";
 import path from "path";
 import util from "util";

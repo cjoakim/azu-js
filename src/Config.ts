@@ -1,4 +1,7 @@
 
+// Utility class for configuration such as environment variables
+// Chris Joakim, Microsoft, 2023
+
 import { FileUtil } from "./FileUtil";
 
 export class Config {

@@ -1,5 +1,6 @@
 
-// TODO - implement
+// Utility class for Azure Cosmos DB Mongo and vCore APIs
+// Chris Joakim, Microsoft, 2023
 
 import util from "util";
 import { v4 as uuidv4 } from 'uuid';

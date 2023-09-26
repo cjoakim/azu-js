@@ -1,4 +1,7 @@
 
+// Utility class for local filesystem operations
+// Chris Joakim, Microsoft, 2023
+
 import fs from "fs";
 
 export class FileUtil {

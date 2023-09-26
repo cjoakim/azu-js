@@ -1,4 +1,7 @@
 
+// Utility class for Azure Blob Storage
+// Chris Joakim, Microsoft, 2023
+
 import fs from "fs";
 import util from "util";
 

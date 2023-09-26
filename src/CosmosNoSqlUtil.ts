@@ -1,4 +1,7 @@
 
+// Utility class for Azure Cosmos DB NoSQL APIs
+// Chris Joakim, Microsoft, 2023
+
 import util from "util";
 import { v4 as uuidv4 } from 'uuid';
 

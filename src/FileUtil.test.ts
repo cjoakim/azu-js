@@ -1,4 +1,7 @@
 
+// Unit tests for class FileUtil
+// Chris Joakim, Microsoft, 2023
+
 import path from "path";
 import util from "util";
 

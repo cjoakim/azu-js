@@ -1,4 +1,7 @@
 
+// Define the classes exported/exposed by the azu-js package.
+// Chris Joakim, Microsoft, 2023
+
 import { Config } from "./Config"
 import { BlobUtil }  from "./BlobUtil";
 import { FileUtil }  from "./FileUtil";

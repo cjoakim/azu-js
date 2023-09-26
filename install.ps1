@@ -1,7 +1,7 @@
 
 # PowerShell script to install and list the npm packages for this app.
 #
-# Chris Joakim, 2023
+# Chris Joakim, Microsoft, 2023
 
 New-Item -ItemType Directory -Force -Path .\tmp | out-null
 
