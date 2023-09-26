@@ -90,6 +90,10 @@ The intent of **the GitHub repo** is to:
 - https://learn.microsoft.com/en-us/azure/cosmos-db/change-feed
 - https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-custom-container
 
+### Data API builder
+
+- https://devblogs.microsoft.com/cosmosdb/announcing-data-api-builder-for-azure-cosmos-db/
+
 ### Related Repos and Presentations
 
 - **Cosmos DB, OpenAI, and Vector Search, Python Day**
