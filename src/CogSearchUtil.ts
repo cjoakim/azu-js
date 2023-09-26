@@ -7,6 +7,8 @@
 
 import util from "util";
 
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+
 import {
     SearchClient,
     SearchIndexClient,
@@ -14,11 +16,20 @@ import {
     AzureKeyCredential,
 } from '@azure/search-documents';
 
+export interface CogSearchResponse {
+    url:    string;
+    method: string;
+    status: number;
+    data:   Object;
+    error:  boolean;
+}
 
 export class CogSearchUtil {
 
     acctURI      : string = null;
     acctName     : string = null;
+    adminKey     : string = null;
+    queryKey     : string = null;
     adminHeaders : Object = null;
     queryHeaders : Object = null;
     apiVersion   : string = null;
@@ -37,6 +48,9 @@ export class CogSearchUtil {
             this.acctURI = process.env[acctUriEnvVar] as string;
             this.acctName = process.env[acctNameEnvVar] as string;
             this.apiVersion = apiVersion;
+            this.adminKey = process.env[acctAdminKeyEnvVar];
+            this.queryKey = process.env[acctQueryKeyEnvVar];
+
             this.adminHeaders = this.buildHttpHeader(acctAdminKeyEnvVar);
             this.queryHeaders = this.buildHttpHeader(acctQueryKeyEnvVar);
         }
@@ -56,8 +70,48 @@ export class CogSearchUtil {
         return;
     }
 
-    // URL methods below:
+    // API Invoking methods:
 
+    async listIndexes() : Promise<CogSearchResponse> {
+        let respObj = null;
+        try {
+            let url  = this.listIndexesUrl();
+            let opts = this.buildAxiosRequestConfig(url, 'GET', this.adminKey);
+            respObj  = this.buildResponseObject(opts);
+            const result = await axios(opts);
+            respObj.status = result.status;
+            if (result.status === 200 && result.data) {
+                respObj.data = result.data;
+            }
+        }
+        catch (error) {
+            respObj.error = true;
+        }
+        return respObj
+    }
+
+    buildAxiosRequestConfig(url: string, method: string, key: string) : AxiosRequestConfig {
+        return {
+            method: method,
+            url: url,
+            headers: {
+                'Content-Type': 'application/json',
+                'api-key': key
+            }
+        };
+    }
+
+    buildResponseObject(opts: AxiosRequestConfig) : CogSearchResponse {
+        return {
+            url:    opts.url,
+            method: opts.method,
+            status: 0,
+            data:   null,
+            error:  false
+        };
+    }
+
+    // URL methods below:
 
     listIndexesUrl() : string {
         return util.format("%s/indexes?api-version=%s", this.acctURI, this.apiVersion);

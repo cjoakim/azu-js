@@ -8,7 +8,7 @@ import fs from "fs";
 import path from "path";
 import util from "util";
 
-import { CogSearchUtil } from "./CogSearchUtil";
+import { CogSearchUtil, CogSearchResponse } from "./CogSearchUtil";
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 
@@ -63,3 +63,15 @@ test("CogSearchUtil: url methods", async () => {
 
     // TODO - test each URL method
 });
+
+
+test("CogSearchUtil: listIndexes", async () => {
+
+    console.log(su.adminHeaders);
+    let resp : CogSearchResponse = await su.listIndexes();
+    console.log(resp);
+
+
+    expect(resp.status).toBe(200);
+});
+

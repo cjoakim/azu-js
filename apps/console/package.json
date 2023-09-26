@@ -23,6 +23,7 @@
         "@azure/search-documents": "^11.3.2",
         "@azure/storage-blob": "^12.16.0",
         "mongodb": "^6.1.0",
+        "node-fetch": "^3.3.2",
         "pg": "^8.11.3",
         "uuid": "^9.0.1",
 

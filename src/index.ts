@@ -9,7 +9,7 @@ import { CosmosMongoUtil }  from "./CosmosMongoUtil";
 import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, QueryUtil } from "./CosmosNoSqlUtil";
 import { CosmosPgUtil }  from "./CosmosPgUtil";
 import { OpenAiUtil }  from "./OpenAiUtil";
-import { CogSearchUtil }  from "./CogSearchUtil";
+import { CogSearchUtil, CogSearchResponse }  from "./CogSearchUtil";
 
 export { Config }
 export { BlobUtil }
@@ -21,3 +21,4 @@ export { defaultCosmosConnectionPolicy }
 export { QueryUtil }
 export { OpenAiUtil }
 export { CogSearchUtil }
+export { CogSearchResponse }
