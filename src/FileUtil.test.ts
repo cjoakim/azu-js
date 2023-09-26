@@ -2,6 +2,7 @@
 import path from "path";
 import util from "util";
 
+import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 
 function epochTime() : number {

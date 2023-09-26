@@ -10,11 +10,12 @@ import {
 } from '@azure/storage-blob';
 
 import { BlobUtil } from "./BlobUtil";
+import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 
 // State retained across tests
-let acctNameEnvVar : string = 'AZURE_STORAGE_ACCOUNT';
-let acctKeyEnvVar : string = 'AZURE_STORAGE_KEY';
+let acctNameEnvVar : string = Config.lookupEnvVarName('ENV_STORAGE_ACCT');
+let acctKeyEnvVar  : string = Config.lookupEnvVarName('ENV_STORAGE_KEY');
 let bu : BlobUtil = null;
 
 beforeAll(() => {

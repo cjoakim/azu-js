@@ -1,6 +1,7 @@
 
 import {
     BlobUtil,
+    Config,
     FileUtil,
     CosmosNoSqlUtil,
     OpenAiUtil
@@ -8,6 +9,7 @@ import {
 
 import fs from "fs";
 import path from "path";
+import { json } from "stream/consumers";
 import util from "util";
 
 let func = process.argv[2];
@@ -17,6 +19,9 @@ console.log('========================================');
 console.log(util.format('func: %s', func));
 
 switch (func) {
+    case "config":
+        config();
+        break;
     case "files":
         files();
         break;
@@ -38,6 +43,13 @@ switch (func) {
     default:
         displayCommandLineExamples();
         break;
+}
+
+function config() {
+    Config.writeSampleConfigFile();
+    Config.readConfigFile();
+    console.log(JSON.stringify(Config.readConfigFile(), null, 4));
+    console.log(util.format("ENV_OPENAI_URL: %s", Config.lookupEnvVarName('ENV_OPENAI_URL')));
 }
 
 function files() {
@@ -67,9 +79,10 @@ function storage() {
 }
 
 async function embeddings() {
-    let acctUriEnvVar : string = 'AZURE_OPENAI_URL';
-    let acctKeyEnvVar : string = 'AZURE_OPENAI_KEY1';
-    let embDepEnvVar  : string = 'AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT';
+    let acctUriEnvVar : string = Config.lookupEnvVarName('ENV_OPENAI_URL');
+    let acctKeyEnvVar : string = Config.lookupEnvVarName('ENV_OPENAI_KEY');
+    let embDepEnvVar  : string = Config.lookupEnvVarName('ENV_OPENAI_EMB_DEP');
+
     let oaiUtil = new OpenAiUtil(acctUriEnvVar, acctKeyEnvVar, embDepEnvVar);
     let fu = new FileUtil();
     let text = fu.readTextFileSync('../../data/gettysburg-address.txt');
@@ -102,6 +115,7 @@ function epochTime() : number {
 
 function displayCommandLineExamples() {
     console.log('');
+    console.log("node .\\dist\\index.js config");
     console.log("node .\\dist\\index.js files");
     console.log("node .\\dist\\index.js storage");
     console.log("node .\\dist\\index.js cosmos_nosql");

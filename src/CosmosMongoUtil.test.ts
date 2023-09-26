@@ -6,12 +6,12 @@ import path from "path";
 import util from "util";
 
 import { CosmosMongoUtil } from "./CosmosMongoUtil";
+import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 import exp from "constants";
 
 // State retained across tests
-let acctUriEnvVar : string = 'AZURE_COSMOSDB_NOSQL_URI';
-let acctKeyEnvVar : string = 'AZURE_COSMOSDB_NOSQL_RW_KEY1';
+let vcoreConnStrEnvVar : string = Config.lookupEnvVarName('ENV_VCORE_CONN_STR');
 
 let mongoUtil : CosmosMongoUtil = null;
 
@@ -20,7 +20,7 @@ beforeAll(() => {
 });
 
 function initCosmosMongoUtil() : CosmosMongoUtil {
-    return new CosmosMongoUtil(acctUriEnvVar, acctKeyEnvVar);
+    return new CosmosMongoUtil(null, null, vcoreConnStrEnvVar);
 }
 
 function epochTime() : number {

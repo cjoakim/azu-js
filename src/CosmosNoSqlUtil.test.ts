@@ -23,12 +23,13 @@ import {
   } from "@azure/cosmos";
 
 import { CosmosNoSqlUtil, QueryUtil } from "./CosmosNoSqlUtil";
+import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 import exp from "constants";
 
 // State retained across tests
-let acctUriEnvVar : string = 'AZURE_COSMOSDB_NOSQL_URI';
-let acctKeyEnvVar : string = 'AZURE_COSMOSDB_NOSQL_RW_KEY1';
+let acctUriEnvVar : string = Config.lookupEnvVarName('ENV_NOSQL_URI');
+let acctKeyEnvVar : string = Config.lookupEnvVarName('ENV_NOSQL_RW_KEY');
 
 export const overrideConnectionPolicy: ConnectionPolicy = Object.freeze({
     connectionMode: ConnectionMode.Gateway,

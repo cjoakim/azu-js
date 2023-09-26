@@ -6,12 +6,13 @@ import path from "path";
 import util from "util";
 
 import { CosmosPgUtil } from "./CosmosPgUtil";
+import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 
 let pgUtil : CosmosPgUtil = null;
 
 beforeAll(() => {
-    pgUtil = initCosmosPgUtil();
+    //pgUtil = initCosmosPgUtil();
 });
 
 function initCosmosPgUtil() : CosmosPgUtil {

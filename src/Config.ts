@@ -7,7 +7,7 @@ export class Config {
     public static LIB_VERSION         : string = '0.9.3';
     public static LIB_AUTHOR          : string = 'Chris Joakim';
     public static LIB_LICENSE         : string = 'MIT';
-    public static ASU_JS_CONFIG_FILE  : string = 'asu-js-config.json';
+    public static ASU_JS_CONFIG_FILE  : string = 'azu-js-config.json';
     private static _config            : Object = null;
 
     static lookupEnvVarName(normalizedName: string) : string {
@@ -41,7 +41,7 @@ export class Config {
             data['ENV_SEARCH_NAME']      = 'AZURE_SEARCH_NAME';
             data['ENV_SEARCH_ADMIN_KEY'] = 'AZURE_SEARCH_ADMIN_KEY';
             data['ENV_SEARCH_QUERY_KEY'] = 'AZURE_SEARCH_QUERY_KEY';
-            data['ENV_STORAGE_ACCOUNT']  = 'AZURE_STORAGE_ACCOUNT';
+            data['ENV_STORAGE_ACCT']     = 'AZURE_STORAGE_ACCOUNT';
             data['ENV_STORAGE_KEY']      = 'AZURE_STORAGE_KEY';
             let fu = new FileUtil();
             fu.writeTextFileSync(Config.ASU_JS_CONFIG_FILE, JSON.stringify(data, null, 2));

@@ -6,12 +6,13 @@ import path from "path";
 import util from "util";
 
 import { OpenAiUtil } from "./OpenAiUtil";
+import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 
 // State retained across tests
-let acctUriEnvVar : string = 'AZURE_OPENAI_URL';
-let acctKeyEnvVar : string = 'AZURE_OPENAI_KEY1';
-let embDepEnvVar  : string = 'AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT';
+let acctUriEnvVar : string = Config.lookupEnvVarName('ENV_OPENAI_URL');
+let acctKeyEnvVar : string = Config.lookupEnvVarName('ENV_OPENAI_KEY');
+let embDepEnvVar  : string = Config.lookupEnvVarName('ENV_OPENAI_EMB_DEP');
 
 let oaiUtil : OpenAiUtil = null;
 
