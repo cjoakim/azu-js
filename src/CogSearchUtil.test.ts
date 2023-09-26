@@ -58,5 +58,8 @@ test("CogSearchUtil: constructor and headers", async () => {
 test("CogSearchUtil: url methods", async () => {
 
     expect(su.listIndexesUrl()).toContain('.search.windows.net/indexes?api-version=2023-07-01-Preview');
+    expect(su.listIndexersUrl()).toContain('.search.windows.net/indexers?api-version=2023-07-01-Preview');
+    expect(su.listDatasourcesUrl()).toContain('.search.windows.net/datasources?api-version=2023-07-01-Preview');
 
+    // TODO - test each URL method
 });

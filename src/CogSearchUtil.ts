@@ -63,71 +63,91 @@ export class CogSearchUtil {
         return util.format("%s/indexes?api-version=%s", this.acctURI, this.apiVersion);
     }
 
-    // list_indexers_url(): string {
-    //     return '{}/indexers?api-version={}'.format(self.search_url, self.search_api_version)
+    listIndexersUrl(): string {
+        return util.format("%s/indexers?api-version=%s", this.acctURI, this.apiVersion);
+    }
 
-    // list_datasources_url(): string {
-    //     return '{}/datasources?api-version={}'.format(self.search_url, self.search_api_version)
+    listDatasourcesUrl(): string {
+        return util.format("%s/datasources?api-version=%s", this.acctURI, this.apiVersion);
+    }
 
-    // list_skillsets_url(): string {
-    //     return '{}/skillsets?api-version={}'.format(self.search_url, self.search_api_version)
+    listSkillsetsUrl(): string {
+        return util.format("%s/skillsets?api-version=%s", this.acctURI, this.apiVersion);
+    }
 
-    // get_index_url(self, name):
-    //     return '{}/indexes/{}?api-version={}'.format(self.search_url, name, self.search_api_version)
+    getIndexUrl(name : string) : string {
+        return util.format("%s/indexes/%s?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // get_indexer_url(self, name):
-    //     return '{}/indexers/{}?api-version={}'.format(self.search_url, name, self.search_api_version)
+    getIndexerUrl(name : string) : string {
+        return util.format("%s/indexers/%s?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // get_indexer_status_url(self, name):
-    //     return '{}/indexers/{}/status?api-version={}'.format(self.search_url, name, self.search_api_version)
+    getIndexerStatusUrl(name : string) : string {
+        return util.format("%s/indexers/%s/status?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // get_datasource_url(self, name):
-    //     return '{}/datasources/{}?api-version={}'.format(self.search_url, name, self.search_api_version)
+    getDatasourceUrl(name : string) : string {
+        return util.format("%s/datasources/%s?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // get_skillset_url(self, name):
-    //     return '{}/skillsets/{}?api-version={}'.format(self.search_url, name, self.search_api_version)
+    getSkillsetUrl(name : string) : string {
+        return util.format("%s/skillsets/%s?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // create_index_url(): string {
-    //     return '{}/indexes?api-version={}'.format(self.search_url, self.search_api_version)
+    createIndexUrl(): string {
+        return util.format("%s/indexes?api-version=%s", this.acctURI, this.apiVersion);
+    }
 
-    // modify_index_url(self, name):
-    //     return '{}/indexes/{}?api-version={}'.format(self.search_url, name, self.search_api_version)
+    modifyIndexUrl(name : string) : string {
+        return util.format("%s/indexes/%s?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // create_indexer_url(): string {
-    //     return '{}/indexers?api-version={}'.format(self.search_url, self.search_api_version)
+    createIndexerUrl(): string {
+        return util.format("%s/indexers?api-version=%s", this.acctURI, this.apiVersion);
+    }
 
-    // modify_indexer_url(self, name):
-    //     return '{}/indexers/{}?api-version={}'.format(self.search_url, name, self.search_api_version)
+    modifyIndexerUrl(name : string) : string {
+        return util.format("%s/indexers/%s?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // reset_indexer_url(self, name):
-    //     return '{}/indexers/{}/reset?api-version={}'.format(self.search_url, name, self.search_api_version)
+    resetIndexerUrl(name : string) : string {
+        return util.format("%s/indexers/%s/reset?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // run_indexer_url(self, name):
-    //     return '{}/indexers/{}/run?api-version={}'.format(self.search_url, name, self.search_api_version)
+    runIndexerUrl(name : string) : string {
+        return util.format("%s/indexers/%s/run?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // create_datasource_url(): string {
-    //     return '{}/datasources?api-version={}'.format(self.search_url, self.search_api_version)
+    createDatasourceUrl(): string {
+        return util.format("%s/datasources?api-version=%s", this.acctURI, this.apiVersion);
+    }
 
-    // modify_datasource_url(self, name):
-    //     return '{}/datasources/{}?api-version={}'.format(self.search_url, name, self.search_api_version)
+    modifyDatasourceUrl(name : string) : string {
+        return util.format("%s/datasources/%s?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // create_synmap_url(): string {
-    //     return '{}/synonymmaps?api-version={}'.format(self.search_url, self.search_api_version)
+    create_synmapUrl(): string {
+        return util.format("%s/synonymmaps?api-version=%s", this.acctURI, this.apiVersion);
+    }
 
-    // modify_synmap_url(self, name):
-    //     return '{}/synonymmaps/{}?api-version={}'.format(self.search_url, name, self.search_api_version)
+    modify_synmapUrl(name : string) : string {
+        return util.format("%s/synonymmaps/%s?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // create_skillset_url(): string {
-    //     return '{}/skillsets?api-version={}'.format(self.search_url, self.search_api_version)
+    createSkillsetUrl(): string {
+        return util.format("%s/skillsets?api-version=%s", this.acctURI, this.apiVersion);
+    }
 
-    // modify_skillset_url(self, name):
-    //     return '{}/skillsets/{}?api-version={}'.format(self.search_url, name, self.search_api_version)
+    modifySkillsetUrl(name : string) : string {
+        return util.format("%s/skillsets/%s?api-version=%s", this.acctURI, name, this.apiVersion);
+    }
 
-    // search_index_url(self, idx_name):
-    //     return '{}/indexes/{}/docs/search?api-version={}'.format(self.search_url, idx_name, self.search_api_version)
+    searchIndexUrl(idx_name : string) : string {
+        return util.format("%s/indexes/%s/docs/search?api-version=%s", this.acctURI, idx_name, this.apiVersion);
+    }
 
-    // lookup_doc_url(self, index_name, doc_key):
-    //     return '{}/indexes/{}/docs/{}?api-version={}'.format(self.search_url, index_name, doc_key, self.search_api_version)
-
-
+    lookupDocUrl(index_name : string, doc_key : string) : string {
+        return util.format("%s/indexes/%s/docs/%s?api-version=%s", this.acctURI, index_name, doc_key, this.apiVersion);
+    }
 }
