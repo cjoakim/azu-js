@@ -5,11 +5,13 @@
 #
 # Chris Joakim, 2023
 
+del .\*.tgz
+
 npm run build
 
 npm run test
 
-rm dist/*test*
+del dist\*test*
 
 npm pack > npm_pack.txt
 

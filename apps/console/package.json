@@ -20,11 +20,13 @@
     "dependencies": {
         "@azure/cosmos": "4.0.0",
         "@azure/openai": "^1.0.0-beta.6",
+        "@azure/search-documents": "^11.3.2",
         "@azure/storage-blob": "^12.16.0",
-        "azu-js": "file:../../azu-js-0.9.3.tgz",
         "mongodb": "^6.1.0",
         "pg": "^8.11.3",
-        "uuid": "^9.0.1"
+        "uuid": "^9.0.1",
+
+        "azu-js": "file:../../azu-js-0.9.3.tgz"
     },
     "devDependencies": {
         "@types/jest": "^29.5.4",

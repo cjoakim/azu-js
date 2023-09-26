@@ -6,6 +6,8 @@
 #
 # Chris Joakim, 2023
 
+rm *.tgz
+
 npm run build
 
 npm run test
