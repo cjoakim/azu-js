@@ -6,6 +6,7 @@
 // See https://www.npmjs.com/package/@azure/search-documents
 
 import util from "util";
+import { FileUtil } from "./FileUtil";
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
@@ -33,6 +34,7 @@ export class CogSearchUtil {
     adminHeaders : Object = null;
     queryHeaders : Object = null;
     apiVersion   : string = null;
+    fileUtil     : FileUtil = new FileUtil();
 
     // Pass in the names of the environment variables that contain the
     // configuration values.
@@ -73,10 +75,210 @@ export class CogSearchUtil {
     // API Invoking methods:
 
     async listIndexes() : Promise<CogSearchResponse> {
-        return this.httpRequest(this.listIndexesUrl(), 'GET', this.adminKey);
+        return this.invokeHttpRequest(this.listIndexesUrl(), 'GET', this.adminKey);
     }
 
-    private async httpRequest(url: string, method: string, key: string, data?: Object) : Promise<CogSearchResponse> {
+    async listIndexers() : Promise<CogSearchResponse> {
+        return this.invokeHttpRequest(this.listIndexersUrl(), 'GET', this.adminKey);
+    }
+
+    async listDatasources() : Promise<CogSearchResponse> {
+        return this.invokeHttpRequest(this.listDatasourcesUrl(), 'GET', this.adminKey);
+    }
+
+    async getIndex(name : string) : Promise<CogSearchResponse> {
+        return this.invokeHttpRequest(this.getIndexUrl(name), 'GET', this.adminKey);
+    }
+
+    async getIndexer(name : string) : Promise<CogSearchResponse> {
+        return this.invokeHttpRequest(this.getIndexerUrl(name), 'GET', this.adminKey);
+    }
+
+    async getIndexerStatus(name : string) : Promise<CogSearchResponse> {
+        return this.invokeHttpRequest(this.getIndexerStatusUrl(name), 'GET', this.adminKey);
+    }
+
+    async getDatasource(name : string) : Promise<CogSearchResponse> {
+        return this.invokeHttpRequest(this.getDatasourceUrl(name), 'GET', this.adminKey);
+    }
+
+    // Index methods 
+
+    async createIndex(name : string, schema_file : string) : Promise<CogSearchResponse> {
+        return await this.modifyIndex('create', name, schema_file);
+    }
+
+    async updateIndex(name : string, schema_file : string) : Promise<CogSearchResponse> {
+        return await this.modifyIndex('update', name, schema_file);
+    }
+
+    async deleteIndex(name : string) : Promise<CogSearchResponse> {
+        return await this.modifyIndex('delete', name);
+    }
+
+    private async modifyIndex(action : string, name : string, schemaFile? : string) : Promise<CogSearchResponse> {
+
+        let schema : object = null;
+        let url    : string = null;
+        let method : string = null;
+
+        if (action in ['create', 'update']) {
+            let schema : object = this.fileUtil.readJsonObjectFile(schemaFile);
+        }
+        switch (action) {
+            case "create":
+                method = 'POST';
+                url = this.createIndexUrl();
+                break;
+            case "update":
+                method = 'PUT';
+                url = this.modifyIndexUrl(name);
+                break;
+            case "delete":
+                method = 'DELETE';
+                url = this.modifyIndexUrl(name);
+                break;
+        }
+        return this.invokeHttpRequest(url, method, this.adminKey, schema);
+    }
+
+    // Indexer methods
+
+    async createIndexer(name : string, schema_file : string) : Promise<CogSearchResponse> {
+        return await this.modifyIndexer('create', name, schema_file);
+    }
+
+    async updateIndexer(name : string, schema_file : string) : Promise<CogSearchResponse> {
+        return await this.modifyIndexer('update', name, schema_file);
+    }
+
+    async deleteIndexer(name : string) : Promise<CogSearchResponse> {
+        return await this.modifyIndexer('delete', name);
+    }
+
+    async resetIndexer(name : string) : Promise<CogSearchResponse> {
+        return this.invokeHttpRequest(this.resetIndexerUrl(name), 'POST', this.adminKey);
+    }
+
+    async runIndexer(name : string) : Promise<CogSearchResponse> {
+        return this.invokeHttpRequest(this.runIndexerUrl(name), 'POST', this.adminKey);
+    }
+
+    private async modifyIndexer(action : string, name : string, schemaFile? : string) : Promise<CogSearchResponse> {
+
+        let schema : object = null;
+        let url    : string = null;
+        let method : string = null;
+
+        if (action in ['create', 'update']) {
+            let schema : object = this.fileUtil.readJsonObjectFile(schemaFile);
+        }
+        switch (action) {
+            case "create":
+                method = 'POST';
+                url = this.createIndexerUrl();
+                break;
+            case "update":
+                method = 'PUT';
+                url = this.modifyIndexerUrl(name);
+                break;
+            case "delete":
+                method = 'DELETE';
+                url = this.modifyIndexerUrl(name);
+                break;
+        }
+        return this.invokeHttpRequest(url, method, this.adminKey, schema);
+    }
+
+    // Datastore methods
+
+    // def create_cosmos_nosql_datasource(self, acct_envvar, key_envvar, dbname, container):
+    //     acct = os.environ[acct_envvar]
+    //     key  = os.environ[key_envvar]
+    //     conn_str = self.cosmos_nosql_datasource_name_conn_str(acct, key, dbname)
+    //     body = self.cosmosdb_nosql_datasource_post_body()
+    //     body['name'] = self.cosmos_nosql_datasource_name(dbname, container)
+    //     body['credentials']['connectionString'] = conn_str
+    //     body['container']['name'] = container
+    //     body['dataDeletionDetectionPolicy'] = None
+    //     body['encryptionKey'] = None
+    //     body['identity'] = None
+
+    //     url = self.create_datasource_url()
+    //     function = 'create_cosmos_nosql_datasource_{}_{}'.format(dbname, container)
+    //     self.http_request(function, 'post', url, self.admin_headers, body)
+
+    // def delete_datasource(self, name):
+    //     url = self.modify_datasource_url(name)
+    //     function = 'delete_datasource{}'.format(name)
+    //     self.http_request(function, 'delete', url, self.admin_headers, None)
+
+    // Synonym Map methods
+
+    // def create_synmap(self, name, schema_file):
+    //     self.modify_synmap('create', name, schema_file)
+
+    // def update_synmap(self, name, schema_file):
+    //     self.modify_synmap('update', name, schema_file)
+
+    // def delete_synmap(self, name):
+    //     self.modify_synmap('delete', name, None)
+
+    // def modify_synmap(self, action, name, schema_file):
+    //     # read the schema json file if necessary
+    //     schema = None
+    //     if action in ['create', 'update']:
+    //         schema_file = 'schemas/{}.json'.format(schema_file)
+    //         schema = self.load_json_file(schema_file)
+    //         schema['name'] = name
+
+    //     if action == 'create':
+    //         http_method = 'post'
+    //         url = self.create_synmap_url()
+    //     elif action == 'update':
+    //         http_method = 'put'
+    //         url = self.modify_synmap_url(name)
+    //     elif action == 'delete':
+    //         http_method = 'delete'
+    //         url = self.modify_synmap_url(name)
+
+    //     function = '{}_synmap_{}'.format(action, name)
+    //     self.http_request(function, http_method, url, self.admin_headers, schema)
+
+    // Search and Lookup methods
+    
+    // def search_index(self, idx_name, search_name, search_params):
+    //     url = self.search_index_url(idx_name)
+    //     if self.verbose:
+    //         print('---')
+    //         print('search_index: {} {} -> {}'.format(idx_name, search_name, search_params))
+    //         print('search_index url: {}'.format(url))
+    //         print('url:     {}'.format(url))
+    //         print('method:  {}'.format('POST'))
+    //         print('params:  {}'.format(search_params))
+    //         print('headers: {}'.format(self.admin_headers))
+
+    //     # Invoke the search via the HTTP API
+    //     r = requests.post(url=url, headers=self.admin_headers, json=search_params)
+    //     if self.verbose:
+    //         print('response: {}'.format(r))
+    //     if r.status_code == 200:
+    //         resp_obj = json.loads(r.text)
+    //         outfile  = 'tmp/search_{}.json'.format(search_name)
+    //         self.write_json_file(resp_obj, outfile)
+    //     return r
+
+    // def lookup_doc(self, index_name, doc_key):
+    //     if self.verbose:
+    //         print('lookup_doc: {} {}'.format(index_name, doc_key))
+    //     url = self.lookup_doc_url(index_name, doc_key)
+    //     headers = self.query_headers
+    //     function = 'lookup_doc_{}_{}'.format(index_name, doc_key)
+    //     r = self.http_request(function, 'get', url, self.query_headers)
+
+
+
+    private async invokeHttpRequest(url: string, method: string, key: string, data?: Object) : Promise<CogSearchResponse> {
         let opts = this.buildAxiosRequestConfig(url, method, key);
         let respObj  = this.buildResponseObject(opts);
         try {
