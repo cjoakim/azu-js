@@ -73,11 +73,13 @@ export class CogSearchUtil {
     // API Invoking methods:
 
     async listIndexes() : Promise<CogSearchResponse> {
-        let respObj = null;
+        return this.httpRequest(this.listIndexesUrl(), 'GET', this.adminKey);
+    }
+
+    private async httpRequest(url: string, method: string, key: string, data?: Object) : Promise<CogSearchResponse> {
+        let opts = this.buildAxiosRequestConfig(url, method, key);
+        let respObj  = this.buildResponseObject(opts);
         try {
-            let url  = this.listIndexesUrl();
-            let opts = this.buildAxiosRequestConfig(url, 'GET', this.adminKey);
-            respObj  = this.buildResponseObject(opts);
             const result = await axios(opts);
             respObj.status = result.status;
             if (result.status === 200 && result.data) {
@@ -86,11 +88,12 @@ export class CogSearchUtil {
         }
         catch (error) {
             respObj.error = true;
+            console.log(error);
         }
-        return respObj
+        return respObj;
     }
 
-    buildAxiosRequestConfig(url: string, method: string, key: string) : AxiosRequestConfig {
+    private buildAxiosRequestConfig(url: string, method: string, key: string) : AxiosRequestConfig {
         return {
             method: method,
             url: url,
@@ -101,7 +104,7 @@ export class CogSearchUtil {
         };
     }
 
-    buildResponseObject(opts: AxiosRequestConfig) : CogSearchResponse {
+    private buildResponseObject(opts: AxiosRequestConfig) : CogSearchResponse {
         return {
             url:    opts.url,
             method: opts.method,
