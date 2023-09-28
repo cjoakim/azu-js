@@ -6,16 +6,10 @@
 // See https://www.npmjs.com/package/@azure/search-documents
 
 import util from "util";
+import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-
-import {
-    SearchClient,
-    SearchIndexClient,
-    SearchIndexerClient,
-    AzureKeyCredential,
-} from '@azure/search-documents';
 
 export interface CogSearchResponse {
     url:    string;
@@ -35,6 +29,7 @@ export class CogSearchUtil {
     queryHeaders : Object = null;
     apiVersion   : string = null;
     fileUtil     : FileUtil = new FileUtil();
+    version      : string = null;
 
     // Pass in the names of the environment variables that contain the
     // configuration values.
@@ -55,6 +50,7 @@ export class CogSearchUtil {
 
             this.adminHeaders = this.buildHttpHeader(acctAdminKeyEnvVar);
             this.queryHeaders = this.buildHttpHeader(acctQueryKeyEnvVar);
+            this.version = Config.LIB_VERSION
         }
         catch (error) {
             console.log(error);
@@ -190,27 +186,61 @@ export class CogSearchUtil {
         return this.invokeHttpRequest(url, method, this.adminKey, schema);
     }
 
-    // Datastore methods
+    // Datasource methods
 
-    // def create_cosmos_nosql_datasource(self, acct_envvar, key_envvar, dbname, container):
-    //     acct = os.environ[acct_envvar]
-    //     key  = os.environ[key_envvar]
-    //     conn_str = self.cosmos_nosql_datasource_name_conn_str(acct, key, dbname)
-    //     body = self.cosmosdb_nosql_datasource_post_body()
-    //     body['name'] = self.cosmos_nosql_datasource_name(dbname, container)
-    //     body['credentials']['connectionString'] = conn_str
-    //     body['container']['name'] = container
-    //     body['dataDeletionDetectionPolicy'] = None
-    //     body['encryptionKey'] = None
-    //     body['identity'] = None
+    async createCosmosNoSqlDatasource(
+        accountNameEnvVarName : string,
+        accountKeyEnvVarName :string,
+        databaseName : string,
+        containerName : string) : Promise<CogSearchResponse> {
 
-    //     url = self.create_datasource_url()
-    //     function = 'create_cosmos_nosql_datasource_{}_{}'.format(dbname, container)
-    //     self.http_request(function, 'post', url, self.admin_headers, body)
+        let acctName = process.env[accountNameEnvVarName];
+        let acctKey = process.env[accountKeyEnvVarName];
+        let url = this.createDatasourceUrl();
+        let body = this.cosmosdbNoSqlDatasourcePostBody();
+
+        body['name'] = this.cosmosdbNosqlDatasourceName(databaseName, containerName);
+        body['credentials']['connectionString'] = this.cosmosdbNoSqlConnectionString(acctName, acctKey, databaseName);
+        body['container']['name'] = containerName;
+        body['dataDeletionDetectionPolicy'] = null;
+        body['encryptionKey'] = null;
+        body['identity'] = null
+        return this.invokeHttpRequest(url, 'POST', this.adminKey, body);
+    }
+
+    cosmosdbNoSqlConnectionString(acct : string, key : string, database : string) : string {
+        return util.format("AccountEndpoint=https://%s.documents.azure.com;AccountKey=%s;Database=%s", acct, key, database);
+    }
+
+    cosmosdbNoSqlDatasourcePostBody() : Object {
+        return {
+            'name': '... populate me ...',
+            'type': 'cosmosdb',
+            'credentials': {
+                'connectionString': '... populate me ...'
+            },
+            'container': {
+                'name': '... populate me ...',
+                'query': null
+            },
+            'dataChangeDetectionPolicy': {
+                '@odata.type': '#Microsoft.Azure.Search.HighWaterMarkChangeDetectionPolicy',
+                'highWaterMarkColumnName': '_ts'
+            }
+        }
+    }
 
     async deleteDatasource(name : string) : Promise<CogSearchResponse> {
         let url = this.modifyDatasourceUrl(name);
         return this.invokeHttpRequest(url, 'DELETE', this.adminKey);
+    }
+
+    blobDatasourceName(container : string) : string {
+        return util.format('azureblob-%s', container);
+    }
+
+    cosmosdbNosqlDatasourceName(dbname : string, container : string) : string {
+        return util.format('cosmosdb-nosql-%s-%s', dbname, container);
     }
 
     // Synonym Map methods

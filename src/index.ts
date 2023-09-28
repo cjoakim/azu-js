@@ -3,22 +3,15 @@
 // Chris Joakim, Microsoft, 2023
 
 import { Config } from "./Config"
-import { BlobUtil }  from "./BlobUtil";
 import { FileUtil }  from "./FileUtil";
-import { CosmosMongoUtil }  from "./CosmosMongoUtil";
+import { BlobUtil }  from "./BlobUtil";
 import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, QueryUtil } from "./CosmosNoSqlUtil";
-import { CosmosPgUtil }  from "./CosmosPgUtil";
+import { CogSearchUtil }  from "./CogSearchUtil";
 import { OpenAiUtil }  from "./OpenAiUtil";
-import { CogSearchUtil, CogSearchResponse }  from "./CogSearchUtil";
 
 export { Config }
-export { BlobUtil }
 export { FileUtil }
-export { CosmosMongoUtil }
-export { CosmosNoSqlUtil }
-export { CosmosPgUtil }
-export { defaultCosmosConnectionPolicy }
-export { QueryUtil }
-export { OpenAiUtil }
+export { BlobUtil }
+export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, QueryUtil }
 export { CogSearchUtil }
-export { CogSearchResponse }
+export { OpenAiUtil }

@@ -3,6 +3,8 @@
 #
 # Chris Joakim, Microsoft, 2023
 
+del node_modules | out-null
+
 New-Item -ItemType Directory -Force -Path .\tmp | out-null
 
 npm install

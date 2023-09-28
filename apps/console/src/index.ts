@@ -4,13 +4,22 @@ import {
     Config,
     FileUtil,
     CosmosNoSqlUtil,
-    OpenAiUtil
+    OpenAiUtil,
+    CogSearchUtil
 } from "azu-js";
 
 import fs from "fs";
 import path from "path";
 import { json } from "stream/consumers";
 import util from "util";
+
+export interface CogSearchResponse {
+    url:    string;
+    method: string;
+    status: number;
+    data:   Object;
+    error:  boolean;
+}
 
 let func = process.argv[2];
 let fu   = new FileUtil();
@@ -24,6 +33,9 @@ switch (func) {
         break;
     case "files":
         files();
+        break;
+    case "search_setup":
+        searchSetup();
         break;
     case "storage":
         storage();
@@ -74,8 +86,28 @@ function files() {
     console.log(airports[0]);
 }
 
-function storage() {
-    console.log('TODO - implement');
+async function searchSetup() {
+
+    let apiVersion : string = '2023-07-01-Preview';
+    let csu : CogSearchUtil = new CogSearchUtil(
+        'AZURE_SEARCH_URL',
+        'AZURE_SEARCH_NAME',
+        'AZURE_SEARCH_ADMIN_KEY',
+        'AZURE_SEARCH_QUERY_KEY',
+        apiVersion,
+        true);
+
+    let resp : CogSearchResponse = await csu.listIndexes();
+    console.log(resp);
+}
+
+async function storage() {
+    let acctNameEnvVar : string = 'AZURE_STORAGE_ACCOUNT';
+    let acctKeyEnvVar : string = 'AZURE_STORAGE_KEY';
+    let bu = new BlobUtil(acctNameEnvVar, acctKeyEnvVar);
+
+    let containersList = await bu.listContainersAsync();
+    console.log(containersList)
 }
 
 async function embeddings() {

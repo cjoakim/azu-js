@@ -4,6 +4,9 @@
 #
 # Chris Joakim, Microsoft, 2023
 
+rm -rf ./node_modules
+
+mkdir -p ./node_modules
 mkdir -p ./tmp
 
 npm install
