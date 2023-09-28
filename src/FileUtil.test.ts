@@ -40,3 +40,14 @@ test("FileUtil: readJsonArrayFile", () => {
     let cdg = airports[8]
     expect(cdg['name']).toBe('Charles De Gaulle');
 });
+
+test("FileUtil: gen console app package.json", () => {
+    let fu = new FileUtil();
+    let obj = fu.readJsonObjectFile('package.json');
+    obj['name'] = 'console';
+    obj['description'] = 'console app using azu-js';
+    obj['dependencies']['azu-js'] = util.format('file:../../azu-js-%s.tgz', obj['version']);
+    expect(Object.keys(obj).length).toBeGreaterThan(6);
+    expect(Object.keys(obj).length).toBeLessThan(20);
+    fu.writeTextFileSync('package-console.json', JSON.stringify(obj, null, 4));
+});
