@@ -208,75 +208,62 @@ export class CogSearchUtil {
     //     function = 'create_cosmos_nosql_datasource_{}_{}'.format(dbname, container)
     //     self.http_request(function, 'post', url, self.admin_headers, body)
 
-    // def delete_datasource(self, name):
-    //     url = self.modify_datasource_url(name)
-    //     function = 'delete_datasource{}'.format(name)
-    //     self.http_request(function, 'delete', url, self.admin_headers, None)
+    async deleteDatasource(name : string) : Promise<CogSearchResponse> {
+        let url = this.modifyDatasourceUrl(name);
+        return this.invokeHttpRequest(url, 'DELETE', this.adminKey);
+    }
 
     // Synonym Map methods
 
-    // def create_synmap(self, name, schema_file):
-    //     self.modify_synmap('create', name, schema_file)
+    async createSynmap(name : string, schema_file : string) : Promise<CogSearchResponse> {
+        return await this.modifySynmap('create', name, schema_file);
+    }
 
-    // def update_synmap(self, name, schema_file):
-    //     self.modify_synmap('update', name, schema_file)
+    async updateSynmap(name : string, schema_file : string) : Promise<CogSearchResponse> {
+        return await this.modifySynmap('update', name, schema_file);
+    }
 
-    // def delete_synmap(self, name):
-    //     self.modify_synmap('delete', name, None)
+    async deleteSynmap(name : string) : Promise<CogSearchResponse> {
+        return await this.modifySynmap('delete', name);
+    }
 
-    // def modify_synmap(self, action, name, schema_file):
-    //     # read the schema json file if necessary
-    //     schema = None
-    //     if action in ['create', 'update']:
-    //         schema_file = 'schemas/{}.json'.format(schema_file)
-    //         schema = self.load_json_file(schema_file)
-    //         schema['name'] = name
+    private async modifySynmap(action : string, name : string, schemaFile? : string) : Promise<CogSearchResponse> {
 
-    //     if action == 'create':
-    //         http_method = 'post'
-    //         url = self.create_synmap_url()
-    //     elif action == 'update':
-    //         http_method = 'put'
-    //         url = self.modify_synmap_url(name)
-    //     elif action == 'delete':
-    //         http_method = 'delete'
-    //         url = self.modify_synmap_url(name)
+        let schema : object = null;
+        let url    : string = null;
+        let method : string = null;
 
-    //     function = '{}_synmap_{}'.format(action, name)
-    //     self.http_request(function, http_method, url, self.admin_headers, schema)
+        if (action in ['create', 'update']) {
+            let schema : object = this.fileUtil.readJsonObjectFile(schemaFile);
+        }
+        switch (action) {
+            case "create":
+                method = 'POST';
+                url = this.createSynmapUrl();
+                break;
+            case "update":
+                method = 'PUT';
+                url = this.modifySynmapUrl(name);
+                break;
+            case "delete":
+                method = 'DELETE';
+                url = this.modifySynmapUrl(name);
+                break;
+        }
+        return this.invokeHttpRequest(url, method, this.adminKey, schema);
+    }
 
     // Search and Lookup methods
-    
-    // def search_index(self, idx_name, search_name, search_params):
-    //     url = self.search_index_url(idx_name)
-    //     if self.verbose:
-    //         print('---')
-    //         print('search_index: {} {} -> {}'.format(idx_name, search_name, search_params))
-    //         print('search_index url: {}'.format(url))
-    //         print('url:     {}'.format(url))
-    //         print('method:  {}'.format('POST'))
-    //         print('params:  {}'.format(search_params))
-    //         print('headers: {}'.format(self.admin_headers))
 
-    //     # Invoke the search via the HTTP API
-    //     r = requests.post(url=url, headers=self.admin_headers, json=search_params)
-    //     if self.verbose:
-    //         print('response: {}'.format(r))
-    //     if r.status_code == 200:
-    //         resp_obj = json.loads(r.text)
-    //         outfile  = 'tmp/search_{}.json'.format(search_name)
-    //         self.write_json_file(resp_obj, outfile)
-    //     return r
+    async searchIndex(indexName : string, docKey : string, searchParams: object) : Promise<CogSearchResponse> {
+        let url = this.searchIndexUrl(indexName);
+        return this.invokeHttpRequest(url, 'POST', this.queryKey, searchParams);
+    }
 
-    // def lookup_doc(self, index_name, doc_key):
-    //     if self.verbose:
-    //         print('lookup_doc: {} {}'.format(index_name, doc_key))
-    //     url = self.lookup_doc_url(index_name, doc_key)
-    //     headers = self.query_headers
-    //     function = 'lookup_doc_{}_{}'.format(index_name, doc_key)
-    //     r = self.http_request(function, 'get', url, self.query_headers)
-
-
+    async lookupDoc(indexName : string, docKey : string) : Promise<CogSearchResponse> {
+        let url = this.lookupDocUrl(indexName, docKey);
+        return this.invokeHttpRequest(url, 'POST', this.queryKey, );
+    }
 
     private async invokeHttpRequest(url: string, method: string, key: string, data?: Object) : Promise<CogSearchResponse> {
         let opts = this.buildAxiosRequestConfig(url, method, key);
@@ -390,11 +377,11 @@ export class CogSearchUtil {
         return util.format("%s/datasources/%s?api-version=%s", this.acctURI, name, this.apiVersion);
     }
 
-    create_synmapUrl(): string {
+    createSynmapUrl(): string {
         return util.format("%s/synonymmaps?api-version=%s", this.acctURI, this.apiVersion);
     }
 
-    modify_synmapUrl(name : string) : string {
+    modifySynmapUrl(name : string) : string {
         return util.format("%s/synonymmaps/%s?api-version=%s", this.acctURI, name, this.apiVersion);
     }
 
