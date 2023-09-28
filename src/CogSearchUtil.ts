@@ -93,14 +93,18 @@ export class CogSearchUtil {
         return respObj;
     }
 
-    private buildAxiosRequestConfig(url: string, method: string, key: string) : AxiosRequestConfig {
+    private buildAxiosRequestConfig(url: string, method: string, key: string, data: object = null) : AxiosRequestConfig {
+        // See https://axios-http.com/docs/req_config
+        // 'data' attribute is only applicable for HTTP methods 'PUT', 'POST', 'DELETE', and 'PATCH'
         return {
-            method: method,
-            url: url,
+            method: method.toUpperCase(),
+            url:    url,
+            data:   data,
             headers: {
                 'Content-Type': 'application/json',
                 'api-key': key
-            }
+            },
+            timeout: 30000
         };
     }
 
