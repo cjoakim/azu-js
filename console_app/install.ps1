@@ -3,9 +3,8 @@
 #
 # Chris Joakim, Microsoft, 2023
 
-del package-lock.json
-del node_modules
-del tmp 
+Remove-Item -Path "node_modules" -Confirm -Recurse -Force | out-null
+Remove-Item package-lock.json | out-null
 
 New-Item -ItemType Directory -Force -Path .\tmp | out-null
 

@@ -34,8 +34,8 @@ switch (func) {
     case "files":
         files();
         break;
-    case "search_setup":
-        searchSetup();
+    case "search":
+        search();
         break;
     case "storage":
         storage();
@@ -86,9 +86,12 @@ function files() {
     console.log(airports[0]);
 }
 
-async function searchSetup() {
+async function search() {
 
+    let subfunc = process.argv[3];
     let apiVersion : string = '2023-07-01-Preview';
+    let name : string = null;
+    let schemaFile : string = null;
     let csu : CogSearchUtil = new CogSearchUtil(
         'AZURE_SEARCH_URL',
         'AZURE_SEARCH_NAME',
@@ -97,8 +100,57 @@ async function searchSetup() {
         apiVersion,
         true);
 
-    let resp : CogSearchResponse = await csu.listIndexes();
-    console.log(resp);
+
+
+
+// node dist/main.js search create_cosmos_nosql_datasource AZURE_COSMOSDB_NOSQL_ACCT AZURE_COSMOSDB_NOSQL_RO_KEY1 dev baseballplayers
+// node dist/main.js search create_index baseballplayers baseballplayers_index.json
+// node dist/main.js search create_indexer baseballplayers baseballplayers_indexer.json
+// node dist/main.js search get_indexer_status baseballplayers
+// node dist/main.js search list_datasources
+// node dist/main.js search list_indexes
+// node dist/main.js search list_indexers
+
+    switch (subfunc) {
+        case "delete_datasource":
+            console.log(await csu.deleteDatasource(process.argv[4]));
+            break;
+        case "delete_index":
+            console.log(await csu.deleteIndex(process.argv[4]));
+            break;
+        case "delete_indexer":
+            console.log(await csu.deleteIndexer(process.argv[4]));
+            break;
+        case "create_cosmos_nosql_datasource":
+            let accountNameEnvVarName = process.argv[4];
+            let accountKeyEnvVarName = process.argv[5];
+            let dbname = process.argv[6];
+            let collection = process.argv[7];
+            console.log(await csu.createCosmosNoSqlDatasource(accountNameEnvVarName, accountKeyEnvVarName, dbname, collection));
+            break;
+        case "create_index":
+            name = process.argv[4];
+            schemaFile = process.argv[5];
+            console.log(await csu.createIndex(name, schemaFile));
+            break;
+        case "create_indexer":
+            name = process.argv[4];
+            schemaFile = process.argv[5];
+            console.log(await csu.createIndex(name, schemaFile));
+            break;
+        case "list_datasources":
+            console.log(await csu.listDatasources());
+            break;
+        case "list_indexes":
+            console.log(await csu.listIndexes());
+            break;
+        case "list_indexers":
+            console.log(await csu.listIndexers());
+            break;
+        default:
+            console.log(util.format("search, unknown subfunction: %s", subfunc));
+            break;
+    }
 }
 
 async function storage() {

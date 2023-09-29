@@ -22,6 +22,7 @@ let su : CogSearchUtil = null;
 
 beforeAll(() => {
     su = initCogSearchUtil();
+    su.doHttpReq = false;
 });
 
 function initCogSearchUtil() : CogSearchUtil {
@@ -66,12 +67,23 @@ test("CogSearchUtil: url methods", async () => {
 
 
 test("CogSearchUtil: listIndexes", async () => {
-
     console.log(su.adminHeaders);
     let resp : CogSearchResponse = await su.listIndexes();
     console.log(resp);
-
-
-    expect(resp.status).toBe(200);
+    expect(resp.status).toBe(0);
 });
 
+test("CogSearchUtil: createDatasource", async () => {
+    let accountNameEnvVarName = 'AZURE_COSMOSDB_NOSQL_ACCT';
+    let accountKeyEnvVarName = 'AZURE_COSMOSDB_NOSQL_RO_KEY1';
+    let dbname = 'dev'
+    let collection = 'baseball';
+    let resp : CogSearchResponse = 
+        await su.createCosmosNoSqlDatasource(
+            accountNameEnvVarName, accountKeyEnvVarName, dbname, collection);
+    console.log('createCosmosNoSqlDatasource resp:');
+    //console.log(resp);
+    expect(resp.status).toBe(0);
+    expect(resp.method).toBe('POST');
+    expect(resp['body']['name']).toBe('cosmosdb-nosql-dev-baseball');
+});

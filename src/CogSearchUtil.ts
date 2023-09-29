@@ -14,6 +14,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 export interface CogSearchResponse {
     url:    string;
     method: string;
+    body:   string;
     status: number;
     data:   Object;
     error:  boolean;
@@ -30,6 +31,7 @@ export class CogSearchUtil {
     apiVersion   : string = null;
     fileUtil     : FileUtil = new FileUtil();
     version      : string = null;
+    doHttpReq    : boolean = true;
 
     // Pass in the names of the environment variables that contain the
     // configuration values.
@@ -198,7 +200,7 @@ export class CogSearchUtil {
         let acctKey = process.env[accountKeyEnvVarName];
         let url = this.createDatasourceUrl();
         let body = this.cosmosdbNoSqlDatasourcePostBody();
-
+        // overlay specific attributes in the post data
         body['name'] = this.cosmosdbNosqlDatasourceName(databaseName, containerName);
         body['credentials']['connectionString'] = this.cosmosdbNoSqlConnectionString(acctName, acctKey, databaseName);
         body['container']['name'] = containerName;
@@ -295,14 +297,18 @@ export class CogSearchUtil {
         return this.invokeHttpRequest(url, 'POST', this.queryKey, );
     }
 
-    private async invokeHttpRequest(url: string, method: string, key: string, data?: Object) : Promise<CogSearchResponse> {
-        let opts = this.buildAxiosRequestConfig(url, method, key);
+    // This is the primary method in this class.  It executes all HTTP requests.
+
+    private async invokeHttpRequest(url: string, method: string, key: string, body: Object = null) : Promise<CogSearchResponse> {
+        let opts = this.buildAxiosRequestConfig(url, method, key, body);
         let respObj  = this.buildResponseObject(opts);
         try {
-            const result = await axios(opts);
-            respObj.status = result.status;
-            if (result.status === 200 && result.data) {
-                respObj.data = result.data;
+            if (this.doHttpReq) {
+                const result = await axios(opts);
+                respObj.status = result.status;
+                if (result.status === 200 && result.data) {
+                    respObj.data = result.data;
+                }
             }
         }
         catch (error) {
@@ -312,13 +318,13 @@ export class CogSearchUtil {
         return respObj;
     }
 
-    private buildAxiosRequestConfig(url: string, method: string, key: string, data: object = null) : AxiosRequestConfig {
+    private buildAxiosRequestConfig(url: string, method: string, key: string, body: object = null) : AxiosRequestConfig {
         // See https://axios-http.com/docs/req_config
         // 'data' attribute is only applicable for HTTP methods 'PUT', 'POST', 'DELETE', and 'PATCH'
         return {
             method: method.toUpperCase(),
             url:    url,
-            data:   data,
+            data:   body,
             headers: {
                 'Content-Type': 'application/json',
                 'api-key': key
@@ -331,6 +337,7 @@ export class CogSearchUtil {
         return {
             url:    opts.url,
             method: opts.method,
+            body:   opts.data,
             status: 0,
             data:   null,
             error:  false
