@@ -4,7 +4,7 @@ Reusable code, implemented in TypeScript, for rapid application Development in *
 
 The focus is on the **Azure Cosmos DB, Azure OpenAI, Azure Cognitive Search, and Azure Blob Storage** PaaS services.
 
-See the example_console_app/ directory for samples.
+See the console_app/ directory, and the unit tests, for example use of the azu-js package.
 
 ---
 
