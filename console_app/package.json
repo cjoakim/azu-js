@@ -1,6 +1,6 @@
 {
     "name": "console_app",
-    "version": "0.9.3",
+    "version": "0.9.4",
     "description": "console app using azu-js",
     "homepage": "https://github.com/cjoakim/azu-js",
     "main": "dist/index.js",
@@ -24,6 +24,7 @@
         "cosmosdb",
         "openai",
         "storage",
+        "cognitive search",
         "typescript",
         "reference_apps"
     ],
@@ -32,20 +33,19 @@
     "dependencies": {
         "@azure/cosmos": "4.0.0",
         "@azure/openai": "^1.0.0-beta.6",
-        "@azure/search-documents": "^11.3.2",
         "@azure/storage-blob": "^12.16.0",
         "axios": "^1.5.1",
         "mongodb": "^6.1.0",
         "pg": "^8.11.3",
         "uuid": "^9.0.1",
-        "azu-js": "file:../azu-js-0.9.3.tgz"
+        "azu-js": "file:../azu-js-0.9.4.tgz"
     },
     "devDependencies": {
         "@types/jest": "^29.5.4",
         "@types/node": "^18.17.1",
-        "@types/uuid": "9.0.1",
+        "@types/uuid": "9.0.4",
         "jest": "^29.7.0",
-        "rimraf": "5.0.1",
+        "rimraf": "5.0.5",
         "ts-jest": "^29.1.1",
         "typescript": "^5.2.2"
     }
