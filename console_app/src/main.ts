@@ -95,6 +95,7 @@ async function search() {
     let searchDict   : object = null;
     let searchParams : object = null;
     let schemaFile   : string = null;
+    let playerId     : string = null;
     let resp : CogSearchResponse = null;
 
     // Pass in YOUR environment variable names which contain these values.
@@ -165,12 +166,34 @@ async function search() {
             console.log(JSON.stringify(resp, null, 2));
             break;
         case "vector_search":
-            searchDict = fu.readJsonObjectFile('cogsearch/named_searches.json');
+            // First lookup the named player to get their embedding value 
             name = process.argv[4];
-            searchName = process.argv[5];
-            searchParams = searchDict[searchName];
-            resp = await csu.searchIndex(name, searchParams);
-            console.log(JSON.stringify(resp, null, 2));
+            playerId = process.argv[5];
+            let lookupParams = {
+                "count":   "true",
+                "search":  "playerID eq 'xxx'",
+                "orderby": "playerID",
+                "select":  "id,playerID,nameFirst,nameLast,primary_position,embeddings_str,embeddings"
+            }
+            lookupParams['search'] = util.format("playerID eq '%s'", playerId);
+            let lookupResp = await csu.searchIndex(name, lookupParams);
+            //console.log(JSON.stringify(resp, null, 2));
+
+            if (lookupResp.status == 200) {
+                // Construct the vector search parameters, then execute the vector search
+                let embeddings = lookupResp.respData['value'][0]['embeddings'];
+                let vectorSearchParams = {};
+                let vector = {};
+                vector['value'] = embeddings
+                vector['fields'] = 'embeddings'
+                vector['k'] = 10
+                vectorSearchParams['count'] = "true";
+                vectorSearchParams['select'] = 'id,playerID,nameFirst,nameLast,primary_position';
+                vectorSearchParams['orderby'] = "playerID";
+                vectorSearchParams['vectors'] = [ vector ];
+                let vectorSearchResp = await csu.searchIndex(name, vectorSearchParams);
+                console.log(JSON.stringify(vectorSearchResp, null, 2));
+            }
             break;
         default:
             console.log(util.format("search, unknown subfunction: %s", subfunc));

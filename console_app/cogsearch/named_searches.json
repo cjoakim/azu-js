@@ -33,7 +33,7 @@
     "count": "true",
     "search": "playerID eq 'henderi01'",
     "orderby": "playerID",
-    "select": "id,playerID,nameFirst,nameLast,primary_position,embeddings_str"
+    "select": "id,playerID,nameFirst,nameLast,primary_position,embeddings_str,embeddings"
   },
   "henderi01_full": {
     "count": "true",
