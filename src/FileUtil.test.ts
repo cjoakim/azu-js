@@ -44,10 +44,10 @@ test("FileUtil: readJsonArrayFile", () => {
 test("FileUtil: gen console app package.json", () => {
     let fu = new FileUtil();
     let obj = fu.readJsonObjectFile('package.json');
-    obj['name'] = 'console';
+    obj['name'] = 'console_app';
     obj['description'] = 'console app using azu-js';
-    obj['dependencies']['azu-js'] = util.format('file:../../azu-js-%s.tgz', obj['version']);
+    obj['dependencies']['azu-js'] = util.format('file:../azu-js-%s.tgz', obj['version']);
     expect(Object.keys(obj).length).toBeGreaterThan(6);
     expect(Object.keys(obj).length).toBeLessThan(20);
-    fu.writeTextFileSync('package-console.json', JSON.stringify(obj, null, 4));
+    fu.writeTextFileSync('console_app/package.json', JSON.stringify(obj, null, 4));
 });

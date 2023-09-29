@@ -1,10 +1,10 @@
 {
-    "name": "example_console_app",
+    "name": "console_app",
     "version": "0.9.3",
     "description": "console app using azu-js",
     "homepage": "https://github.com/cjoakim/azu-js",
-    "main": "dist/main.js",
-    "types": "dist/main.d.ts",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "engines": {
         "node": ">=18.7.0"
     },

@@ -8,12 +8,12 @@ tsc
 
 rm tmp/*.*
 
-node dist/index.js files        > tmp/files.txt
-node dist/index.js storage      > tmp/storage.txt
-node dist/index.js embeddings   > tmp/embeddings.txt
-node dist/index.js cosmos_nosql > tmp/cosmos_nosql.txt
-node dist/index.js cosmos_mongo > tmp/cosmos_mongo.txt
-node dist/index.js cosmos_pg    > tmp/cosmos_pg.txt
+node dist/main.js files        > tmp/files.txt
+node dist/main.js storage      > tmp/storage.txt
+node dist/main.js embeddings   > tmp/embeddings.txt
+node dist/main.js cosmos_nosql > tmp/cosmos_nosql.txt
+node dist/main.js cosmos_mongo > tmp/cosmos_mongo.txt
+node dist/main.js cosmos_pg    > tmp/cosmos_pg.txt
 
 cat tmp/files.txt
 cat tmp/storage.txt
