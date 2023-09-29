@@ -62,7 +62,7 @@ test("CogSearchUtil: url methods", async () => {
     expect(su.listIndexersUrl()).toContain('.search.windows.net/indexers?api-version=2023-07-01-Preview');
     expect(su.listDatasourcesUrl()).toContain('.search.windows.net/datasources?api-version=2023-07-01-Preview');
 
-    // TODO - test each URL method
+    // TODO - test more URL methods
 });
 
 
@@ -89,7 +89,7 @@ test("CogSearchUtil: createDatasource", async () => {
 });
 
 test("CogSearchUtil: createIndex", async () => {
-    let infile = 'console_app/cogsearch_schemas/baseballplayers_index.json'
+    let infile = 'console_app/cogsearch/baseballplayers_index.json'
     let resp : CogSearchResponse = 
         await su.createIndex('baseballplayers', infile);
     // console.log('createIndex resp:');
@@ -100,7 +100,7 @@ test("CogSearchUtil: createIndex", async () => {
 });
 
 test("CogSearchUtil: createIndexer", async () => {
-    let infile = 'console_app/cogsearch_schemas/baseballplayers_index.json'
+    let infile = 'console_app/cogsearch/baseballplayers_index.json'
     let resp : CogSearchResponse = 
         await su.createIndexer('baseballplayers', infile);
     // console.log('createIndex resp:');
