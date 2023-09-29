@@ -14,11 +14,12 @@ import { json } from "stream/consumers";
 import util from "util";
 
 export interface CogSearchResponse {
-    url:    string;
-    method: string;
-    status: number;
-    data:   Object;
-    error:  boolean;
+    url:      string;
+    method:   string;
+    body:     string;
+    status:   number;
+    respData: object;
+    error:    boolean;
 }
 
 let func = process.argv[2];
@@ -87,11 +88,16 @@ function files() {
 }
 
 async function search() {
-
     let subfunc = process.argv[3];
     let apiVersion : string = '2023-07-01-Preview';
     let name : string = null;
-    let schemaFile : string = null;
+    let searchName   : string = null;
+    let searchDict   : object = null;
+    let searchParams : object = null;
+    let schemaFile   : string = null;
+    let resp : CogSearchResponse = null;
+
+    // Pass in YOUR environment variable names which contain these values.
     let csu : CogSearchUtil = new CogSearchUtil(
         'AZURE_SEARCH_URL',
         'AZURE_SEARCH_NAME',
@@ -100,52 +106,71 @@ async function search() {
         apiVersion,
         true);
 
-
-
-
-// node dist/main.js search create_cosmos_nosql_datasource AZURE_COSMOSDB_NOSQL_ACCT AZURE_COSMOSDB_NOSQL_RO_KEY1 dev baseballplayers
-// node dist/main.js search create_index baseballplayers baseballplayers_index.json
-// node dist/main.js search create_indexer baseballplayers baseballplayers_indexer.json
-// node dist/main.js search get_indexer_status baseballplayers
-// node dist/main.js search list_datasources
-// node dist/main.js search list_indexes
-// node dist/main.js search list_indexers
-
     switch (subfunc) {
         case "delete_datasource":
-            console.log(await csu.deleteDatasource(process.argv[4]));
+            resp = await csu.deleteDatasource(process.argv[4]);
+            console.log(JSON.stringify(resp, null, 2));
             break;
         case "delete_index":
-            console.log(await csu.deleteIndex(process.argv[4]));
+            resp = await csu.deleteIndex(process.argv[4]);
+            console.log(JSON.stringify(resp, null, 2));
             break;
         case "delete_indexer":
-            console.log(await csu.deleteIndexer(process.argv[4]));
+            resp = await csu.deleteIndexer(process.argv[4]);
+            console.log(JSON.stringify(resp, null, 2));
             break;
         case "create_cosmos_nosql_datasource":
             let accountNameEnvVarName = process.argv[4];
             let accountKeyEnvVarName = process.argv[5];
             let dbname = process.argv[6];
             let collection = process.argv[7];
-            console.log(await csu.createCosmosNoSqlDatasource(accountNameEnvVarName, accountKeyEnvVarName, dbname, collection));
+            resp = await csu.createCosmosNoSqlDatasource(accountNameEnvVarName, accountKeyEnvVarName, dbname, collection);
+            console.log(JSON.stringify(resp, null, 2));
             break;
         case "create_index":
             name = process.argv[4];
             schemaFile = process.argv[5];
-            console.log(await csu.createIndex(name, schemaFile));
+            resp = await csu.createIndex(name, schemaFile);
+            console.log(JSON.stringify(resp, null, 2));
             break;
         case "create_indexer":
             name = process.argv[4];
             schemaFile = process.argv[5];
-            console.log(await csu.createIndex(name, schemaFile));
+            resp = await csu.createIndexer(name, schemaFile);
+            console.log(JSON.stringify(resp, null, 2));
+            break;
+        case "get_indexer_status":
+            name = process.argv[4];
+            resp = await csu.getIndexerStatus(name);
+            console.log(JSON.stringify(resp, null, 2));
             break;
         case "list_datasources":
-            console.log(await csu.listDatasources());
+            resp = await csu.listDatasources();
+            console.log(JSON.stringify(resp, null, 2));
             break;
         case "list_indexes":
-            console.log(await csu.listIndexes());
+            resp = await csu.listIndexes();
+            console.log(JSON.stringify(resp, null, 2));
             break;
         case "list_indexers":
-            console.log(await csu.listIndexers());
+            resp = await csu.listIndexers();
+            console.log(JSON.stringify(resp, null, 2));
+            break;
+        case "named_search":
+            searchDict = fu.readJsonObjectFile('cogsearch/named_searches.json');
+            name = process.argv[4];
+            searchName = process.argv[5];
+            searchParams = searchDict[searchName];
+            resp = await csu.searchIndex(name, searchParams);
+            console.log(JSON.stringify(resp, null, 2));
+            break;
+        case "vector_search":
+            searchDict = fu.readJsonObjectFile('cogsearch/named_searches.json');
+            name = process.argv[4];
+            searchName = process.argv[5];
+            searchParams = searchDict[searchName];
+            resp = await csu.searchIndex(name, searchParams);
+            console.log(JSON.stringify(resp, null, 2));
             break;
         default:
             console.log(util.format("search, unknown subfunction: %s", subfunc));

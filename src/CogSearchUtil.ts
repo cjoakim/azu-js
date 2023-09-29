@@ -285,7 +285,7 @@ export class CogSearchUtil {
 
     // Search and Lookup methods
 
-    async searchIndex(indexName : string, docKey : string, searchParams: object) : Promise<CogSearchResponse> {
+    async searchIndex(indexName : string, searchParams: object) : Promise<CogSearchResponse> {
         let url = this.searchIndexUrl(indexName);
         return this.invokeHttpRequest(url, 'POST', this.queryKey, searchParams);
     }
