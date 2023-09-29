@@ -12,12 +12,12 @@ import { FileUtil } from "./FileUtil";
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export interface CogSearchResponse {
-    url:    string;
-    method: string;
-    body:   string;
-    status: number;
-    data:   Object;
-    error:  boolean;
+    url:      string;
+    method:   string;
+    body:     string;
+    status:   number;
+    respData: object;
+    error:    boolean;
 }
 
 export class CogSearchUtil {
@@ -120,17 +120,16 @@ export class CogSearchUtil {
         let url    : string = null;
         let method : string = null;
 
-        if (action in ['create', 'update']) {
-            let schema : object = this.fileUtil.readJsonObjectFile(schemaFile);
-        }
         switch (action) {
             case "create":
                 method = 'POST';
-                url = this.createIndexUrl();
+                url    = this.createIndexUrl();
+                schema = this.fileUtil.readJsonObjectFile(schemaFile);
                 break;
             case "update":
                 method = 'PUT';
-                url = this.modifyIndexUrl(name);
+                url    = this.modifyIndexUrl(name);
+                schema = this.fileUtil.readJsonObjectFile(schemaFile);
                 break;
             case "delete":
                 method = 'DELETE';
@@ -168,21 +167,20 @@ export class CogSearchUtil {
         let url    : string = null;
         let method : string = null;
 
-        if (action in ['create', 'update']) {
-            let schema : object = this.fileUtil.readJsonObjectFile(schemaFile);
-        }
         switch (action) {
             case "create":
                 method = 'POST';
-                url = this.createIndexerUrl();
+                url    = this.createIndexerUrl();
+                schema = this.fileUtil.readJsonObjectFile(schemaFile);
                 break;
             case "update":
                 method = 'PUT';
-                url = this.modifyIndexerUrl(name);
+                url    = this.modifyIndexerUrl(name);
+                schema = this.fileUtil.readJsonObjectFile(schemaFile);
                 break;
             case "delete":
                 method = 'DELETE';
-                url = this.modifyIndexerUrl(name);
+                url    = this.modifyIndexerUrl(name);
                 break;
         }
         return this.invokeHttpRequest(url, method, this.adminKey, schema);
@@ -299,15 +297,20 @@ export class CogSearchUtil {
 
     // This is the primary method in this class.  It executes all HTTP requests.
 
-    private async invokeHttpRequest(url: string, method: string, key: string, body: Object = null) : Promise<CogSearchResponse> {
-        let opts = this.buildAxiosRequestConfig(url, method, key, body);
+    private async invokeHttpRequest(
+        url:    string, 
+        method: string, 
+        key:    string,
+        data:   Object = null) : Promise<CogSearchResponse> {
+
+        let opts = this.buildAxiosRequestConfig(url, method, key, data);
         let respObj  = this.buildResponseObject(opts);
         try {
             if (this.doHttpReq) {
                 const result = await axios(opts);
                 respObj.status = result.status;
                 if (result.status === 200 && result.data) {
-                    respObj.data = result.data;
+                    respObj.respData = result.data;
                 }
             }
         }
@@ -318,13 +321,13 @@ export class CogSearchUtil {
         return respObj;
     }
 
-    private buildAxiosRequestConfig(url: string, method: string, key: string, body: object = null) : AxiosRequestConfig {
+    private buildAxiosRequestConfig(url: string, method: string, key: string, data: object = null) : AxiosRequestConfig {
         // See https://axios-http.com/docs/req_config
         // 'data' attribute is only applicable for HTTP methods 'PUT', 'POST', 'DELETE', and 'PATCH'
         return {
             method: method.toUpperCase(),
             url:    url,
-            data:   body,
+            data:   data,
             headers: {
                 'Content-Type': 'application/json',
                 'api-key': key
@@ -335,12 +338,12 @@ export class CogSearchUtil {
 
     private buildResponseObject(opts: AxiosRequestConfig) : CogSearchResponse {
         return {
-            url:    opts.url,
-            method: opts.method,
-            body:   opts.data,
-            status: 0,
-            data:   null,
-            error:  false
+            url:      opts.url,
+            method:   opts.method,
+            body:     opts.data,
+            status:   0,
+            respData: null,
+            error:    false
         };
     }
 
