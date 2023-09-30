@@ -79,11 +79,11 @@ function files() {
     console.log(data);
 
     console.log('--- readJsonObjectFile');
-    let obj = fu.readJsonObjectFile('../../data/usa-states.json');
+    let obj = fu.readJsonObjectFile('../data/usa-states.json');
     console.log(obj);
 
     console.log('--- readJsonArrayFile');
-    let airports = fu.readJsonArrayFile('../../data/world-airports-50.json');
+    let airports = fu.readJsonArrayFile('../data/world-airports-50.json');
     console.log(airports[0]);
 }
 
@@ -217,7 +217,7 @@ async function embeddings() {
 
     let oaiUtil = new OpenAiUtil(acctUriEnvVar, acctKeyEnvVar, embDepEnvVar);
     let fu = new FileUtil();
-    let text = fu.readTextFileSync('../../data/gettysburg-address.txt');
+    let text = fu.readTextFileSync('../data/gettysburg-address.txt');
 
     let e = await oaiUtil.generateEmbeddings([text]);
     console.log(e);
