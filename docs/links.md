@@ -37,6 +37,7 @@
 - https://www.typescriptlang.org
 - https://www.typescriptlang.org/docs/handbook/intro.html
 - https://www.typescriptlang.org/docs/
+- https://tsdoc.org
 - https://code.visualstudio.com/docs/languages/typescript
 - https://code.visualstudio.com/blogs/2023/03/30/vscode-copilot
 

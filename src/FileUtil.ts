@@ -9,6 +9,14 @@ export class FileUtil {
     constructor() {
     }
 
+    cwd() : string {
+        return process.cwd();
+    }
+
+    listFiles(dir: string) : Array<string> {
+        return fs.readdirSync(dir);
+    }
+
     readTextFileSync(infile: string) : string {
         try {
             return fs.readFileSync(infile, 'utf-8');

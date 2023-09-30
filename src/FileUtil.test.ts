@@ -2,6 +2,8 @@
 // Unit tests for class FileUtil
 // Chris Joakim, Microsoft, 2023
 
+// npm test --testPathPattern FileUtil
+
 import path from "path";
 import util from "util";
 
@@ -11,6 +13,24 @@ import { FileUtil } from "./FileUtil";
 function epochTime() : number {
     return Date.now().valueOf();
 }
+
+test("FileUtil: cwd", () => {
+    let fu = new FileUtil();
+    let cwd : string = fu.cwd();
+    let endsWell : boolean = cwd.endsWith('azu-js');
+    //console.log(cwd);
+    expect(cwd).toContain('azu-js');
+    expect(endsWell).toBe(true);
+});
+
+test("FileUtil: listFiles", () => {
+    let fu = new FileUtil();
+    let files = fu.listFiles('dist');
+    //console.log(files);
+    expect(files).toContain('FileUtil.js');
+    expect(files).toContain('FileUtil.d.ts');
+    expect(files.length).toBe(26);
+});
 
 test("FileUtil: writeTextFileSync and readTextFileSync", () => {
     let fu = new FileUtil();
