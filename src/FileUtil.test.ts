@@ -95,5 +95,6 @@ test("FileUtil: gen documentation", () => {
         }
     }
     let s = outArray.join("\n");
-    fu.writeTextFileSync('docs/typings.md', s);
+    let outfile = util.format("docs/typings-%s.md", Config.LIB_VERSION);
+    fu.writeTextFileSync(outfile, s);
 });
