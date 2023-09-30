@@ -111,6 +111,10 @@ export declare class Config {
     static LIB_LICENSE: string;
     static ASU_JS_CONFIG_FILE: string;
     private static _config;
+    static platform(): string;
+    static isWindows(): boolean;
+    static isMac(): boolean;
+    static isLinux(): boolean;
     static lookupEnvVarName(normalizedName: string): string;
     static readConfigFile(): Object;
     static writeSampleConfigFile(): boolean;

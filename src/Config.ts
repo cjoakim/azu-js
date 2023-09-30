@@ -1,6 +1,8 @@
 // Utility class for configuration such as environment variables
 // Chris Joakim, Microsoft, 2023
 
+import os from "os";
+
 import { FileUtil } from "./FileUtil";
 
 export class Config {
@@ -11,6 +13,29 @@ export class Config {
     public static LIB_LICENSE         : string = 'MIT';
     public static ASU_JS_CONFIG_FILE  : string = 'azu-js-config.json';
     private static _config            : Object = null;
+
+    static platform() : string {
+        // Possible values are 'aix', 'darwin', 'freebsd','linux', 'openbsd', 'sunos', and 'win32'.
+        return os.platform();
+    }
+
+    static isWindows() : boolean {
+        let p : string = os.platform().toLowerCase();
+        if (this.isMac()) {
+            return false;  // 'darwin' contains 'win'!
+        }
+        return p.includes('win');
+    }
+
+    static isMac() : boolean {
+        let p : string = os.platform().toLowerCase();
+        return p.includes('darwin');
+    }
+
+    static isLinux() : boolean {
+        let p : string = os.platform().toLowerCase();
+        return p.includes('linux');
+    }
 
     static lookupEnvVarName(normalizedName: string) : string {
         this.readConfigFile();
