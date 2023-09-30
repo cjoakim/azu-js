@@ -1,4 +1,3 @@
-
 // Utility class for Azure Blob Storage
 // Chris Joakim, Microsoft, 2023
 

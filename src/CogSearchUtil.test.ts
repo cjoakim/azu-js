@@ -1,4 +1,3 @@
-
 // Unit tests for class CogSearchUtil
 // Chris Joakim, Microsoft, 2023
 
@@ -8,7 +7,9 @@ import fs from "fs";
 import path from "path";
 import util from "util";
 
-import { CogSearchUtil, CogSearchResponse } from "./CogSearchUtil";
+import { CogSearchUtil } from "./CogSearchUtil";
+import { CogSearchResponse } from "./Interfaces";
+
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 

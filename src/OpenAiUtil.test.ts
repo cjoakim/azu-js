@@ -1,4 +1,3 @@
-
 // Unit tests for class OpenAiUtil
 // Chris Joakim, Microsoft, 2023
 

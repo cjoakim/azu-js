@@ -6,7 +6,7 @@ The focus is on the **Azure Cosmos DB, Azure OpenAI, Azure Cognitive Search, and
 
 See the console_app/ directory, and the unit tests, for example use of the azu-js package.
 
-See the TypeScript typings documentation at https://github.com/cjoakim/azu-js/tree/main/docs.
+See the azu-js typings and interfaces documentation at https://github.com/cjoakim/azu-js/tree/main/docs.
 
 ---
 

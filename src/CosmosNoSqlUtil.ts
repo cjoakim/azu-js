@@ -1,4 +1,3 @@
-
 // Utility class for Azure Cosmos DB NoSQL APIs
 // Chris Joakim, Microsoft, 2023
 

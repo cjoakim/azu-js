@@ -1,9 +1,5 @@
-
 // Utility class for Azure Cognitive Search
 // Chris Joakim, Microsoft, 2023
-//
-// See https://learn.microsoft.com/en-us/javascript/api/overview/azure/search-documents-readme?view=azure-node-latest
-// See https://www.npmjs.com/package/@azure/search-documents
 
 import util from "util";
 import { Config } from "./Config";
@@ -11,14 +7,7 @@ import { FileUtil } from "./FileUtil";
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-export interface CogSearchResponse {
-    url:      string;
-    method:   string;
-    body:     string;
-    status:   number;
-    respData: object;
-    error:    boolean;
-}
+import { CogSearchResponse } from "./Interfaces";
 
 export class CogSearchUtil {
 

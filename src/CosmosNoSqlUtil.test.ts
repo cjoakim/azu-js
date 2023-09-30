@@ -1,4 +1,3 @@
-
 // Unit tests for class CosmosNoSqlUtil
 // Chris Joakim, Microsoft, 2023
 

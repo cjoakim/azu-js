@@ -1,4 +1,3 @@
-
 // Unit tests for class Config
 // Chris Joakim, Microsoft, 2023
 

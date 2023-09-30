@@ -1,4 +1,3 @@
-
 // Utility class for Azure OpenAI
 // Chris Joakim, Microsoft, 2023
 

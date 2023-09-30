@@ -1,4 +1,3 @@
-
 // Utility class for local filesystem operations
 // Chris Joakim, Microsoft, 2023
 
