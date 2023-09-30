@@ -22,16 +22,14 @@ export interface CogSearchResponse {
 
 export class CogSearchUtil {
 
-    acctURI      : string = null;
-    acctName     : string = null;
-    adminKey     : string = null;
-    queryKey     : string = null;
-    adminHeaders : Object = null;
-    queryHeaders : Object = null;
-    apiVersion   : string = null;
-    fileUtil     : FileUtil = new FileUtil();
-    version      : string = null;
-    doHttpReq    : boolean = true;
+    acctURI    : string = null;
+    acctName   : string = null;
+    adminKey   : string = null;
+    queryKey   : string = null;
+    apiVersion : string = null;
+    fileUtil   : FileUtil = new FileUtil();
+    version    : string = null;
+    doHttpReq  : boolean = true;
 
     // Pass in the names of the environment variables that contain the
     // configuration values.
@@ -49,21 +47,11 @@ export class CogSearchUtil {
             this.apiVersion = apiVersion;
             this.adminKey = process.env[acctAdminKeyEnvVar];
             this.queryKey = process.env[acctQueryKeyEnvVar];
-
-            this.adminHeaders = this.buildHttpHeader(acctAdminKeyEnvVar);
-            this.queryHeaders = this.buildHttpHeader(acctQueryKeyEnvVar);
-            this.version = Config.LIB_VERSION
+            this.version  = Config.LIB_VERSION
         }
         catch (error) {
             console.log(error);
         }
-    }
-
-    private buildHttpHeader(keyEnvVarName) : Object {
-        let headers = {};
-        headers['Content-Type'] = 'application/json';
-        headers['api-key'] = process.env['' + keyEnvVarName] as string;
-        return headers;
     }
 
     dispose() : void {

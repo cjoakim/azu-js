@@ -38,7 +38,7 @@ function epochTime() : number {
     return Date.now().valueOf();
 }
 
-test("CogSearchUtil: constructor and headers", async () => {
+test("CogSearchUtil: constructor", async () => {
     expect(true).toBe(true);
 
     expect(su.acctName.length).toBeGreaterThan(6);
@@ -46,14 +46,6 @@ test("CogSearchUtil: constructor and headers", async () => {
     expect(su.acctURI).toContain('https://');
     expect(su.acctURI).toContain('.search.windows.net');
     expect(su.apiVersion).toBe(apiVersion);
-
-    let ah = su.adminHeaders;
-    expect(ah['Content-Type']).toBe('application/json');
-    expect(ah['api-key'].length).toBeGreaterThan(30);
-
-    let qh = su.queryHeaders;
-    expect(qh['Content-Type']).toBe('application/json');
-    expect(qh['api-key'].length).toBeGreaterThan(30);
 });
 
 test("CogSearchUtil: url methods", async () => {
@@ -67,7 +59,6 @@ test("CogSearchUtil: url methods", async () => {
 
 
 test("CogSearchUtil: listIndexes", async () => {
-    console.log(su.adminHeaders);
     let resp : CogSearchResponse = await su.listIndexes();
     console.log(resp);
     expect(resp.status).toBe(0);
