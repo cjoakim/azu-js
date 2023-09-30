@@ -78,7 +78,7 @@ test("FileUtil: gen documentation", () => {
     console.log(filesList);
 
     outArray.push('');
-    outArray.push('## azu-js typings');
+    outArray.push('## azu-js typings, version ' + Config.LIB_VERSION);
 
     for (let f of filesList) {
         if (f.endsWith('.d.ts')) {

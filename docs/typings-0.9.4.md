@@ -1,5 +1,5 @@
 
-## azu-js typings
+## azu-js typings, version 0.9.4
 
 ### BlobUtil.d.ts
 
