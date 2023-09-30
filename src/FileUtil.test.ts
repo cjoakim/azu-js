@@ -71,3 +71,29 @@ test("FileUtil: gen console app package.json", () => {
     expect(Object.keys(obj).length).toBeLessThan(20);
     fu.writeTextFileSync('console_app/package.json', JSON.stringify(obj, null, 4));
 });
+
+test("FileUtil: gen documentation", () => {
+    let fu = new FileUtil();
+    let filesList = fu.listFiles('dist');
+    let outArray = [];
+    console.log(filesList);
+
+    outArray.push('');
+    outArray.push('## azu-js typings');
+
+    for (let f of filesList) {
+        if (f.endsWith('.d.ts')) {
+            if (!f.includes('test')) {
+                outArray.push('');
+                outArray.push('### ' + f);
+                outArray.push('');
+                outArray.push("```");
+                let text = fu.readTextFileSync('dist/' + f);
+                outArray.push(text);
+                outArray.push("```");
+            }
+        }
+    }
+    let s = outArray.join("\n");
+    fu.writeTextFileSync('docs/typings.md', s);
+});

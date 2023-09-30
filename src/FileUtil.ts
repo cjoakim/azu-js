@@ -19,7 +19,8 @@ export class FileUtil {
 
     readTextFileSync(infile: string) : string {
         try {
-            return fs.readFileSync(infile, 'utf-8');
+            let buf = fs.readFileSync(infile, 'utf8');
+            return buf.toString();
         }
         catch (error) {
             console.log(error);
