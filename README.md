@@ -27,4 +27,4 @@ See the azu-js typings and interfaces documentation at https://github.com/cjoaki
 
 - (1) embeddings implemented
 - (2) supports both traditional and vector search
-- (3) PaaS service provisioning functionality is not planned; use az CLI, ARM, Bicep, Terraform, etc. instead
+- (3) PaaS service provisioning functionality is not planned; please use az CLI, ARM, Bicep, Terraform, etc. instead
