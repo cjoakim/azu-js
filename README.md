@@ -12,7 +12,7 @@ See the azu-js typings and interfaces documentation at https://github.com/cjoaki
 
 ## azu-js Current Implementation State and Roadmap
 
-| Functionality                   | v0.9.4 Support | Codebase State       | Implementation Class   |
+| Functionality                   | v0.9.5 Support | Codebase State       | Implementation Class   |
 | ------------------------------- | -------------- | -------------------- | ---------------------- |
 | Azure Blob Storage              | yes            | Implemented          | BlobUtil               |
 | Local Filesystem                | yes            | Implemented          | FileUtil               |
@@ -28,3 +28,18 @@ See the azu-js typings and interfaces documentation at https://github.com/cjoaki
 - (1) embeddings implemented
 - (2) supports both traditional and vector search
 - (3) PaaS service provisioning functionality is not planned; please use az CLI, ARM, Bicep, Terraform, etc. instead
+
+### Dependencies
+
+Your application should include the following:
+
+```
+    "dependencies": {
+        "@azure/cosmos": "4.0.0",
+        "@azure/openai": "^1.0.0-beta.6",
+        "@azure/storage-blob": "^12.16.0",
+        "axios": "^1.5.1",
+        "uuid": "^9.0.1",
+        "azu-js": "0.9.5"
+    },
+```
