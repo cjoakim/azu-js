@@ -8,7 +8,6 @@ import path from "path";
 import util from "util";
 
 import { Config } from "./Config";
-import { FileUtil } from "./FileUtil";
 
 
 test("Config: writeSampleConfigFile", async () => {

@@ -1,6 +1,6 @@
 {
     "name": "azu-js",
-    "version": "0.9.4",
+    "version": "0.9.5",
     "description": "Azure Utilities, such as for Cosmos DB",
     "homepage": "https://github.com/cjoakim/azu-js",
     "main": "dist/index.js",
@@ -35,8 +35,6 @@
         "@azure/openai": "^1.0.0-beta.6",
         "@azure/storage-blob": "^12.16.0",
         "axios": "^1.5.1",
-        "mongodb": "^6.1.0",
-        "pg": "^8.11.3",
         "uuid": "^9.0.1"
     },
     "devDependencies": {
