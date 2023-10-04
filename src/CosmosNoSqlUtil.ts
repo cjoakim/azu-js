@@ -13,6 +13,7 @@ import {
     Database,
     DatabaseResponse,
     DatabaseAccount,
+    DatabaseDefinition,
     DiagnosticNodeInternal,
     FeedOptions,
     FeedResponse,
@@ -76,7 +77,9 @@ export class CosmosNoSqlUtil {
     verbose : boolean = false;
 
     // Pass in the names of the environment variables that contain the
-    // Azure Cosmos DB account URI and Key.
+    // Azure Cosmos DB account URI and Key.  The ConnectionPolicy arg
+    // enables you to set preferred regions and other similar params.
+
     constructor(
         acctUriEnvVar : string,
         acctKeyEnvVar : string,
@@ -146,6 +149,15 @@ export class CosmosNoSqlUtil {
 
     async getWriteEndpointAsync() : Promise<string> {
         return this.cosmosClient.getWriteEndpoint();
+    }
+
+    async listDatabasesAsync() : Promise<Array<DatabaseDefinition>> {
+        let feedResp = await this.cosmosClient.databases.readAll().fetchAll();
+        let databases = new Array<DatabaseDefinition>();
+        for (const db of feedResp.resources) {
+            databases.push(db);
+        }
+        return databases;
     }
 
     async setCurrentDatabaseAsync(dbName: string) : Promise<void> {

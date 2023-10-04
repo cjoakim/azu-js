@@ -1,6 +1,8 @@
 // Unit tests for class CosmosNoSqlUtil
 // Chris Joakim, Microsoft, 2023
 
+// npm test --testPathPattern CosmosNoSqlUtil
+
 import fs from "fs";
 import path from "path";
 import util from "util";
@@ -12,6 +14,7 @@ import {
     Container,
     CosmosClient,
     DatabaseAccount,
+    DatabaseDefinition,
     FeedResponse,
     ItemResponse,
     FeedOptions,
@@ -97,6 +100,15 @@ test("CosmosNoSqlUtil: readPartitionKeyDefinitionAsync", async () => {
     // { paths: [ '/pk' ], kind: 'Hash', version: 2 }
     expect(pkDef.paths.length).toBe(1);
     expect(pkDef.paths[0]).toBe('/pk');
+});
+
+test("CosmosNoSqlUtil: listDatabasesAsync", async () => {
+    cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
+    let databases : Array<DatabaseDefinition> = await cu.listDatabasesAsync();
+    for (const db of databases) {
+        //console.log(db);
+    }
+    expect(databases.length).toBeGreaterThan(0);
 });
 
 test("CosmosNoSqlUtil: crud operations", async () => {
