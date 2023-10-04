@@ -39,7 +39,7 @@ Your application should include the following:
         "@azure/openai": "^1.0.0-beta.6",
         "@azure/storage-blob": "^12.16.0",
         "axios": "^1.5.1",
-        "uuid": "^9.0.1",
-        "azu-js": "0.9.5"
+        "uuid": "^9.0.1"
+        "azu-js": "0.9.6"
     },
 ```
