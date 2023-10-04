@@ -12,7 +12,7 @@ See the azu-js typings and interfaces documentation at https://github.com/cjoaki
 
 ## azu-js Current Implementation State and Roadmap
 
-| Functionality                   | v0.9.5 Support | Codebase State       | Implementation Class   |
+| Functionality                   | v0.9.6 Support | Codebase State       | Implementation Class   |
 | ------------------------------- | -------------- | -------------------- | ---------------------- |
 | Azure Blob Storage              | yes            | Implemented          | BlobUtil               |
 | Local Filesystem                | yes            | Implemented          | FileUtil               |

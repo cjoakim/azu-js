@@ -61,7 +61,7 @@ test("CogSearchUtil: url methods", async () => {
 
 test("CogSearchUtil: listIndexes", async () => {
     let resp : CogSearchResponse = await su.listIndexes();
-    console.log(resp);
+    //console.log(resp);
     expect(resp.status).toBe(0);
 });
 
@@ -73,8 +73,6 @@ test("CogSearchUtil: createDatasource", async () => {
     let resp : CogSearchResponse = 
         await su.createCosmosNoSqlDatasource(
             accountNameEnvVarName, accountKeyEnvVarName, dbname, collection);
-    console.log('createCosmosNoSqlDatasource resp:');
-    console.log(resp);
     expect(resp.status).toBe(0);
     expect(resp.method).toBe('POST');
     expect(resp['body']['name']).toBe('cosmosdb-nosql-dev-baseball');
@@ -84,8 +82,6 @@ test("CogSearchUtil: createIndex", async () => {
     let infile = 'console_app/cogsearch/baseballplayers_index.json'
     let resp : CogSearchResponse = 
         await su.createIndex('baseballplayers', infile);
-    // console.log('createIndex resp:');
-    // console.log(resp);
     expect(resp.status).toBe(0);
     expect(resp.method).toBe('POST');
     expect(resp['body']['name']).toBe('baseballplayers');
@@ -95,8 +91,6 @@ test("CogSearchUtil: createIndexer", async () => {
     let infile = 'console_app/cogsearch/baseballplayers_index.json'
     let resp : CogSearchResponse = 
         await su.createIndexer('baseballplayers', infile);
-    // console.log('createIndex resp:');
-    // console.log(resp);
     expect(resp.status).toBe(0);
     expect(resp.method).toBe('POST');
     expect(resp['body']['name']).toBe('baseballplayers');

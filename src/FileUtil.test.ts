@@ -75,7 +75,7 @@ test("FileUtil: gen documentation", () => {
     let fu = new FileUtil();
     let filesList = fu.listFiles('dist');
     let outArray = [];
-    console.log(filesList);
+    //console.log(filesList);
 
     outArray.push('');
     outArray.push('## azu-js typings, version ' + Config.LIB_VERSION);
