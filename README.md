@@ -8,6 +8,8 @@ See the console_app/ directory, and the unit tests, for example use of the azu-j
 
 See the azu-js typings and interfaces documentation at https://github.com/cjoakim/azu-js/tree/main/docs.
 
+The npm package is available here: https://www.npmjs.com/package/azu-js?activeTab=readme
+
 ---
 
 ## azu-js Current Implementation State and Roadmap
