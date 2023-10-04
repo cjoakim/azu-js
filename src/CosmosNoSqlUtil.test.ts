@@ -19,6 +19,7 @@ import {
     FeedResponse,
     ItemResponse,
     FeedOptions,
+    Offer,
     OperationInput,
     PatchOperation,
     PatchOperationType,
@@ -119,6 +120,17 @@ test("CosmosNoSqlUtil: listContainersAsync", async () => {
         //console.log(c);
     }
     expect(containers.length).toBeGreaterThan(0);
+});
+
+test("CosmosNoSqlUtil: getDatabaseOfferAsync", async () => {
+    cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
+    let offer : Offer = await cu.getDatabaseOfferAsync('dev');
+    console.log('' + offer);
+    expect(offer).toBe(undefined);
+
+    offer = await cu.getDatabaseOfferAsync('explore');
+    console.log('' + JSON.stringify(offer, null, 2));
+    expect(offer).toBe(undefined);
 });
 
 test("CosmosNoSqlUtil: crud operations", async () => {

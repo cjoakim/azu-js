@@ -18,6 +18,9 @@ import {
     FeedOptions,
     FeedResponse,
     ItemResponse,
+    Offer,
+    OfferDefinition,
+    OfferResponse,
     OperationInput,
     PatchOperation,
     PartitionKeyDefinition,
@@ -168,6 +171,11 @@ export class CosmosNoSqlUtil {
             containers.push(container);
         }
         return containers;
+    }
+
+    async getDatabaseOfferAsync(dbName: string) : Promise<Offer> {
+        let resp = (await this.cosmosClient.database(dbName).readOffer());
+        return resp.offer.read();  // may be null
     }
 
     async setCurrentDatabaseAsync(dbName: string) : Promise<void> {
