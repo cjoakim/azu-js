@@ -142,10 +142,10 @@ test("CosmosNoSqlUtil: getAccountMetadataAsync", async () => {
     expect(metadata.containers.length).toBeGreaterThan(0);
 });
 
-test("CosmosNoSqlUtil: weaveMetadata", async () => {
+test("CosmosNoSqlUtil CosmosAccountMetadata: weave", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
     let metadata : CosmosAccountMetadata = await cu.getAccountMetadataAsync();
-    let data : Array<object> = cu.weaveMetadata(metadata);
+    let data : Array<object> = metadata.weave();
 
     // TODO - implement
 

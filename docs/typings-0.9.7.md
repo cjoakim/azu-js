@@ -132,10 +132,11 @@ export declare class QueryUtil {
     querySpec(sql: string, parameters?: string[]): SqlQuerySpec;
 }
 export declare class CosmosAccountMetadata {
-    offers: Array<OfferDefinition>;
     databases: Array<DatabaseDefinition>;
     containers: Array<ContainerDefinition>;
+    offers: Array<OfferDefinition>;
     constructor();
+    weave(): Array<object>;
 }
 export declare class CosmosNoSqlUtil {
     acctUriEnvVar: string;
@@ -159,7 +160,6 @@ export declare class CosmosNoSqlUtil {
     listContainersAsync(dbName: string): Promise<Array<ContainerDefinition>>;
     getAccountOffersAsync(): Promise<Array<OfferDefinition>>;
     getAccountMetadataAsync(): Promise<CosmosAccountMetadata>;
-    weaveMetadata(metadata: CosmosAccountMetadata): Array<object>;
     setCurrentDatabaseAsync(dbName: string): Promise<void>;
     setCurrentContainerAsync(cName: string): Promise<void>;
     readPartitionKeyDefinitionAsync(dbName: string, cName: string): Promise<PartitionKeyDefinition>;
