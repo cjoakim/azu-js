@@ -30,7 +30,7 @@ import {
     SqlParameter
   } from "@azure/cosmos";
 
-import { CosmosNoSqlUtil, QueryUtil } from "./CosmosNoSqlUtil";
+import { CosmosNoSqlUtil, QueryUtil, CosmosAccountMetadata } from "./CosmosNoSqlUtil";
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 import exp from "constants";
@@ -55,6 +55,7 @@ export const overrideConnectionPolicy: ConnectionPolicy = Object.freeze({
 });
 
 let cu : CosmosNoSqlUtil = null;
+let fu : FileUtil = new FileUtil();
 
 beforeAll(() => {
     cu = initCosmosNoSqlUtil();
@@ -126,11 +127,23 @@ test("CosmosNoSqlUtil: listContainersAsync", async () => {
 test("CosmosNoSqlUtil: getAccountOffersAsync", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
     let offerDefs : Array<OfferDefinition> = await cu.getAccountOffersAsync();
-    console.log('offerDefs.length: ' + offerDefs.length);
     for (const offer of offerDefs) {
-        console.log(JSON.stringify(offer, null, 2));
+        //console.log(JSON.stringify(offer, null, 2));
     }
     expect(offerDefs.length).toBeGreaterThan(0);
+});
+
+test("CosmosNoSqlUtil: getAccountMetadataAsync", async () => {
+    cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
+    let metadata : CosmosAccountMetadata = await cu.getAccountMetadataAsync();
+    //console.log('metadata: ' + JSON.stringify(metadata, null, 2));
+    fu.writeTextFileSync('tmp/cosmos_account_metadata.json', JSON.stringify(metadata, null, 2));
+    // for (const offer of offerDefs) {
+    //     console.log(JSON.stringify(offer, null, 2));
+    // }
+    expect(metadata.offers.length).toBeGreaterThan(0);
+    expect(metadata.databases.length).toBeGreaterThan(0);
+    expect(metadata.containers.length).toBeGreaterThan(0);
 });
 
 test("CosmosNoSqlUtil: crud operations", async () => {
@@ -215,7 +228,6 @@ test("CosmosNoSqlUtil: crud operations", async () => {
     // Delete document
     // See https://learn.microsoft.com/en-us/rest/api/cosmos-db/http-status-codes-for-cosmosdb
     let deleteResp : ItemResponse<Object> = await cu.deleteDocumentAsync(dbName, cName, id, pk);
-    //console.log(deleteResp);
     expect(deleteResp.statusCode).toBe(204);
     try {
         deleteResp = await cu.deleteDocumentAsync(dbName, cName, id, pk);

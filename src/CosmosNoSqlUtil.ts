@@ -64,6 +64,15 @@ export class QueryUtil {
     }
 }
 
+export class CosmosAccountMetadata {
+
+    offers : Array<OfferDefinition> = new Array<OfferDefinition>();
+    databases : Array<DatabaseDefinition> = new Array<DatabaseDefinition>();
+    containers : Array<ContainerDefinition> = new Array<ContainerDefinition>();
+
+    constructor() {}
+}
+
 
 export class CosmosNoSqlUtil {
 
@@ -180,6 +189,26 @@ export class CosmosNoSqlUtil {
             offerDefs.push(offer);
         }
         return offerDefs;
+    }
+
+    async getAccountMetadataAsync() : Promise<CosmosAccountMetadata> {
+        let metadata : CosmosAccountMetadata = new CosmosAccountMetadata();
+        let offerDefs : Array<OfferDefinition> = await this.getAccountOffersAsync();
+        for (const offer of offerDefs) {
+            metadata.offers.push(offer);
+        }
+        let databases : Array<DatabaseDefinition> = await this.listDatabasesAsync();
+        for (const db of databases) {
+            metadata.databases.push(db);
+        }
+        for (const db of metadata.databases) {
+            let dbName = db.id;  // db.id is the database name
+            let containers : Array<ContainerDefinition> = await this.listContainersAsync(db.id);
+            for (const c of containers) {
+                metadata.containers.push(c);
+            }
+        }
+        return metadata;
     }
 
     async setCurrentDatabaseAsync(dbName: string) : Promise<void> {

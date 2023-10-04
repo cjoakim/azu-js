@@ -125,11 +125,17 @@ export declare class Config {
 ### CosmosNoSqlUtil.d.ts
 
 ```
-import { ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, FeedResponse, ItemResponse, PartitionKeyDefinition, ResourceResponse, SqlQuerySpec } from "@azure/cosmos";
+import { ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PartitionKeyDefinition, ResourceResponse, SqlQuerySpec, ContainerDefinition } from "@azure/cosmos";
 export declare const defaultCosmosConnectionPolicy: ConnectionPolicy;
 export declare class QueryUtil {
     constructor();
     querySpec(sql: string, parameters?: string[]): SqlQuerySpec;
+}
+export declare class CosmosAccountMetadata {
+    offers: Array<OfferDefinition>;
+    databases: Array<DatabaseDefinition>;
+    containers: Array<ContainerDefinition>;
+    constructor();
 }
 export declare class CosmosNoSqlUtil {
     acctUriEnvVar: string;
@@ -149,6 +155,10 @@ export declare class CosmosNoSqlUtil {
     getDatabaseAccountAsync(): Promise<ResourceResponse<DatabaseAccount>>;
     getReadEndpointAsync(): Promise<string>;
     getWriteEndpointAsync(): Promise<string>;
+    listDatabasesAsync(): Promise<Array<DatabaseDefinition>>;
+    listContainersAsync(dbName: string): Promise<Array<ContainerDefinition>>;
+    getAccountOffersAsync(): Promise<Array<OfferDefinition>>;
+    getAccountMetadataAsync(): Promise<CosmosAccountMetadata>;
     setCurrentDatabaseAsync(dbName: string): Promise<void>;
     setCurrentContainerAsync(cName: string): Promise<void>;
     readPartitionKeyDefinitionAsync(dbName: string, cName: string): Promise<PartitionKeyDefinition>;
@@ -176,6 +186,26 @@ export declare class FileUtil {
     readJsonArrayFile(infile: string): Array<Object>;
     readJsonObjectFile(infile: string): Object;
 }
+
+```
+
+### index.d.ts
+
+```
+import { Config } from "./Config";
+import { CogSearchResponse } from "./Interfaces";
+import { FileUtil } from "./FileUtil";
+import { BlobUtil } from "./BlobUtil";
+import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, QueryUtil } from "./CosmosNoSqlUtil";
+import { CogSearchUtil } from "./CogSearchUtil";
+import { OpenAiUtil } from "./OpenAiUtil";
+export { Config };
+export { CogSearchResponse };
+export { FileUtil };
+export { BlobUtil };
+export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, QueryUtil };
+export { CogSearchUtil };
+export { OpenAiUtil };
 
 ```
 
@@ -211,25 +241,5 @@ export declare class OpenAiUtil {
     generateEmbeddings(input: string[], options?: GetEmbeddingsOptions): Promise<Embeddings>;
     generateUuid(): string;
 }
-
-```
-
-### index.d.ts
-
-```
-import { Config } from "./Config";
-import { CogSearchResponse } from "./Interfaces";
-import { FileUtil } from "./FileUtil";
-import { BlobUtil } from "./BlobUtil";
-import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, QueryUtil } from "./CosmosNoSqlUtil";
-import { CogSearchUtil } from "./CogSearchUtil";
-import { OpenAiUtil } from "./OpenAiUtil";
-export { Config };
-export { CogSearchResponse };
-export { FileUtil };
-export { BlobUtil };
-export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, QueryUtil };
-export { CogSearchUtil };
-export { OpenAiUtil };
 
 ```
