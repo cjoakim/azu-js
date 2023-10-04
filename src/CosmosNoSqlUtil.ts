@@ -173,7 +173,7 @@ export class CosmosNoSqlUtil {
         return containers;
     }
 
-    async getOffersAsync() : Promise<Array<OfferDefinition>> {
+    async getAccountOffersAsync() : Promise<Array<OfferDefinition>> {
         let offerDefs : Array<OfferDefinition> = new Array<OfferDefinition>();
         let resp = await this.cosmosClient.offers.readAll().fetchAll();
         for (const offer of resp.resources) {

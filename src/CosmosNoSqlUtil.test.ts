@@ -123,9 +123,9 @@ test("CosmosNoSqlUtil: listContainersAsync", async () => {
     expect(containers.length).toBeGreaterThan(0);
 });
 
-test("CosmosNoSqlUtil: getOffersAsync", async () => {
+test("CosmosNoSqlUtil: getAccountOffersAsync", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
-    let offerDefs : Array<OfferDefinition> = await cu.getOffersAsync();
+    let offerDefs : Array<OfferDefinition> = await cu.getAccountOffersAsync();
     console.log('offerDefs.length: ' + offerDefs.length);
     for (const offer of offerDefs) {
         console.log(JSON.stringify(offer, null, 2));
