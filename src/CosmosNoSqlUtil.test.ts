@@ -20,6 +20,7 @@ import {
     ItemResponse,
     FeedOptions,
     Offer,
+    OfferDefinition,
     OperationInput,
     PatchOperation,
     PatchOperationType,
@@ -122,15 +123,14 @@ test("CosmosNoSqlUtil: listContainersAsync", async () => {
     expect(containers.length).toBeGreaterThan(0);
 });
 
-test("CosmosNoSqlUtil: getDatabaseOfferAsync", async () => {
+test("CosmosNoSqlUtil: getOffersAsync", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
-    let offer : Offer = await cu.getDatabaseOfferAsync('dev');
-    console.log('' + offer);
-    expect(offer).toBe(undefined);
-
-    offer = await cu.getDatabaseOfferAsync('explore');
-    console.log('' + JSON.stringify(offer, null, 2));
-    expect(offer).toBe(undefined);
+    let offerDefs : Array<OfferDefinition> = await cu.getOffersAsync();
+    console.log('offerDefs.length: ' + offerDefs.length);
+    for (const offer of offerDefs) {
+        console.log(JSON.stringify(offer, null, 2));
+    }
+    expect(offerDefs.length).toBeGreaterThan(0);
 });
 
 test("CosmosNoSqlUtil: crud operations", async () => {

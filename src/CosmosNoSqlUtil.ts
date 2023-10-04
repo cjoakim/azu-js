@@ -173,9 +173,13 @@ export class CosmosNoSqlUtil {
         return containers;
     }
 
-    async getDatabaseOfferAsync(dbName: string) : Promise<Offer> {
-        let resp = (await this.cosmosClient.database(dbName).readOffer());
-        return resp.offer.read();  // may be null
+    async getOffersAsync() : Promise<Array<OfferDefinition>> {
+        let offerDefs : Array<OfferDefinition> = new Array<OfferDefinition>();
+        let resp = await this.cosmosClient.offers.readAll().fetchAll();
+        for (const offer of resp.resources) {
+            offerDefs.push(offer);
+        }
+        return offerDefs;
     }
 
     async setCurrentDatabaseAsync(dbName: string) : Promise<void> {
