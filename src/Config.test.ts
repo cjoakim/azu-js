@@ -40,3 +40,9 @@ test("Config: platform methods", async () => {
         expect(true).toBe(false);
     }
 });
+
+test("Config: ensure version number consistency", async () => {
+    // TODO - implement
+    // Ensure that package.json, Config.ts and README files are consistent.
+    expect(true).toBe(false);
+});
