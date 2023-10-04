@@ -159,6 +159,7 @@ export declare class CosmosNoSqlUtil {
     listContainersAsync(dbName: string): Promise<Array<ContainerDefinition>>;
     getAccountOffersAsync(): Promise<Array<OfferDefinition>>;
     getAccountMetadataAsync(): Promise<CosmosAccountMetadata>;
+    weaveMetadata(metadata: CosmosAccountMetadata): Array<object>;
     setCurrentDatabaseAsync(dbName: string): Promise<void>;
     setCurrentContainerAsync(cName: string): Promise<void>;
     readPartitionKeyDefinitionAsync(dbName: string, cName: string): Promise<PartitionKeyDefinition>;

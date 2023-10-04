@@ -136,14 +136,20 @@ test("CosmosNoSqlUtil: getAccountOffersAsync", async () => {
 test("CosmosNoSqlUtil: getAccountMetadataAsync", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
     let metadata : CosmosAccountMetadata = await cu.getAccountMetadataAsync();
-    //console.log('metadata: ' + JSON.stringify(metadata, null, 2));
     fu.writeTextFileSync('tmp/cosmos_account_metadata.json', JSON.stringify(metadata, null, 2));
-    // for (const offer of offerDefs) {
-    //     console.log(JSON.stringify(offer, null, 2));
-    // }
     expect(metadata.offers.length).toBeGreaterThan(0);
     expect(metadata.databases.length).toBeGreaterThan(0);
     expect(metadata.containers.length).toBeGreaterThan(0);
+});
+
+test("CosmosNoSqlUtil: weaveMetadata", async () => {
+    cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
+    let metadata : CosmosAccountMetadata = await cu.getAccountMetadataAsync();
+    let data : Array<object> = cu.weaveMetadata(metadata);
+
+    // TODO - implement
+
+    expect(true).toBe(false);
 });
 
 test("CosmosNoSqlUtil: crud operations", async () => {

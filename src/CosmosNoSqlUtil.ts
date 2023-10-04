@@ -211,6 +211,17 @@ export class CosmosNoSqlUtil {
         return metadata;
     }
 
+    weaveMetadata(metadata: CosmosAccountMetadata) : Array<object> {
+        // "weave" the databases, containers, and offers in the given metadata
+        // object into a sorted list of objects suitable for presenting in
+        // a HTML page or other report.
+        let results = new Array<object>();
+
+        // TODO - implement
+        
+        return results;
+    }
+
     async setCurrentDatabaseAsync(dbName: string) : Promise<void> {
         if (this.currentDbName !== dbName) {
             this.currentDbName = dbName;
