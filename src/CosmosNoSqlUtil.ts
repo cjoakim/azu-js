@@ -24,7 +24,8 @@ import {
     PatchOperationType,
     ResourceResponse,
     SqlQuerySpec,
-    SqlParameter
+    SqlParameter,
+    ContainerDefinition
   } from "@azure/cosmos";
 
 
@@ -158,6 +159,15 @@ export class CosmosNoSqlUtil {
             databases.push(db);
         }
         return databases;
+    }
+
+    async listContainersAsync(dbName: string) : Promise<Array<ContainerDefinition>> {
+        let feedResp = await this.cosmosClient.database(dbName).containers.readAll().fetchAll();
+        let containers = new Array<ContainerDefinition>();
+        for (const container of feedResp.resources) {
+            containers.push(container);
+        }
+        return containers;
     }
 
     async setCurrentDatabaseAsync(dbName: string) : Promise<void> {

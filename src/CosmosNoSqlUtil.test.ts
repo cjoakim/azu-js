@@ -12,6 +12,7 @@ import {
     ConnectionMode,
     ConnectionPolicy,
     Container,
+    ContainerDefinition,
     CosmosClient,
     DatabaseAccount,
     DatabaseDefinition,
@@ -109,6 +110,15 @@ test("CosmosNoSqlUtil: listDatabasesAsync", async () => {
         //console.log(db);
     }
     expect(databases.length).toBeGreaterThan(0);
+});
+
+test("CosmosNoSqlUtil: listContainersAsync", async () => {
+    cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
+    let containers : Array<ContainerDefinition> = await cu.listContainersAsync('dev');
+    for (const c of containers) {
+        //console.log(c);
+    }
+    expect(containers.length).toBeGreaterThan(0);
 });
 
 test("CosmosNoSqlUtil: crud operations", async () => {
