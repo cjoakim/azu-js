@@ -1,4 +1,6 @@
-// Utility class for local filesystem operations
+// Utility class for local filesystem operations.
+// To read huge text files, consider using a line-by-line
+// streaming approach in your application code.
 // Chris Joakim, Microsoft, 2023
 
 import fs from "fs";
