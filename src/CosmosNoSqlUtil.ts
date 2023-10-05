@@ -31,6 +31,7 @@ import {
     ContainerDefinition
   } from "@azure/cosmos";
 
+import { FileUtil } from "./FileUtil";
 
 export const defaultCosmosConnectionPolicy: ConnectionPolicy = Object.freeze({
     connectionMode: ConnectionMode.Gateway,
@@ -64,6 +65,43 @@ export class QueryUtil {
     }
 }
 
+export class Meta {
+
+    raw   : object = null;
+    type  : string = null;
+    id    : string = null;
+    rid   : string = null;
+    self  : string = null;
+    offer : Meta   = null;
+    key   : string = null;
+    containers : Array<Meta> = null;
+
+    constructor(obj_type : string, raw_data : object) {
+        this.type = ('' + obj_type).toLowerCase();
+        this.raw  = raw_data;
+        this.id   = raw_data['id'];
+        this.rid  = raw_data['_rid'];
+        this.self = raw_data['_self'];
+        this.key  = util.format('%s|%s|%s', this.type, this.id, this.self);
+
+        if (this.isDb()) {
+            this.containers = new Array<Meta>();
+        }
+    }
+
+    isDb() : boolean {
+        return this.type === 'db';
+    }
+
+    isCollection() : boolean {
+        return this.type === 'coll';
+    }
+
+    isOffer() : boolean {
+        return this.type === 'offer';
+    }
+}
+
 export class CosmosAccountMetadata {
 
     databases  : Array<DatabaseDefinition>  = new Array<DatabaseDefinition>();
@@ -76,11 +114,26 @@ export class CosmosAccountMetadata {
         // "weave" the databases, containers, and offers in the given metadata
         // object into a sorted list of objects suitable for presenting in a
         // HTML page or other report.
-        let results = new Array<object>();
-
         // TODO - implement
-        
-        return results;
+        let fu : FileUtil = new FileUtil();
+        let metaArray = new Array<object>();
+        let dictionary = {};
+        this.databases.forEach(data => { 
+            let m = new Meta('db', data);
+            dictionary[m.self] = m.id;
+        });
+        this.containers.forEach(data => { 
+            let m = new Meta('coll', data);
+            dictionary[m.self] = m.id;
+        });
+        this.offers.forEach(data => { 
+            let m = new Meta('offer', data);
+            dictionary[m.self] = m.raw['resource'];
+        });
+
+        fu.writeTextFileSync('tmp/meta-dict.json', JSON.stringify(dictionary, null, 2));
+        fu.writeTextFileSync('tmp/meta-weave.json', JSON.stringify(metaArray, null, 2));
+        return null;
     }
 }
 
