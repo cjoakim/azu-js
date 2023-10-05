@@ -2,6 +2,7 @@
 // Chris Joakim, Microsoft, 2023
 
 import fs from "fs";
+import os from "os";
 
 export class FileUtil {
     
@@ -20,6 +21,22 @@ export class FileUtil {
         try {
             let buf = fs.readFileSync(infile, 'utf8');
             return buf.toString();
+        }
+        catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+
+    readTextFileAsLinesSync(infile: string) : Array<string> {
+        try {
+            let text = this.readTextFileSync(infile);
+            if (text == null) {
+                return null;
+            }
+            else {
+                return text.split("\n");
+            }
         }
         catch (error) {
             console.log(error);

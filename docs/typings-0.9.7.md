@@ -183,6 +183,7 @@ export declare class FileUtil {
     cwd(): string;
     listFiles(dir: string): Array<string>;
     readTextFileSync(infile: string): string;
+    readTextFileAsLinesSync(infile: string): Array<string>;
     writeTextFileSync(outfile: string, data: string): boolean;
     readJsonArrayFile(infile: string): Array<Object>;
     readJsonObjectFile(infile: string): Object;

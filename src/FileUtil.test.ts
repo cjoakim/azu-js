@@ -44,6 +44,14 @@ test("FileUtil: writeTextFileSync and readTextFileSync", () => {
     expect(data).toBe(content);
 });
 
+test("FileUtil: readTextFileAsLinesSync", () => {
+    let fu = new FileUtil();
+    let lines : Array<string> = fu.readTextFileAsLinesSync('data/gettysburg-address.txt');
+    expect(lines.length).toBe(20);
+    expect(lines[0]).toBe('Four score and seven years ago our fathers brought forth on this continent, a new nation,');
+    expect(lines[18]).toBe('– and that government of the people, by the people, for the people, shall not perish from the earth.');
+});
+
 test("FileUtil: readJsonObjectFile", () => {
     let fu = new FileUtil();
     let obj = fu.readJsonObjectFile('data/usa-states.json');

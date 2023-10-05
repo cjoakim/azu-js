@@ -8,7 +8,7 @@ import path from "path";
 import util from "util";
 
 import { Config } from "./Config";
-
+import { FileUtil } from "./FileUtil";
 
 test("Config: writeSampleConfigFile", async () => {
     let writeResult : boolean = Config.writeSampleConfigFile();
@@ -42,7 +42,22 @@ test("Config: platform methods", async () => {
 });
 
 test("Config: ensure version number consistency", async () => {
-    // TODO - implement
-    // Ensure that package.json, Config.ts and README files are consistent.
-    expect(true).toBe(false);
+    // Ensure that the package.json, Config.ts and README files are consistent
+    // regarding the current version number of azu-js.
+    let fu = new FileUtil();
+    let pkg = fu.readJsonObjectFile('package.json');
+    let pkgVersion = pkg['version'];
+    let readmeLines : Array<string> = fu.readTextFileAsLinesSync('README.md');
+    let expectedReadmeLine : string = util.format('"azu-js": "%s"', pkgVersion);
+    let expectedReadmeLineFound : boolean = false;
+    readmeLines.forEach(line => { 
+        if (line.includes(expectedReadmeLine)) {
+            expectedReadmeLineFound = true;
+        }
+    }); 
+    expect(pkgVersion).toBe('0.9.7');
+    expect(pkgVersion).toBe(Config.LIB_VERSION);
+    expect(readmeLines.length).toBeGreaterThan(40);
+    expect(readmeLines.length).toBeLessThan(60);
+    expect(expectedReadmeLineFound).toBe(true);
 });
