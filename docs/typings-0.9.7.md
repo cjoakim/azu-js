@@ -122,14 +122,24 @@ export declare class Config {
 
 ```
 
-### CosmosNoSqlUtil.d.ts
+### CosmosAccountMetadata.d.ts
 
 ```
-import { ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PartitionKeyDefinition, ResourceResponse, SqlQuerySpec, ContainerDefinition } from "@azure/cosmos";
-export declare const defaultCosmosConnectionPolicy: ConnectionPolicy;
-export declare class QueryUtil {
-    constructor();
-    querySpec(sql: string, parameters?: string[]): SqlQuerySpec;
+import { DatabaseDefinition, OfferDefinition, ContainerDefinition } from "@azure/cosmos";
+export declare class Meta {
+    raw: object;
+    type: string;
+    id: string;
+    rid: string;
+    self: string;
+    offer: Meta;
+    key: string;
+    containers: Array<Meta>;
+    constructor(obj_type: string, raw_data: object);
+    isDb(): boolean;
+    isContainer(): boolean;
+    isOffer(): boolean;
+    addContainer(m: Meta): void;
 }
 export declare class CosmosAccountMetadata {
     databases: Array<DatabaseDefinition>;
@@ -138,6 +148,15 @@ export declare class CosmosAccountMetadata {
     constructor();
     weave(): Array<object>;
 }
+
+```
+
+### CosmosNoSqlUtil.d.ts
+
+```
+import { ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PartitionKeyDefinition, ResourceResponse, SqlQuerySpec, ContainerDefinition } from "@azure/cosmos";
+import { CosmosAccountMetadata } from "./CosmosAccountMetadata";
+export declare const defaultCosmosConnectionPolicy: ConnectionPolicy;
 export declare class CosmosNoSqlUtil {
     acctUriEnvVar: string;
     acctKeyEnvVar: string;
@@ -226,6 +245,17 @@ export declare class OpenAiUtil {
 
 ```
 
+### SqlQueryUtil.d.ts
+
+```
+import { SqlQuerySpec } from "@azure/cosmos";
+export declare class SqlQueryUtil {
+    constructor();
+    querySpec(sql: string, parameters?: string[]): SqlQuerySpec;
+}
+
+```
+
 ### index.d.ts
 
 ```
@@ -233,15 +263,19 @@ import { Config } from "./Config";
 import { CogSearchResponse } from "./Interfaces";
 import { FileUtil } from "./FileUtil";
 import { BlobUtil } from "./BlobUtil";
-import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, QueryUtil } from "./CosmosNoSqlUtil";
+import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUtil";
+import { Meta, CosmosAccountMetadata } from "./CosmosAccountMetadata";
 import { CogSearchUtil } from "./CogSearchUtil";
 import { OpenAiUtil } from "./OpenAiUtil";
+import { SqlQueryUtil } from "./SqlQueryUtil";
 export { Config };
 export { CogSearchResponse };
 export { FileUtil };
 export { BlobUtil };
-export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, QueryUtil };
+export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy };
+export { Meta, CosmosAccountMetadata };
 export { CogSearchUtil };
 export { OpenAiUtil };
+export { SqlQueryUtil };
 
 ```

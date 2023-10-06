@@ -30,9 +30,12 @@ import {
     SqlParameter
   } from "@azure/cosmos";
 
-import { CosmosNoSqlUtil, QueryUtil, CosmosAccountMetadata } from "./CosmosNoSqlUtil";
+import { CosmosNoSqlUtil } from "./CosmosNoSqlUtil";
+import { Meta, CosmosAccountMetadata } from "./CosmosAccountMetadata";
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
+import { SqlQueryUtil } from "./SqlQueryUtil";
+
 import exp from "constants";
 
 // State retained across tests
@@ -191,7 +194,7 @@ test("CosmosNoSqlUtil: crud operations", async () => {
     expect(ru).toBeLessThan(1.1);
 
     // Query all
-    let qu = new QueryUtil();
+    let qu = new SqlQueryUtil();
     let spec : SqlQuerySpec = qu.querySpec('select * from c offset 0 limit 1');
     expect(spec['query']).toBe('select * from c offset 0 limit 1');
     expect(spec['parameters'].length).toBe(0);

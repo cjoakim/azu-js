@@ -28,7 +28,7 @@ test("FileUtil: listFiles", () => {
     //console.log(files);
     expect(files).toContain('FileUtil.js');
     expect(files).toContain('FileUtil.d.ts');
-    expect(files.length).toBe(28);
+    expect(files.length).toBe(32);
 });
 
 test("FileUtil: writeTextFileSync and readTextFileSync", () => {
