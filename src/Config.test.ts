@@ -55,7 +55,7 @@ test("Config: ensure version number consistency", async () => {
             expectedReadmeLineFound = true;
         }
     }); 
-    expect(pkgVersion).toBe('0.9.7');
+    expect(pkgVersion).toBe('0.9.8');
     expect(pkgVersion).toBe(Config.LIB_VERSION);
     expect(readmeLines.length).toBeGreaterThan(40);
     expect(readmeLines.length).toBeLessThan(60);
