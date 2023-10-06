@@ -37,14 +37,17 @@ import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
 
 export class NoSqlMeta {
 
-    raw   : object = null;
-    type  : string = null;
-    id    : string = null;
-    rid   : string = null;
-    self  : string = null;
-    offer : NoSqlMeta = null;
-    key   : string = null;
-    containers : Array<NoSqlMeta> = null;
+    raw     : object = null;
+    type    : string = null;
+    id      : string = null;
+    rid     : string = null;
+    self    : string = null;
+    offer   : NoSqlMeta = null;
+    key     : string = null;
+    partitionKey  : Array<object> = null;
+    defaultTtl    : string = null;
+    analyticalTtl : string = null;
+    containers    : Array<NoSqlMeta> = null;
 
     constructor(obj_type : string, raw_data : object) {
         this.type = ('' + obj_type).toLowerCase();
@@ -56,6 +59,18 @@ export class NoSqlMeta {
 
         if (this.isDb()) {
             this.containers = new Array<NoSqlMeta>();
+        }
+        if (this.isContainer()) {
+            this.partitionKey = [];
+            if (raw_data['partitionKey']) {
+                this.partitionKey = raw_data['partitionKey']['paths'];
+            }
+            if (raw_data['defaultTtl']) {
+                this.defaultTtl = '' + raw_data['defaultTtl'];
+            }
+            if (raw_data['analyticalStorageTtl']) {
+                this.analyticalTtl = '' + raw_data['analyticalStorageTtl'];
+            }
         }
     }
 
@@ -73,7 +88,16 @@ export class NoSqlMeta {
 
     addContainer(m : NoSqlMeta) : void {
         this.containers.push(m);
+    }
 
+    pruneDb() : void {
+        this.raw = null;
+        delete this['raw'];
+        delete this['key'];
+        this.containers.forEach(c => { 
+            delete c['raw'];
+            delete c['key'];
+        });
     }
 }
 
@@ -89,9 +113,9 @@ export class CosmosNoSqlAccountMetadata {
         // "weave" the databases, containers, and offers in the given metadata
         // object into a sorted list of objects suitable for presenting in a
         // HTML page or other report.
-        // TODO - implement
         let fu : FileUtil = new FileUtil();
         let metaArray = new Array<NoSqlMeta>();
+        let dbArray = new Array<NoSqlMeta>();
         let dictionary = {};
 
         // Collect the raw databases and containers into an array of Meta objects
@@ -109,11 +133,9 @@ export class CosmosNoSqlAccountMetadata {
         // Assign the offers to the databases or containers
         this.offers.forEach(data => { 
             let resourceId = data['resource'];
-            let assigned = false;
             metaArray.forEach(m => {
                 if (m.self === resourceId) {
-                    m.offer = new NoSqlMeta('offer', data);
-                    assigned = true;
+                    m.offer = new NoSqlMeta('offer', data['content']);
                 }
             });
         });
@@ -132,8 +154,16 @@ export class CosmosNoSqlAccountMetadata {
             }
         });
 
+        metaArray.forEach(m => { 
+            if (m.isDb()) {
+                m.pruneDb();
+                dbArray.push(m);
+            }
+        });
+
         fu.writeTextFileSync('tmp/meta-dict.json', JSON.stringify(dictionary, null, 2));
         fu.writeTextFileSync('tmp/meta-array.json', JSON.stringify(metaArray, null, 2));
+        fu.writeTextFileSync('tmp/db-array.json', JSON.stringify(metaArray, null, 2));
         return null;
     }
 }
