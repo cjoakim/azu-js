@@ -150,6 +150,7 @@ test("CosmosNoSqlUtil CosmosAccountMetadata: weave", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
     let metadata : CosmosNoSqlAccountMetadata = await cu.getAccountMetadataAsync();
     let data : Array<object> = metadata.weave();
+    fu.writeTextFileSync('tmp/weave.json', JSON.stringify(data, null, 2));
     expect(data.length).toBeGreaterThan(0);
     expect(data.length).toBeLessThan(10);
 });

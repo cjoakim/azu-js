@@ -9,9 +9,6 @@ import {
     ContainerDefinition
   } from "@azure/cosmos";
 
-import { FileUtil } from "./FileUtil";
-
-
 export class NoSqlMeta {
 
     raw     : object = null;
@@ -99,10 +96,9 @@ export class CosmosNoSqlAccountMetadata {
     constructor() {}
 
     weave() : Array<object> {
-        // "weave" the databases, containers, and offers in the given metadata
+        // "weave" the databases, containers, and offers data in this metadata
         // object into a sorted list of objects suitable for presenting in a
         // HTML page or other report.
-        let fu : FileUtil = new FileUtil();
         let metaArray = new Array<NoSqlMeta>();
         let dbArray = new Array<NoSqlMeta>();
         let dictionary = {};
@@ -149,10 +145,6 @@ export class CosmosNoSqlAccountMetadata {
                 dbArray.push(m);
             }
         });
-
-        fu.writeTextFileSync('tmp/meta-dict.json', JSON.stringify(dictionary, null, 2));
-        fu.writeTextFileSync('tmp/meta-array.json', JSON.stringify(metaArray, null, 2));
-        fu.writeTextFileSync('tmp/db-array.json', JSON.stringify(dbArray, null, 2));
         return dbArray;
     }
 }

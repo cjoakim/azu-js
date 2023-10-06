@@ -225,30 +225,6 @@ export declare class FileUtil {
 
 ```
 
-### index.d.ts
-
-```
-import { Config } from "./Config";
-import { CogSearchResponse } from "./Interfaces";
-import { FileUtil } from "./FileUtil";
-import { BlobUtil } from "./BlobUtil";
-import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUtil";
-import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
-import { CogSearchUtil } from "./CogSearchUtil";
-import { OpenAiUtil } from "./OpenAiUtil";
-import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
-export { Config };
-export { CogSearchResponse };
-export { FileUtil };
-export { BlobUtil };
-export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy };
-export { NoSqlMeta, CosmosNoSqlAccountMetadata };
-export { CogSearchUtil };
-export { OpenAiUtil };
-export { CosmosNoSqlQuerySpecUtil };
-
-```
-
 ### Interfaces.d.ts
 
 ```
@@ -281,5 +257,29 @@ export declare class OpenAiUtil {
     generateEmbeddings(input: string[], options?: GetEmbeddingsOptions): Promise<Embeddings>;
     generateUuid(): string;
 }
+
+```
+
+### index.d.ts
+
+```
+import { BlobUtil } from "./BlobUtil";
+import { CogSearchResponse } from "./Interfaces";
+import { CogSearchUtil } from "./CogSearchUtil";
+import { Config } from "./Config";
+import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
+import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUtil";
+import { FileUtil } from "./FileUtil";
+import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
+import { OpenAiUtil } from "./OpenAiUtil";
+export { BlobUtil };
+export { CogSearchResponse };
+export { CogSearchUtil };
+export { Config };
+export { CosmosNoSqlQuerySpecUtil };
+export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy };
+export { FileUtil };
+export { NoSqlMeta, CosmosNoSqlAccountMetadata };
+export { OpenAiUtil };
 
 ```
