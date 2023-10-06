@@ -116,19 +116,36 @@ export class CosmosAccountMetadata {
         // HTML page or other report.
         // TODO - implement
         let fu : FileUtil = new FileUtil();
-        let metaArray = new Array<object>();
+        let metaArray = new Array<Meta>();
         let dictionary = {};
+
+        // Collect the raw databases and containers into an array of Meta objects
         this.databases.forEach(data => { 
             let m = new Meta('db', data);
             dictionary[m.self] = m.id;
+            metaArray.push(m);
         });
         this.containers.forEach(data => { 
             let m = new Meta('coll', data);
             dictionary[m.self] = m.id;
+            metaArray.push(m);
         });
+
+        // Assign the offers to the databases or containers
         this.offers.forEach(data => { 
-            let m = new Meta('offer', data);
-            dictionary[m.self] = m.raw['resource'];
+            let resourceId = data['resource'];
+            let assigned = false;
+            console.log('weave: processing offer: ' + resourceId);
+            metaArray.forEach(m => {
+                if (m.self === resourceId) {
+                    m.offer = new Meta('offer', data);
+                    console.log(util.format('weave: assigning offer %s to %s', resourceId, m.key));
+                    assigned = true;
+                }
+            });
+            if (!assigned) {
+                console.log(util.format('weave: warning offer not assigned %s', resourceId));
+            }
         });
 
         fu.writeTextFileSync('tmp/meta-dict.json', JSON.stringify(dictionary, null, 2));
