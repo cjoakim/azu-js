@@ -6,7 +6,7 @@ import {
 // This class is used to create instances of the SqlQuerySpec interface.
 // See https://learn.microsoft.com/en-us/javascript/api/@azure/cosmos/sqlqueryspec?view=azure-node-latest
 
-export class SqlQueryUtil {
+export class NoSqlQueryUtil {
 
     constructor() {}
 

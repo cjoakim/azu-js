@@ -31,10 +31,11 @@ import {
   } from "@azure/cosmos";
 
 import { CosmosNoSqlUtil } from "./CosmosNoSqlUtil";
-import { Meta, CosmosAccountMetadata } from "./CosmosAccountMetadata";
+import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
+
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
-import { SqlQueryUtil } from "./SqlQueryUtil";
+import { NoSqlQueryUtil } from "./NoSqlQueryUtil";
 
 import exp from "constants";
 
@@ -138,7 +139,7 @@ test("CosmosNoSqlUtil: getAccountOffersAsync", async () => {
 
 test("CosmosNoSqlUtil: getAccountMetadataAsync", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
-    let metadata : CosmosAccountMetadata = await cu.getAccountMetadataAsync();
+    let metadata : CosmosNoSqlAccountMetadata = await cu.getAccountMetadataAsync();
     fu.writeTextFileSync('tmp/cosmos_account_metadata.json', JSON.stringify(metadata, null, 2));
     expect(metadata.offers.length).toBeGreaterThan(0);
     expect(metadata.databases.length).toBeGreaterThan(0);
@@ -147,7 +148,7 @@ test("CosmosNoSqlUtil: getAccountMetadataAsync", async () => {
 
 test("CosmosNoSqlUtil CosmosAccountMetadata: weave", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
-    let metadata : CosmosAccountMetadata = await cu.getAccountMetadataAsync();
+    let metadata : CosmosNoSqlAccountMetadata = await cu.getAccountMetadataAsync();
     let data : Array<object> = metadata.weave();
 
     // TODO - implement
@@ -194,7 +195,7 @@ test("CosmosNoSqlUtil: crud operations", async () => {
     expect(ru).toBeLessThan(1.1);
 
     // Query all
-    let qu = new SqlQueryUtil();
+    let qu = new NoSqlQueryUtil();
     let spec : SqlQuerySpec = qu.querySpec('select * from c offset 0 limit 1');
     expect(spec['query']).toBe('select * from c offset 0 limit 1');
     expect(spec['parameters'].length).toBe(0);

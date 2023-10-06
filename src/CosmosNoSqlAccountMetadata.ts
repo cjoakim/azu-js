@@ -32,19 +32,19 @@ import {
   } from "@azure/cosmos";
 
 import { FileUtil } from "./FileUtil";
-import { SqlQueryUtil } from "./SqlQueryUtil";
+import { NoSqlQueryUtil } from "./NoSqlQueryUtil";
 
 
-export class Meta {
+export class NoSqlMeta {
 
     raw   : object = null;
     type  : string = null;
     id    : string = null;
     rid   : string = null;
     self  : string = null;
-    offer : Meta   = null;
+    offer : NoSqlMeta = null;
     key   : string = null;
-    containers : Array<Meta> = null;
+    containers : Array<NoSqlMeta> = null;
 
     constructor(obj_type : string, raw_data : object) {
         this.type = ('' + obj_type).toLowerCase();
@@ -55,7 +55,7 @@ export class Meta {
         this.key  = util.format('%s|%s|%s', this.type, this.id, this.self);
 
         if (this.isDb()) {
-            this.containers = new Array<Meta>();
+            this.containers = new Array<NoSqlMeta>();
         }
     }
 
@@ -71,12 +71,12 @@ export class Meta {
         return this.type === 'offer';
     }
 
-    addContainer(m : Meta) : void {
+    addContainer(m : NoSqlMeta) : void {
 
     }
 }
 
-export class CosmosAccountMetadata {
+export class CosmosNoSqlAccountMetadata {
 
     databases  : Array<DatabaseDefinition>  = new Array<DatabaseDefinition>();
     containers : Array<ContainerDefinition> = new Array<ContainerDefinition>();
@@ -90,17 +90,17 @@ export class CosmosAccountMetadata {
         // HTML page or other report.
         // TODO - implement
         let fu : FileUtil = new FileUtil();
-        let metaArray = new Array<Meta>();
+        let metaArray = new Array<NoSqlMeta>();
         let dictionary = {};
 
         // Collect the raw databases and containers into an array of Meta objects
         this.databases.forEach(data => { 
-            let m = new Meta('db', data);
+            let m = new NoSqlMeta('db', data);
             dictionary[m.self] = m.id;
             metaArray.push(m);
         });
         this.containers.forEach(data => { 
-            let m = new Meta('coll', data);
+            let m = new NoSqlMeta('coll', data);
             dictionary[m.self] = m.id;
             metaArray.push(m);
         });
@@ -112,7 +112,7 @@ export class CosmosAccountMetadata {
             console.log('weave: processing offer: ' + resourceId);
             metaArray.forEach(m => {
                 if (m.self === resourceId) {
-                    m.offer = new Meta('offer', data);
+                    m.offer = new NoSqlMeta('offer', data);
                     console.log(util.format('weave: assigning offer %s to %s', resourceId, m.key));
                     assigned = true;
                 }

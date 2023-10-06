@@ -122,26 +122,26 @@ export declare class Config {
 
 ```
 
-### CosmosAccountMetadata.d.ts
+### CosmosNoSqlAccountMetadata.d.ts
 
 ```
 import { DatabaseDefinition, OfferDefinition, ContainerDefinition } from "@azure/cosmos";
-export declare class Meta {
+export declare class NoSqlMeta {
     raw: object;
     type: string;
     id: string;
     rid: string;
     self: string;
-    offer: Meta;
+    offer: NoSqlMeta;
     key: string;
-    containers: Array<Meta>;
+    containers: Array<NoSqlMeta>;
     constructor(obj_type: string, raw_data: object);
     isDb(): boolean;
     isContainer(): boolean;
     isOffer(): boolean;
-    addContainer(m: Meta): void;
+    addContainer(m: NoSqlMeta): void;
 }
-export declare class CosmosAccountMetadata {
+export declare class CosmosNoSqlAccountMetadata {
     databases: Array<DatabaseDefinition>;
     containers: Array<ContainerDefinition>;
     offers: Array<OfferDefinition>;
@@ -155,7 +155,7 @@ export declare class CosmosAccountMetadata {
 
 ```
 import { ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PartitionKeyDefinition, ResourceResponse, SqlQuerySpec, ContainerDefinition } from "@azure/cosmos";
-import { CosmosAccountMetadata } from "./CosmosAccountMetadata";
+import { CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
 export declare const defaultCosmosConnectionPolicy: ConnectionPolicy;
 export declare class CosmosNoSqlUtil {
     acctUriEnvVar: string;
@@ -178,7 +178,7 @@ export declare class CosmosNoSqlUtil {
     listDatabasesAsync(): Promise<Array<DatabaseDefinition>>;
     listContainersAsync(dbName: string): Promise<Array<ContainerDefinition>>;
     getAccountOffersAsync(): Promise<Array<OfferDefinition>>;
-    getAccountMetadataAsync(): Promise<CosmosAccountMetadata>;
+    getAccountMetadataAsync(): Promise<CosmosNoSqlAccountMetadata>;
     setCurrentDatabaseAsync(dbName: string): Promise<void>;
     setCurrentContainerAsync(cName: string): Promise<void>;
     readPartitionKeyDefinitionAsync(dbName: string, cName: string): Promise<PartitionKeyDefinition>;
@@ -224,6 +224,17 @@ export interface CogSearchResponse {
 
 ```
 
+### NoSqlQueryUtil.d.ts
+
+```
+import { SqlQuerySpec } from "@azure/cosmos";
+export declare class NoSqlQueryUtil {
+    constructor();
+    querySpec(sql: string, parameters?: string[]): SqlQuerySpec;
+}
+
+```
+
 ### OpenAiUtil.d.ts
 
 ```
@@ -245,17 +256,6 @@ export declare class OpenAiUtil {
 
 ```
 
-### SqlQueryUtil.d.ts
-
-```
-import { SqlQuerySpec } from "@azure/cosmos";
-export declare class SqlQueryUtil {
-    constructor();
-    querySpec(sql: string, parameters?: string[]): SqlQuerySpec;
-}
-
-```
-
 ### index.d.ts
 
 ```
@@ -264,18 +264,18 @@ import { CogSearchResponse } from "./Interfaces";
 import { FileUtil } from "./FileUtil";
 import { BlobUtil } from "./BlobUtil";
 import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUtil";
-import { Meta, CosmosAccountMetadata } from "./CosmosAccountMetadata";
+import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
 import { CogSearchUtil } from "./CogSearchUtil";
 import { OpenAiUtil } from "./OpenAiUtil";
-import { SqlQueryUtil } from "./SqlQueryUtil";
+import { NoSqlQueryUtil } from "./NoSqlQueryUtil";
 export { Config };
 export { CogSearchResponse };
 export { FileUtil };
 export { BlobUtil };
 export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy };
-export { Meta, CosmosAccountMetadata };
+export { NoSqlMeta, CosmosNoSqlAccountMetadata };
 export { CogSearchUtil };
 export { OpenAiUtil };
-export { SqlQueryUtil };
+export { NoSqlQueryUtil };
 
 ```

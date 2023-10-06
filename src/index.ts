@@ -6,17 +6,17 @@ import { CogSearchResponse } from "./Interfaces";
 import { FileUtil }  from "./FileUtil";
 import { BlobUtil }  from "./BlobUtil";
 import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUtil";
-import { Meta, CosmosAccountMetadata } from "./CosmosAccountMetadata";
+import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
 import { CogSearchUtil }  from "./CogSearchUtil";
 import { OpenAiUtil }  from "./OpenAiUtil";
-import { SqlQueryUtil } from "./SqlQueryUtil";
+import { NoSqlQueryUtil } from "./NoSqlQueryUtil";
 
 export { Config }
 export { CogSearchResponse }
 export { FileUtil }
 export { BlobUtil }
 export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy }
-export { Meta, CosmosAccountMetadata }
+export { NoSqlMeta, CosmosNoSqlAccountMetadata }
 export { CogSearchUtil }
 export { OpenAiUtil }
-export { SqlQueryUtil }
+export { NoSqlQueryUtil }
