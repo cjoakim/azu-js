@@ -151,6 +151,17 @@ export declare class CosmosNoSqlAccountMetadata {
 
 ```
 
+### CosmosNoSqlQuerySpecUtil.d.ts
+
+```
+import { SqlQuerySpec } from "@azure/cosmos";
+export declare class CosmosNoSqlQuerySpecUtil {
+    constructor();
+    querySpec(sql: string, parameters?: string[]): SqlQuerySpec;
+}
+
+```
+
 ### CosmosNoSqlUtil.d.ts
 
 ```
@@ -224,17 +235,6 @@ export interface CogSearchResponse {
 
 ```
 
-### NoSqlQueryUtil.d.ts
-
-```
-import { SqlQuerySpec } from "@azure/cosmos";
-export declare class NoSqlQueryUtil {
-    constructor();
-    querySpec(sql: string, parameters?: string[]): SqlQuerySpec;
-}
-
-```
-
 ### OpenAiUtil.d.ts
 
 ```
@@ -267,7 +267,7 @@ import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUti
 import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
 import { CogSearchUtil } from "./CogSearchUtil";
 import { OpenAiUtil } from "./OpenAiUtil";
-import { NoSqlQueryUtil } from "./NoSqlQueryUtil";
+import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
 export { Config };
 export { CogSearchResponse };
 export { FileUtil };
@@ -276,6 +276,6 @@ export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy };
 export { NoSqlMeta, CosmosNoSqlAccountMetadata };
 export { CogSearchUtil };
 export { OpenAiUtil };
-export { NoSqlQueryUtil };
+export { CosmosNoSqlQuerySpecUtil };
 
 ```

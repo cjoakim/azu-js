@@ -32,7 +32,7 @@ import {
   } from "@azure/cosmos";
 
 import { FileUtil } from "./FileUtil";
-import { NoSqlQueryUtil } from "./NoSqlQueryUtil";
+import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
 
 
 export class NoSqlMeta {

@@ -35,7 +35,7 @@ import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetad
 
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
-import { NoSqlQueryUtil } from "./NoSqlQueryUtil";
+import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
 
 import exp from "constants";
 
@@ -195,7 +195,7 @@ test("CosmosNoSqlUtil: crud operations", async () => {
     expect(ru).toBeLessThan(1.1);
 
     // Query all
-    let qu = new NoSqlQueryUtil();
+    let qu = new CosmosNoSqlQuerySpecUtil();
     let spec : SqlQuerySpec = qu.querySpec('select * from c offset 0 limit 1');
     expect(spec['query']).toBe('select * from c offset 0 limit 1');
     expect(spec['parameters'].length).toBe(0);
@@ -248,5 +248,4 @@ test("CosmosNoSqlUtil: crud operations", async () => {
         let msg : string = '' + err;
         expect(msg).toContain('Entity with the specified id does not exist in the system');
     }
-
 });
