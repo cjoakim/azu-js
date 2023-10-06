@@ -4,8 +4,7 @@
 #
 # Chris Joakim, Microsoft, 2023
 
-rm tmp/test*
-rm tmp/down*
+rm tmp/*.*
 
 npm run build
 

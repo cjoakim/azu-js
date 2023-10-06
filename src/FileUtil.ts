@@ -37,7 +37,7 @@ export class FileUtil {
                 return null;
             }
             else {
-                return text.split("\n");
+                return text.split(os.EOL);
             }
         }
         catch (error) {

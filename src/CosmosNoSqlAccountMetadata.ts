@@ -72,6 +72,7 @@ export class NoSqlMeta {
     }
 
     addContainer(m : NoSqlMeta) : void {
+        this.containers.push(m);
 
     }
 }
@@ -109,17 +110,12 @@ export class CosmosNoSqlAccountMetadata {
         this.offers.forEach(data => { 
             let resourceId = data['resource'];
             let assigned = false;
-            console.log('weave: processing offer: ' + resourceId);
             metaArray.forEach(m => {
                 if (m.self === resourceId) {
                     m.offer = new NoSqlMeta('offer', data);
-                    console.log(util.format('weave: assigning offer %s to %s', resourceId, m.key));
                     assigned = true;
                 }
             });
-            if (!assigned) {
-                console.log(util.format('weave: warning offer not assigned %s', resourceId));
-            }
         });
 
         // Assign the containers to the databases

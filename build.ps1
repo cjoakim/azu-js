@@ -3,8 +3,7 @@
 #
 # Chris Joakim, Microsoft, 2023
 
-del tmp\test*
-del tmp\down*
+del tmp\*.*
 
 npm run build
 
