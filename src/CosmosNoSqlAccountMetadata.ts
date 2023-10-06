@@ -2,37 +2,14 @@
 // Chris Joakim, Microsoft, 2023
 
 import util from "util";
-import { v4 as uuidv4 } from 'uuid';
 
 import {
-    BulkOperationType,
-    ConnectionMode,
-    ConnectionPolicy,
-    Container,
-    CosmosClient,
-    Database,
-    DatabaseResponse,
-    DatabaseAccount,
     DatabaseDefinition,
-    DiagnosticNodeInternal,
-    FeedOptions,
-    FeedResponse,
-    ItemResponse,
-    Offer,
     OfferDefinition,
-    OfferResponse,
-    OperationInput,
-    PatchOperation,
-    PartitionKeyDefinition,
-    PatchOperationType,
-    ResourceResponse,
-    SqlQuerySpec,
-    SqlParameter,
     ContainerDefinition
   } from "@azure/cosmos";
 
 import { FileUtil } from "./FileUtil";
-import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
 
 
 export class NoSqlMeta {
@@ -42,15 +19,22 @@ export class NoSqlMeta {
     id      : string = null;
     rid     : string = null;
     self    : string = null;
-    offer   : NoSqlMeta = null;
+    throughput : object = null;
     key     : string = null;
     partitionKey  : Array<object> = null;
     defaultTtl    : string = null;
     analyticalTtl : string = null;
     containers    : Array<NoSqlMeta> = null;
 
-    constructor(obj_type : string, raw_data : object) {
-        this.type = ('' + obj_type).toLowerCase();
+    constructor(objType : string, raw_data : object) {
+        this.type = ('' + objType).toLowerCase();
+
+        if (objType === 'offer') {
+            this.throughput = raw_data['content'];
+        }
+        else {
+            this.raw = raw_data
+        }
         this.raw  = raw_data;
         this.id   = raw_data['id'];
         this.rid  = raw_data['_rid'];
@@ -94,9 +78,14 @@ export class NoSqlMeta {
         this.raw = null;
         delete this['raw'];
         delete this['key'];
+        delete this['partitionKey'];
+        delete this['defaultTtl'];
+        delete this['analyticalTtl'];
+
         this.containers.forEach(c => { 
             delete c['raw'];
             delete c['key'];
+            delete c['containers'];
         });
     }
 }
@@ -135,7 +124,7 @@ export class CosmosNoSqlAccountMetadata {
             let resourceId = data['resource'];
             metaArray.forEach(m => {
                 if (m.self === resourceId) {
-                    m.offer = new NoSqlMeta('offer', data['content']);
+                    m.throughput = data['content'];
                 }
             });
         });
@@ -163,7 +152,7 @@ export class CosmosNoSqlAccountMetadata {
 
         fu.writeTextFileSync('tmp/meta-dict.json', JSON.stringify(dictionary, null, 2));
         fu.writeTextFileSync('tmp/meta-array.json', JSON.stringify(metaArray, null, 2));
-        fu.writeTextFileSync('tmp/db-array.json', JSON.stringify(metaArray, null, 2));
-        return null;
+        fu.writeTextFileSync('tmp/db-array.json', JSON.stringify(dbArray, null, 2));
+        return dbArray;
     }
 }

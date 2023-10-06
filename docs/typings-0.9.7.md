@@ -132,14 +132,18 @@ export declare class NoSqlMeta {
     id: string;
     rid: string;
     self: string;
-    offer: NoSqlMeta;
+    throughput: object;
     key: string;
+    partitionKey: Array<object>;
+    defaultTtl: string;
+    analyticalTtl: string;
     containers: Array<NoSqlMeta>;
-    constructor(obj_type: string, raw_data: object);
+    constructor(objType: string, raw_data: object);
     isDb(): boolean;
     isContainer(): boolean;
     isOffer(): boolean;
     addContainer(m: NoSqlMeta): void;
+    pruneDb(): void;
 }
 export declare class CosmosNoSqlAccountMetadata {
     databases: Array<DatabaseDefinition>;
