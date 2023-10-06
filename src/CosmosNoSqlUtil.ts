@@ -93,12 +93,16 @@ export class Meta {
         return this.type === 'db';
     }
 
-    isCollection() : boolean {
+    isContainer() : boolean {
         return this.type === 'coll';
     }
 
     isOffer() : boolean {
         return this.type === 'offer';
+    }
+
+    addContainer(m : Meta) : void {
+
     }
 }
 
@@ -148,8 +152,22 @@ export class CosmosAccountMetadata {
             }
         });
 
+        // Assign the containers to the databases
+        metaArray.forEach(m1 => { 
+            if (m1.isDb()) {
+                metaArray.forEach(m2 => { 
+                    if (m2.isContainer()) {
+                        // example self values: dbs/gm8hAA==/  dbs/gm8hAA==/colls/gm8hAOJUuwE=/
+                        if (m2.self.startsWith(m1.self)) {
+                            m1.addContainer(m2);
+                        }
+                    }
+                });
+            }
+        });
+
         fu.writeTextFileSync('tmp/meta-dict.json', JSON.stringify(dictionary, null, 2));
-        fu.writeTextFileSync('tmp/meta-weave.json', JSON.stringify(metaArray, null, 2));
+        fu.writeTextFileSync('tmp/meta-array.json', JSON.stringify(metaArray, null, 2));
         return null;
     }
 }
