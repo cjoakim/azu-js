@@ -31,7 +31,12 @@ import {
   } from "@azure/cosmos";
 
 import { CosmosNoSqlUtil } from "./CosmosNoSqlUtil";
-import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
+import {
+    BaseNoSqlMeta,
+    NoSqlDBMeta,
+    NoSqlContainerMeta,
+    NoSqlOfferMeta,
+    CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
@@ -139,7 +144,7 @@ test("CosmosNoSqlUtil: getAccountOffersAsync", async () => {
 
 test("CosmosNoSqlUtil: getAccountMetadataAsync", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
-    let metadata : CosmosNoSqlAccountMetadata = await cu.getAccountMetadataAsync();
+    let metadata : CosmosNoSqlAccountMeta = await cu.getAccountMetadataAsync();
     fu.writeTextFileSync('tmp/cosmos_account_metadata.json', JSON.stringify(metadata, null, 2));
     expect(metadata.offers.length).toBeGreaterThan(0);
     expect(metadata.databases.length).toBeGreaterThan(0);
@@ -148,7 +153,7 @@ test("CosmosNoSqlUtil: getAccountMetadataAsync", async () => {
 
 test("CosmosNoSqlUtil CosmosAccountMetadata: weave", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
-    let metadata : CosmosNoSqlAccountMetadata = await cu.getAccountMetadataAsync();
+    let metadata : CosmosNoSqlAccountMeta = await cu.getAccountMetadataAsync();
     let data : Array<object> = metadata.weave();
     fu.writeTextFileSync('tmp/weave.json', JSON.stringify(data, null, 2));
     expect(data.length).toBeGreaterThan(0);

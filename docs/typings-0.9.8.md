@@ -126,26 +126,41 @@ export declare class Config {
 
 ```
 import { DatabaseDefinition, OfferDefinition, ContainerDefinition } from "@azure/cosmos";
-export declare class NoSqlMeta {
+export declare abstract class BaseNoSqlMeta {
     raw: object;
     type: string;
     id: string;
     rid: string;
     self: string;
-    throughput: object;
+    throughput?: object;
     key: string;
-    partitionKey: Array<object>;
-    defaultTtl: string;
-    analyticalTtl: string;
-    containers: Array<NoSqlMeta>;
-    constructor(objType: string, raw_data: object);
+    constructor(raw_data: object);
     isDb(): boolean;
     isContainer(): boolean;
     isOffer(): boolean;
-    addContainer(m: NoSqlMeta): void;
-    pruneDb(): void;
+    prune(): void;
 }
-export declare class CosmosNoSqlAccountMetadata {
+export declare class NoSqlDBMeta extends BaseNoSqlMeta {
+    partitionKey: Array<object>;
+    defaultTtl: string;
+    analyticalTtl: string;
+    containers: Array<NoSqlContainerMeta>;
+    constructor(raw_data: object);
+    addContainerMeta(container: NoSqlContainerMeta): void;
+    prune(): void;
+}
+export declare class NoSqlContainerMeta extends BaseNoSqlMeta {
+    partitionKey: Array<object>;
+    defaultTtl: string;
+    analyticalTtl: string;
+    constructor(raw_data: object);
+    prune(): void;
+}
+export declare class NoSqlOfferMeta extends BaseNoSqlMeta {
+    constructor(raw_data: object);
+    prune(): void;
+}
+export declare class CosmosNoSqlAccountMeta {
     databases: Array<DatabaseDefinition>;
     containers: Array<ContainerDefinition>;
     offers: Array<OfferDefinition>;
@@ -170,7 +185,7 @@ export declare class CosmosNoSqlQuerySpecUtil {
 
 ```
 import { ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PartitionKeyDefinition, ResourceResponse, SqlQuerySpec, ContainerDefinition } from "@azure/cosmos";
-import { CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
+import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 export declare const defaultCosmosConnectionPolicy: ConnectionPolicy;
 export declare class CosmosNoSqlUtil {
     acctUriEnvVar: string;
@@ -193,7 +208,7 @@ export declare class CosmosNoSqlUtil {
     listDatabasesAsync(): Promise<Array<DatabaseDefinition>>;
     listContainersAsync(dbName: string): Promise<Array<ContainerDefinition>>;
     getAccountOffersAsync(): Promise<Array<OfferDefinition>>;
-    getAccountMetadataAsync(): Promise<CosmosNoSqlAccountMetadata>;
+    getAccountMetadataAsync(): Promise<CosmosNoSqlAccountMeta>;
     setCurrentDatabaseAsync(dbName: string): Promise<void>;
     setCurrentContainerAsync(cName: string): Promise<void>;
     readPartitionKeyDefinitionAsync(dbName: string, cName: string): Promise<PartitionKeyDefinition>;
@@ -270,8 +285,8 @@ import { Config } from "./Config";
 import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
 import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUtil";
 import { FileUtil } from "./FileUtil";
-import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
 import { OpenAiUtil } from "./OpenAiUtil";
+import { BaseNoSqlMeta, NoSqlDBMeta, NoSqlContainerMeta, NoSqlOfferMeta, CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 export { BlobUtil };
 export { CogSearchResponse };
 export { CogSearchUtil };
@@ -279,7 +294,7 @@ export { Config };
 export { CosmosNoSqlQuerySpecUtil };
 export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy };
 export { FileUtil };
-export { NoSqlMeta, CosmosNoSqlAccountMetadata };
+export { BaseNoSqlMeta, NoSqlDBMeta, NoSqlContainerMeta, NoSqlOfferMeta, CosmosNoSqlAccountMeta };
 export { OpenAiUtil };
 
 ```

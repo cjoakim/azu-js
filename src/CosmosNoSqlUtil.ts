@@ -33,7 +33,12 @@ import {
 
 import { FileUtil } from "./FileUtil";
 import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
-import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
+import {
+    BaseNoSqlMeta,
+    NoSqlDBMeta,
+    NoSqlContainerMeta,
+    NoSqlOfferMeta,
+    CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 
 export const defaultCosmosConnectionPolicy: ConnectionPolicy = Object.freeze({
     connectionMode: ConnectionMode.Gateway,
@@ -168,8 +173,8 @@ export class CosmosNoSqlUtil {
         return offerDefs;
     }
 
-    async getAccountMetadataAsync() : Promise<CosmosNoSqlAccountMetadata> {
-        let metadata : CosmosNoSqlAccountMetadata = new CosmosNoSqlAccountMetadata();
+    async getAccountMetadataAsync() : Promise<CosmosNoSqlAccountMeta> {
+        let metadata : CosmosNoSqlAccountMeta = new CosmosNoSqlAccountMeta();
         let offerDefs : Array<OfferDefinition> = await this.getAccountOffersAsync();
         for (const offer of offerDefs) {
             metadata.offers.push(offer);

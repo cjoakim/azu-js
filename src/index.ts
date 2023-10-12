@@ -8,8 +8,13 @@ import { Config } from "./Config"
 import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
 import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUtil";
 import { FileUtil }  from "./FileUtil";
-import { NoSqlMeta, CosmosNoSqlAccountMetadata } from "./CosmosNoSqlAccountMetadata";
 import { OpenAiUtil }  from "./OpenAiUtil";
+import {
+    BaseNoSqlMeta,
+    NoSqlDBMeta,
+    NoSqlContainerMeta,
+    NoSqlOfferMeta,
+    CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 
 export { BlobUtil }
 export { CogSearchResponse }
@@ -18,5 +23,5 @@ export { Config }
 export { CosmosNoSqlQuerySpecUtil }
 export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy }
 export { FileUtil }
-export { NoSqlMeta, CosmosNoSqlAccountMetadata }
+export { BaseNoSqlMeta, NoSqlDBMeta, NoSqlContainerMeta, NoSqlOfferMeta, CosmosNoSqlAccountMeta }
 export { OpenAiUtil }
