@@ -7,7 +7,14 @@ import { FileUtil } from "./FileUtil";
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import { CogSearchResponse } from "./Interfaces";
+export interface CogSearchResponse {
+    url:      string;
+    method:   string;
+    body:     string;
+    status:   number;
+    respData: object;
+    error:    boolean;
+}
 
 export class CogSearchUtil {
 

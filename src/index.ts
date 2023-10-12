@@ -2,8 +2,7 @@
 // Chris Joakim, Microsoft, 2023
 
 import { BlobUtil }  from "./BlobUtil";
-import { CogSearchResponse } from "./Interfaces";
-import { CogSearchUtil }  from "./CogSearchUtil";
+import { CogSearchResponse, CogSearchUtil }  from "./CogSearchUtil";
 import { Config } from "./Config"
 import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
 import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUtil";
@@ -17,8 +16,7 @@ import {
     CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 
 export { BlobUtil }
-export { CogSearchResponse }
-export { CogSearchUtil }
+export { CogSearchResponse, CogSearchUtil }
 export { Config }
 export { CosmosNoSqlQuerySpecUtil }
 export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy }

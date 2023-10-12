@@ -7,11 +7,8 @@ import fs from "fs";
 import path from "path";
 import util from "util";
 
-import { CogSearchUtil } from "./CogSearchUtil";
-import { CogSearchResponse } from "./Interfaces";
-
+import { CogSearchResponse, CogSearchUtil } from "./CogSearchUtil";
 import { Config } from "./Config";
-import { FileUtil } from "./FileUtil";
 
 let acctUriEnvVar      : string = Config.lookupEnvVarName('ENV_SEARCH_URL');
 let acctNameEnvVar     : string = Config.lookupEnvVarName('ENV_SEARCH_NAME');
