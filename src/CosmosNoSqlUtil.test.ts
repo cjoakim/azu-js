@@ -3,10 +3,6 @@
 
 // npm test --testPathPattern CosmosNoSqlUtil
 
-import fs from "fs";
-import path from "path";
-import util from "util";
-
 import {
     BulkOperationType,
     ConnectionMode,
@@ -31,18 +27,11 @@ import {
   } from "@azure/cosmos";
 
 import { CosmosNoSqlUtil } from "./CosmosNoSqlUtil";
-import {
-    BaseNoSqlMeta,
-    NoSqlDBMeta,
-    NoSqlContainerMeta,
-    NoSqlOfferMeta,
-    CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
+import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
 import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
-
-import exp from "constants";
 
 // State retained across tests
 let acctUriEnvVar : string = Config.lookupEnvVarName('ENV_NOSQL_URI');

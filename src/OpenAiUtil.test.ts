@@ -1,10 +1,6 @@
 // Unit tests for class OpenAiUtil
 // Chris Joakim, Microsoft, 2023
 
-import fs from "fs";
-import path from "path";
-import util from "util";
-
 import { OpenAiUtil } from "./OpenAiUtil";
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";

@@ -31,14 +31,7 @@ import {
     ContainerDefinition
   } from "@azure/cosmos";
 
-import { FileUtil } from "./FileUtil";
-import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
-import {
-    BaseNoSqlMeta,
-    NoSqlDBMeta,
-    NoSqlContainerMeta,
-    NoSqlOfferMeta,
-    CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
+import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 
 export const defaultCosmosConnectionPolicy: ConnectionPolicy = Object.freeze({
     connectionMode: ConnectionMode.Gateway,

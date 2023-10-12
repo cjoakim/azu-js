@@ -30,7 +30,14 @@ export declare class BlobUtil {
 
 ```
 import { FileUtil } from "./FileUtil";
-import { CogSearchResponse } from "./Interfaces";
+export interface CogSearchResponse {
+    url: string;
+    method: string;
+    body: string;
+    status: number;
+    respData: object;
+    error: boolean;
+}
 export declare class CogSearchUtil {
     acctURI: string;
     acctName: string;
@@ -240,20 +247,6 @@ export declare class FileUtil {
 
 ```
 
-### Interfaces.d.ts
-
-```
-export interface CogSearchResponse {
-    url: string;
-    method: string;
-    body: string;
-    status: number;
-    respData: object;
-    error: boolean;
-}
-
-```
-
 ### OpenAiUtil.d.ts
 
 ```
@@ -279,8 +272,7 @@ export declare class OpenAiUtil {
 
 ```
 import { BlobUtil } from "./BlobUtil";
-import { CogSearchResponse } from "./Interfaces";
-import { CogSearchUtil } from "./CogSearchUtil";
+import { CogSearchResponse, CogSearchUtil } from "./CogSearchUtil";
 import { Config } from "./Config";
 import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
 import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUtil";
@@ -288,8 +280,7 @@ import { FileUtil } from "./FileUtil";
 import { OpenAiUtil } from "./OpenAiUtil";
 import { BaseNoSqlMeta, NoSqlDBMeta, NoSqlContainerMeta, NoSqlOfferMeta, CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 export { BlobUtil };
-export { CogSearchResponse };
-export { CogSearchUtil };
+export { CogSearchResponse, CogSearchUtil };
 export { Config };
 export { CosmosNoSqlQuerySpecUtil };
 export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy };

@@ -3,8 +3,6 @@
 
 // npm test --testPathPattern Config
 
-import fs from "fs";
-import path from "path";
 import util from "util";
 
 import { Config } from "./Config";
