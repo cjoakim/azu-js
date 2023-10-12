@@ -23,7 +23,9 @@ import {
     PartitionKeyDefinition,
     ResourceResponse,
     SqlQuerySpec,
-    SqlParameter
+    SqlParameter,
+    JSONArray,
+    JSONObject
   } from "@azure/cosmos";
 
 import { CosmosNoSqlUtil } from "./CosmosNoSqlUtil";
@@ -271,4 +273,31 @@ test("CosmosNoSqlUtil: crud operations", async () => {
         let msg : string = '' + err;
         expect(msg).toContain('Entity with the specified id does not exist in the system');
     }
+});
+
+test("CosmosNoSqlUtil: bulk create and upsert", async () => {
+    cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
+    let dbName = 'dev';
+    let cName = 'unittests';
+    cu.setCurrentDatabaseAsync(dbName);
+    cu.setCurrentContainerAsync(cName);
+    let rawAirports : Array<object> = fu.readJsonArrayFile('data/world-airports-50.json');
+    expect(rawAirports.length).toBe(50);
+
+    let jsonObjects : JSONObject[] = new Array<JSONObject>();
+    rawAirports.forEach(a => {
+        // ensure that the object is a dictionary and has a 'key' with both type and value string
+        let obj = { dic: <{ [key: string]: string }> a };  
+        obj['id'] = cu.generateUuid();
+        obj['key']= a['pk'];
+        jsonObjects.push(obj);
+    });
+
+    let resultsArray = await cu.loadContainerBulkAsync(dbName, cName, 'create', jsonObjects);
+    console.log(resultsArray);
+
+    expect(resultsArray.length).toBe(50);
+    resultsArray.forEach(r => {
+        expect(r.statusCode).toBe(201);
+    });
 });

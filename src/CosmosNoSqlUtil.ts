@@ -5,6 +5,7 @@ import util from "util";
 import { v4 as uuidv4 } from 'uuid';
 
 import {
+    BulkOptions,
     BulkOperationType,
     ConnectionMode,
     ConnectionPolicy,
@@ -18,6 +19,7 @@ import {
     FeedOptions,
     FeedResponse,
     ItemResponse,
+    JSONObject,
     Offer,
     OfferDefinition,
     OfferResponse,
@@ -25,10 +27,12 @@ import {
     PatchOperation,
     PartitionKeyDefinition,
     PatchOperationType,
+    RequestOptions,
     ResourceResponse,
     SqlQuerySpec,
     SqlParameter,
-    ContainerDefinition
+    ContainerDefinition,
+    BulkOperationResponse
   } from "@azure/cosmos";
 
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
@@ -47,7 +51,6 @@ export const defaultCosmosConnectionPolicy: ConnectionPolicy = Object.freeze({
     endpointRefreshRateInMs: 300000,
     enableBackgroundEndpointRefreshing: true,
 });
-
 
 export class CosmosNoSqlUtil {
 
@@ -242,7 +245,7 @@ export class CosmosNoSqlUtil {
         return await this.currentContainer.item(id, pk).delete();
     }
 
-    async loadContainerAsync(dbName: string, cName: string, documents: Array<Object>): Promise<number> {
+    async loadContainerSequentialAsync(dbName: string, cName: string, documents: Array<Object>): Promise<number> {
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName)
 
@@ -255,6 +258,31 @@ export class CosmosNoSqlUtil {
             console.log(util.format('result: %s', result));
         }
         return count;
+    }
+
+    async loadContainerBulkAsync(
+        dbName: string,
+        cName:  string,
+        operationName: string,
+        documents: Array<JSONObject>,
+        bulkOptions?: BulkOptions,
+        reqOptions?: RequestOptions): Promise<BulkOperationResponse> {
+        this.setCurrentDatabaseAsync(dbName);
+        this.setCurrentContainerAsync(cName);
+
+        let operationType : any = BulkOperationType.Create; // default to Create unless explicitly Upsert
+        if (operationName.toLocaleLowerCase() === 'upsert') {
+            operationType = BulkOperationType.Upsert;
+        }
+        let operations : Array<OperationInput> = new Array<OperationInput>();
+        documents.forEach(resourceBody => {
+            let op: OperationInput = {
+                operationType,
+                resourceBody
+              };
+            operations.push(op);
+        });
+        return await this.currentContainer.items.bulk(operations, bulkOptions, reqOptions);
     }
 
     generateUuid() : string {

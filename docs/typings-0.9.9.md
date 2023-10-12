@@ -188,7 +188,7 @@ export declare class CosmosNoSqlQuerySpecUtil {
 ### CosmosNoSqlUtil.d.ts
 
 ```
-import { ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PartitionKeyDefinition, ResourceResponse, SqlQuerySpec, ContainerDefinition } from "@azure/cosmos";
+import { BulkOptions, ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, JSONObject, OfferDefinition, PartitionKeyDefinition, RequestOptions, ResourceResponse, SqlQuerySpec, ContainerDefinition, BulkOperationResponse } from "@azure/cosmos";
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 export declare const defaultCosmosConnectionPolicy: ConnectionPolicy;
 export declare class CosmosNoSqlUtil {
@@ -222,7 +222,8 @@ export declare class CosmosNoSqlUtil {
     queryAsync(dbName: string, cName: string, querySpec: SqlQuerySpec): Promise<FeedResponse<Object>>;
     upsertDocumentAsync(dbName: string, cName: string, doc: Object): Promise<ItemResponse<Object>>;
     deleteDocumentAsync(dbName: string, cName: string, id: string, pk: string): Promise<ItemResponse<Object>>;
-    loadContainerAsync(dbName: string, cName: string, documents: Array<Object>): Promise<number>;
+    loadContainerSequentialAsync(dbName: string, cName: string, documents: Array<Object>): Promise<number>;
+    loadContainerBulkAsync(dbName: string, cName: string, operationName: string, documents: Array<JSONObject>, bulkOptions?: BulkOptions, reqOptions?: RequestOptions): Promise<BulkOperationResponse>;
     generateUuid(): string;
 }
 
