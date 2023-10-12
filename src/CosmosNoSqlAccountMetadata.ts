@@ -49,10 +49,7 @@ export abstract class BaseNoSqlMeta {
 
 export class NoSqlDBMeta extends BaseNoSqlMeta {
 
-    partitionKey  : Array<object> = null;
-    defaultTtl    : string = null;
-    analyticalTtl : string = null;
-    containers    : Array<NoSqlContainerMeta> = null;
+    containers : Array<NoSqlContainerMeta> = null;
 
     constructor(raw_data : object) {
         super(raw_data);
@@ -95,9 +92,6 @@ export class NoSqlContainerMeta extends BaseNoSqlMeta {
 
     prune() : void {
         super.prune();
-        delete this['partitionKey'];
-        delete this['defaultTtl'];
-        delete this['analyticalTtl'];
     }
 }
 

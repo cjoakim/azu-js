@@ -27,7 +27,12 @@ import {
   } from "@azure/cosmos";
 
 import { CosmosNoSqlUtil } from "./CosmosNoSqlUtil";
-import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
+import {
+    BaseNoSqlMeta,
+    NoSqlDBMeta,
+    NoSqlContainerMeta,
+    NoSqlOfferMeta,
+    CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
@@ -143,10 +148,35 @@ test("CosmosNoSqlUtil: getAccountMetadataAsync", async () => {
 test("CosmosNoSqlUtil CosmosAccountMetadata: weave", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
     let metadata : CosmosNoSqlAccountMeta = await cu.getAccountMetadataAsync();
-    let data : Array<object> = metadata.weave();
-    fu.writeTextFileSync('tmp/weave.json', JSON.stringify(data, null, 2));
-    expect(data.length).toBeGreaterThan(0);
-    expect(data.length).toBeLessThan(10);
+    let databases : Array<object> = metadata.weave();
+    let dbThroughputPopulated : boolean = false;
+    let dbThroughputNotPopulated : boolean = false;
+    fu.writeTextFileSync('tmp/cosmos_account_metadata_weave.json', JSON.stringify(databases, null, 2));
+    expect(databases.length).toBeGreaterThan(0);
+    expect(databases.length).toBeLessThan(10);
+
+    databases.forEach(db => { 
+        expect(db['type']).toBe('db');
+        expect(db['id'].length).toBeGreaterThan(0);
+        expect(db['rid'].length).toBeGreaterThan(0);
+        expect(db['self'].slice(0, 4)).toBe('dbs/');
+        if (db['throughput']) {
+            dbThroughputPopulated = true;
+        }
+        else {
+            dbThroughputNotPopulated = true;
+        }
+
+        db['containers'].forEach(c => { 
+            expect(c['type']).toBe('container');
+            expect(c['id'].length).toBeGreaterThan(0);
+            expect(c['rid'].length).toBeGreaterThan(0);
+            expect(c['self']).toContain('/colls/');
+            expect(c['partitionKey'].length).toBeGreaterThan(0);
+        });
+    });
+    expect(dbThroughputPopulated).toBe(true);
+    expect(dbThroughputNotPopulated).toBe(true);
 });
 
 test("CosmosNoSqlUtil: crud operations", async () => {

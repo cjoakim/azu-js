@@ -148,9 +148,6 @@ export declare abstract class BaseNoSqlMeta {
     prune(): void;
 }
 export declare class NoSqlDBMeta extends BaseNoSqlMeta {
-    partitionKey: Array<object>;
-    defaultTtl: string;
-    analyticalTtl: string;
     containers: Array<NoSqlContainerMeta>;
     constructor(raw_data: object);
     addContainerMeta(container: NoSqlContainerMeta): void;
