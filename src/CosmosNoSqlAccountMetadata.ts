@@ -12,6 +12,10 @@ import {
     ContainerDefinition
   } from "@azure/cosmos";
 
+/**
+ * Abstract base class for NoSqlDBMeta, NoSqlContainerMeta, and NoSqlOfferMeta.
+ * Attributes include the id (i.e. - name), the _rid, and the _self identifiers.
+ */
 export abstract class BaseNoSqlMeta {
 
     raw         : object = null;
@@ -31,18 +35,32 @@ export abstract class BaseNoSqlMeta {
         this.key  = util.format('%s|%s|%s', this.type, this.id, this.self);
     }
 
+    /**
+     * Return true if this instance is a database, else return false.
+     */
     isDb() : boolean {
         return this.type === 'db';
     }
 
+    /**
+     * Return true if this instance is a container, else return false.
+     */
     isContainer() : boolean {
         return this.type === 'container';
     }
 
+    /**
+     * Return true if this instance is an offer (i.e. - throughput descriptor),
+     * else return false.
+     */
     isOffer() : boolean {
         return this.type === 'offer';
     }
 
+    /**
+     * Delete unnecessary properties from this instance so as to make
+     * the JSON string representation smaller and more pertinent.
+     */
     prune() : void {
         this.raw = null;
         delete this['raw'];
@@ -50,6 +68,10 @@ export abstract class BaseNoSqlMeta {
     }
 }
 
+/**
+ * Instances of this class represent the metadata for a given
+ * Cosmos DB NoSQL API database, including its containers and offers.
+ */
 export class NoSqlDBMeta extends BaseNoSqlMeta {
 
     containers : Array<NoSqlContainerMeta> = null;
@@ -66,12 +88,22 @@ export class NoSqlDBMeta extends BaseNoSqlMeta {
         }
     }
 
+    /**
+     * Delete unnecessary properties from this instance so as to make
+     * the JSON string representation smaller and more pertinent.
+     */
     prune() : void {
         super.prune();
         this.containers.forEach(c => { c.prune(); });
     }
 }
 
+/**
+ * Instances of this class represent the metadata for a given
+ * Cosmos DB NoSQL API container, including its offer.
+ * Attributes include the inherited id (i.e. - name), _rid, _self,
+ * as well as the partitionKey(s), defaultTtl, and analyticalTtl.
+ */
 export class NoSqlContainerMeta extends BaseNoSqlMeta {
 
     partitionKey  : Array<object> = null;
@@ -93,11 +125,20 @@ export class NoSqlContainerMeta extends BaseNoSqlMeta {
         }
     }
 
+    /**
+     * Delete unnecessary properties from this instance so as to make
+     * the JSON string representation smaller and more pertinent.
+     */
     prune() : void {
         super.prune();
     }
 }
 
+/**
+ * Instances of this class represent the metadata for a given
+ * Cosmos DB NoSQL API offer, or "throughput descriptor", 
+ * for either a database or container.
+ */
 export class NoSqlOfferMeta extends BaseNoSqlMeta {
 
     constructor(raw_data : object) {
@@ -106,11 +147,22 @@ export class NoSqlOfferMeta extends BaseNoSqlMeta {
         this.throughput = raw_data['content'];
     }
 
+    /**
+     * Delete unnecessary properties from this instance so as to make
+     * the JSON string representation smaller and more pertinent.
+     */
     prune() : void {
         super.prune();
     }
 }
 
+/**
+ * Instances of this class represent the complete set of raw metadata
+ * for a given Cosmos DB NoSQL API account, including its databases,
+ * containers, and offers.  This raw metadata is obtained by SDK methods,
+ * and the raw data is refined and correlated into the above XxxMeta classes.
+ * 
+ */
 export class CosmosNoSqlAccountMeta {
 
     databases  : Array<DatabaseDefinition>  = new Array<DatabaseDefinition>();
@@ -119,10 +171,14 @@ export class CosmosNoSqlAccountMeta {
 
     constructor() {}
 
+    /**
+     * This method is used to "weave", or correlate, the raw database, container,
+     * and offer metadata into a sorted list of objects suitable for presenting
+     * in a HTML page or other report.  It returns an array of NoSqlDBMeta objects,
+     * which contain the appropriate NoSqlContainerMeta and NoSqlOfferMeta objects.
+     * NoSqlOfferMeta objects can be either at the database or container lerve.
+     */
     weave() : Array<object> {
-        // "weave" the databases, containers, and offers data in this metadata
-        // object into a sorted list of objects suitable for presenting in a
-        // HTML page or other report.
         let dbArray = new Array<NoSqlDBMeta>();
         let containerArray = new Array<NoSqlContainerMeta>();
         let dictionary = {};

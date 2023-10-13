@@ -1,5 +1,6 @@
 /**
  * Utility class for local filesystem operations.
+ * 
  * To read huge text files, consider using a line-by-line streaming approach
  * in your application code rather than using this class.
  * Chris Joakim, Microsoft, 2023
@@ -13,14 +14,23 @@ export class FileUtil {
     constructor() {
     }
 
+    /**
+     * Return the current directory where this node.js process is running.
+     */
     cwd() : string {
         return process.cwd();
     }
 
+    /**
+     * Return a list of files in the given directory.
+     */
     listFiles(dir: string) : Array<string> {
         return fs.readdirSync(dir);
     }
 
+    /**
+     * Read the given filename and return its contents as a text string.
+     */
     readTextFileSync(infile: string) : string {
         try {
             let buf = fs.readFileSync(infile, 'utf8');
@@ -32,6 +42,10 @@ export class FileUtil {
         }
     }
 
+    /**
+     * Read the given filename and return its contents an array
+     * of strings, one per line.
+     */
     readTextFileAsLinesSync(infile: string) : Array<string> {
         try {
             let text = this.readTextFileSync(infile);
@@ -48,6 +62,10 @@ export class FileUtil {
         }
     }
 
+    /**
+     * Write the given string/text content to the given filename.
+     * Return true if successful, else false.
+     */
     writeTextFileSync(outfile: string, data: string) : boolean {
         try {
             fs.writeFileSync(outfile, data);
@@ -59,6 +77,10 @@ export class FileUtil {
         }
     }
 
+    /**
+     * Read the given JSON Array file and return its parsed contents.
+     * The file contents must begin and end with the '[' and ']' characters.
+     */
     readJsonArrayFile(infile: string): Array<Object> {
         try {
             let str : string = fs.readFileSync(infile, 'utf8');
@@ -70,6 +92,10 @@ export class FileUtil {
         }
     }
 
+    /**
+     * Read the given JSON Array file and return its parsed contents.
+     * The file contents must begin and end with the '{' and '}' characters.
+     */
     readJsonObjectFile(infile: string): Object {
         try {
             let str : string = fs.readFileSync(infile, 'utf8');

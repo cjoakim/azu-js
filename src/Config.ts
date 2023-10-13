@@ -16,11 +16,17 @@ export class Config {
     public static ASU_JS_CONFIG_FILE  : string = 'azu-js-config.json';
     private static _config            : Object = null;
 
+    /**
+     * Return the name of the platform where this node.js process is running.
+     * Possible values are 'aix', 'darwin', 'freebsd', 'linux', 'openbsd', 'sunos', and 'win32'.
+     */
     static platform() : string {
-        // Possible values are 'aix', 'darwin', 'freebsd','linux', 'openbsd', 'sunos', and 'win32'.
         return os.platform();
     }
 
+    /**
+     * Return true if the current platform is Windows, else return false. 
+     */
     static isWindows() : boolean {
         let p : string = os.platform().toLowerCase();
         if (this.isMac()) {
@@ -29,16 +35,26 @@ export class Config {
         return p.includes('win');
     }
 
+    /**
+     * Return true if the current platform is Apple macOS, else return false. 
+     */
     static isMac() : boolean {
         let p : string = os.platform().toLowerCase();
         return p.includes('darwin');
     }
 
+    /**
+     * Return true if the current platform is Linux, else return false. 
+     */
     static isLinux() : boolean {
         let p : string = os.platform().toLowerCase();
         return p.includes('linux');
     }
 
+    /**
+     * Return your mapped environment variable name for the given normalized name,
+     * or null if it is not defined. The mapping is defined in file 'azu-js-config.json'.
+     */
     static lookupEnvVarName(normalizedName: string) : string {
         this.readConfigFile();
         if (!normalizedName) {
@@ -50,6 +66,13 @@ export class Config {
         return null;
     }
 
+    /**
+     * Read the standard configuration file used by the azu-js package;
+     * 'azu-js-config.json' in the current working directory.
+     * This file should contain a JSON object with key/value pairs
+     * that map the normalized environment variable names to your
+     * specified environment variable names.
+     */
     static readConfigFile() : Object {
         if (this._config == null) {
             this._config = new FileUtil().readJsonObjectFile(Config.ASU_JS_CONFIG_FILE);
@@ -57,6 +80,9 @@ export class Config {
         return this._config;
     }
 
+    /**
+     * Create an example 'azu-js-config.json' file.
+     */
     static writeSampleConfigFile() : boolean {
         try {
             let data = {};

@@ -24,8 +24,10 @@ export class OpenAiUtil {
     oaiClient     : OpenAIClient;
     verbose : boolean = false;
 
-    // Pass in the names of the environment variables that contain the
-    // Azure OpenAI account Url and Key.
+    /**
+     * Pass in the names of the environment variables that contain the
+     * Azure OpenAI account Url and Key.
+     */
     constructor(
         acctUrlEnvVar : string,
         acctKeyEnvVar : string,
@@ -68,10 +70,18 @@ export class OpenAiUtil {
         }
     }
 
+    /**
+     * Close/dispose the OpenAIClient SDK instance.
+     */
     dispose() : void {
         this.oaiClient = null;
     }
 
+    /**
+     * Generate and return embeddings for the given input text.
+     * The embeddings can be used for vector searching with 
+     * Azure Cosmos DB and/or Azure Cognitive Search.
+     */
     async generateEmbeddings(
         input: string[],
         options: GetEmbeddingsOptions = { requestOptions: {} }
@@ -83,9 +93,5 @@ export class OpenAiUtil {
         catch (error) {
             console.log(error);
         }
-    }
-
-    generateUuid() : string {
-        return uuidv4();
     }
 }

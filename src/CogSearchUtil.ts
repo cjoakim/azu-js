@@ -9,6 +9,11 @@ import { FileUtil } from "./FileUtil";
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
+/**
+ * This interface represents a response from the CogSearchUtil class
+ * in the azu-js package.  Essentially all methods of class CogSearchUtil
+ * return an instance of this interface.
+ */
 export interface CogSearchResponse {
     url:      string;
     method:   string;
@@ -18,6 +23,10 @@ export interface CogSearchResponse {
     error:    boolean;
 }
 
+/**
+ * This class executes all functionality against an Azure Cognitive Search
+ * PaaS service, but using the REST/HTTPS API rather than the Azure SDK.
+ */
 export class CogSearchUtil {
 
     acctURI    : string = null;
@@ -29,8 +38,11 @@ export class CogSearchUtil {
     version    : string = null;
     doHttpReq  : boolean = true;
 
-    // Pass in the names of the environment variables that contain the
-    // configuration values.
+    /**
+     * Pass in the names of the environment variables that contain the
+     * Azure Cognitive Search URI, name, admin and query keys, and the
+     * API version identifier.
+     */
     constructor(
         acctUriEnvVar  : string,
         acctNameEnvVar : string,
@@ -52,11 +64,7 @@ export class CogSearchUtil {
         }
     }
 
-    dispose() : void {
-        return;
-    }
-
-    // API Invoking methods:
+    // API Invoking methods - their names are self-explanatory.
 
     async listIndexes() : Promise<CogSearchResponse> {
         return this.invokeHttpRequest(this.listIndexesUrl(), 'GET', this.adminKey);
@@ -86,7 +94,7 @@ export class CogSearchUtil {
         return this.invokeHttpRequest(this.getDatasourceUrl(name), 'GET', this.adminKey);
     }
 
-    // Index methods 
+    // Index methods - their names are self-explanatory.
 
     async createIndex(name : string, schema_file : string) : Promise<CogSearchResponse> {
         return await this.modifyIndex('create', name, schema_file);
@@ -100,6 +108,9 @@ export class CogSearchUtil {
         return await this.modifyIndex('delete', name);
     }
 
+    /**
+     * Private method invoked above to create, update, or delete an index.
+     */
     private async modifyIndex(action : string, name : string, schemaFile? : string) : Promise<CogSearchResponse> {
 
         let schema : object = null;
@@ -125,7 +136,7 @@ export class CogSearchUtil {
         return this.invokeHttpRequest(url, method, this.adminKey, schema);
     }
 
-    // Indexer methods
+    // Indexer methods - their names are self-explanatory.
 
     async createIndexer(name : string, schema_file : string) : Promise<CogSearchResponse> {
         return await this.modifyIndexer('create', name, schema_file);
@@ -147,6 +158,9 @@ export class CogSearchUtil {
         return this.invokeHttpRequest(this.runIndexerUrl(name), 'POST', this.adminKey);
     }
 
+    /**
+     * Private method invoked above to create, update, or delete an indexer.
+     */
     private async modifyIndexer(action : string, name : string, schemaFile? : string) : Promise<CogSearchResponse> {
 
         let schema : object = null;
@@ -172,7 +186,7 @@ export class CogSearchUtil {
         return this.invokeHttpRequest(url, method, this.adminKey, schema);
     }
 
-    // Datasource methods
+    // Datasource methods - their names are self-explanatory.
 
     async createCosmosNoSqlDatasource(
         accountNameEnvVarName : string,
@@ -198,6 +212,10 @@ export class CogSearchUtil {
         return util.format("AccountEndpoint=https://%s.documents.azure.com;AccountKey=%s;Database=%s", acct, key, database);
     }
 
+    /**
+     * Return a template Object for creating a Datasource.
+     * This Object should be further modified by the calling method.
+     */
     cosmosdbNoSqlDatasourcePostBody() : Object {
         return {
             'name': '... populate me ...',
@@ -229,7 +247,7 @@ export class CogSearchUtil {
         return util.format('cosmosdb-nosql-%s-%s', dbname, container);
     }
 
-    // Synonym Map methods
+    // Synonym Map methods - their names are self-explanatory.
 
     async createSynmap(name : string, schema_file : string) : Promise<CogSearchResponse> {
         return await this.modifySynmap('create', name, schema_file);
@@ -243,6 +261,9 @@ export class CogSearchUtil {
         return await this.modifySynmap('delete', name);
     }
 
+    /**
+     * Private method invoked above to create, update, or delete a synmap (i.e. - synonyms).
+     */
     private async modifySynmap(action : string, name : string, schemaFile? : string) : Promise<CogSearchResponse> {
 
         let schema : object = null;
@@ -269,20 +290,27 @@ export class CogSearchUtil {
         return this.invokeHttpRequest(url, method, this.adminKey, schema);
     }
 
-    // Search and Lookup methods
-
+    /**
+     * Execute a given search against a given index.
+     */
     async searchIndex(indexName : string, searchParams: object) : Promise<CogSearchResponse> {
         let url = this.searchIndexUrl(indexName);
         return this.invokeHttpRequest(url, 'POST', this.queryKey, searchParams);
     }
 
+    /**
+     * Lookup one specific document in the given index.
+     */
     async lookupDoc(indexName : string, docKey : string) : Promise<CogSearchResponse> {
         let url = this.lookupDocUrl(indexName, docKey);
         return this.invokeHttpRequest(url, 'POST', this.queryKey, );
     }
 
-    // This is the primary method in this class.  It executes all HTTP requests.
-
+    /**
+     * This is the primary method in this class.  It executes all HTTP requests.
+     * The axios library is used to execute the HTTP requests;
+     * see https://www.npmjs.com/package/axios
+     */
     private async invokeHttpRequest(
         url:    string, 
         method: string, 
@@ -333,7 +361,7 @@ export class CogSearchUtil {
         };
     }
 
-    // URL methods below:
+    // URL methods below - their names are self-explanatory.
 
     listIndexesUrl() : string {
         return util.format("%s/indexes?api-version=%s", this.acctURI, this.apiVersion);

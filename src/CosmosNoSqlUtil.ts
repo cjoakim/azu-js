@@ -59,6 +59,10 @@ export const defaultCosmosConnectionPolicy: ConnectionPolicy = Object.freeze({
     enableBackgroundEndpointRefreshing: true,
 });
 
+/**
+ * Instances of this class are used to return the aggregate results
+ * from a "loadContainerBulkAsync" method call in class CosmosNoSqlUtil below.
+ */
 export class BulkLoadResult {
     inputDocumentCount: number = 0;
     startTime     : number = -1;
@@ -73,9 +77,14 @@ export class BulkLoadResult {
         this.startTime = this.timeNow();
     }
 
+    /**
+     * Individual BulkOperationResponse results are aggregated
+     * in this method.  For example, a bulk load may execute ten
+     * "batches" of n-number of documents; each batch is aggregated
+     * here.
+     */
     increment(bulkOpResp : BulkOperationResponse) {
         this.batchCount++;
-        //this.totalRUs = this.totalRUs + bulkOpResp.  
         bulkOpResp.forEach(opResp => {
             if (this.responseCodes[opResp.statusCode]) {
                 this.responseCodes[opResp.statusCode]++;
@@ -87,20 +96,33 @@ export class BulkLoadResult {
         });
     }
 
+    /**
+     * Start the internal elapsed time clock.
+     */
     start() {
         this.startTime = this.timeNow();
     }
 
+    /**
+     * Stop the internal elapsed time clock and calculate elapsed time.
+     */
     finish() {
         this.endTime = this.timeNow();
         this.elapsedTime = this.endTime - this.startTime;
     }
 
+    /**
+     * Get and return the current epoch time value.
+     */
     private timeNow() : number {
         return new Date().getTime();
     }
 }
 
+/**
+ * Utility class for the Azure Cosmos DB NoSQL API -
+ * such as CRUD operations, bulk loading, and metadata.
+ */
 export class CosmosNoSqlUtil {
     acctUriEnvVar : string;
     acctKeyEnvVar : string;
@@ -114,10 +136,11 @@ export class CosmosNoSqlUtil {
     cosmosClient : CosmosClient = null;
     verbose : boolean = false;
 
-    // Pass in the names of the environment variables that contain the
-    // Azure Cosmos DB account URI and Key.  The ConnectionPolicy arg
-    // enables you to set preferred regions and other similar params.
-
+    /**
+     * Pass in the names of the environment variables that contain the
+     * Azure Cosmos DB account URI and Key.  The ConnectionPolicy arg
+     * enables you to set preferred regions and other similar params.
+     */
     constructor(
         acctUriEnvVar : string,
         acctKeyEnvVar : string,
@@ -151,7 +174,6 @@ export class CosmosNoSqlUtil {
             else {
                 this.connectionPolicy = connPolicy;
             }
-
             this.cosmosClient = new CosmosClient({
                 endpoint: this.acctUri,
                 key: this.acctKey,
@@ -170,6 +192,9 @@ export class CosmosNoSqlUtil {
         return defaultCosmosConnectionPolicy;
     }
 
+    /**
+     * Close/dispose the CosmosClient SDK instance.
+     */
     dispose() {
         if (this.cosmosClient) {
             this.cosmosClient.dispose();
@@ -258,10 +283,6 @@ export class CosmosNoSqlUtil {
         return pkDef.resource
     }
 
-    async queryContainerAsync(dbName: string, cName: string, query: string): Promise<Object[]> { 
-        return null;
-    }
-
     async insertDocumentAsync(dbName: string, cName: string, doc: Object) : Promise<ItemResponse<Object>> {
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
@@ -307,6 +328,15 @@ export class CosmosNoSqlUtil {
         return count;
     }
 
+    /**
+     * Execute a bulk-load or bulk-upsert of the given documents into the
+     * given database and container.  These operations are executed in
+     * batches of up to 50 documents per batch, per the given batchSize.
+     * An instance of class BulkLoadResult is returned - it contains the
+     * aggregated/summarized resuls of the bulk operation.  This includes
+     * document counts, elapsed time, RU consumption, and response codes
+     * counts.
+     */
     async loadContainerBulkAsync(
         dbName: string,
         cName:  string,
@@ -357,7 +387,7 @@ export class CosmosNoSqlUtil {
         return bulkLoadResult;
     }
 
-    async executeBulkBatch(
+    private async executeBulkBatch(
         operations : Array<OperationInput>,
         blr : BulkLoadResult,
         bulkOptions?: BulkOptions,
@@ -369,7 +399,7 @@ export class CosmosNoSqlUtil {
         return true;
     }
 
-    buildJsonObjectArray(documents : Array<object>, generateIds : boolean) : JSONObject[] {
+    private buildJsonObjectArray(documents : Array<object>, generateIds : boolean) : JSONObject[] {
         let jsonObjects : JSONObject[] = new Array<JSONObject>();
         documents.forEach(doc => {
             // deal with the awkward JSONObject interface; make tsc think that the
@@ -388,7 +418,7 @@ export class CosmosNoSqlUtil {
     /**
      * Return a batch size value between 1 and 50 from the given value.
      */
-    normalizedBatchSize(n : number) : number {
+    private normalizedBatchSize(n : number) : number {
         if (n < 1) {
             return 1;
         }

@@ -24,11 +24,13 @@ export class BlobUtil {
     private sharedKeyCred : StorageSharedKeyCredential;
     private blobSvcClient : BlobServiceClient;
 
-    // Pass in the names of the environment variables that contain the
-    // Azure Storage account Name and Key.
+    /**
+     * Pass in the names of the environment variables that contain the
+     * Azure Storage account Name and Key.
+     */
     constructor(
         public acctNameEnvVar : string,
-        public acctKeyEnvVar : string,
+        public acctKeyEnvVar  : string,
         public verbose : boolean = false) {
 
         try {
@@ -63,6 +65,10 @@ export class BlobUtil {
         }
     }
 
+    /**
+     * Return a list of the containers in the storage account,
+     * as an array of objects with their details.
+     */
     async listContainersAsync() : Promise<Object[]> {
         try {
             let results = [];
@@ -76,6 +82,10 @@ export class BlobUtil {
         }
     }
 
+    /**
+     * Return a list of the blobs in the given container in the storage account,
+     * as an array of objects with their details.
+     */
     async listContainerAsync(containerName : string) : Promise<Object[]> {
         try {
             let containerClient = await this.blobSvcClient.getContainerClient(containerName);
@@ -97,6 +107,9 @@ export class BlobUtil {
         }
     }
 
+    /**
+     * Create a container with the given name.
+     */
     async createContainerAsync(containerName : string) : Promise<ContainerCreateIfNotExistsResponse> {
         try {
             let containerClient = await this.blobSvcClient.getContainerClient(containerName);
@@ -107,6 +120,9 @@ export class BlobUtil {
         }
     }
 
+    /**
+     * Delete the container with the given name.
+     */
     async deleteContainerAsync(containerName : string) : Promise<ContainerDeleteIfExistsResponse> {
         try {
             let containerClient = await this.blobSvcClient.getContainerClient(containerName);
@@ -117,6 +133,10 @@ export class BlobUtil {
         }
     }
 
+    /**
+     * Upload a blob to the given container and blob name, from the given
+     * ReadStream.
+     */
     async uploadBlobFromReadStreamAsync(
         containerName: string,
         blobName:      string,
@@ -131,6 +151,9 @@ export class BlobUtil {
         }
     }
 
+    /**
+     * Download the given blob name to a local file.
+     */
     async downloadToFileAsync(
         containerName: string,
         blobName:      string,
