@@ -14,16 +14,16 @@ The npm package is available here: https://www.npmjs.com/package/azu-js?activeTa
 
 ## azu-js Current Implementation State and Roadmap
 
-| Functionality                   | v0.9.9 Support | Codebase State       | Implementation Class   |
-| ------------------------------- | -------------- | -------------------- | ---------------------- |
-| Azure Blob Storage              | yes            | Implemented          | BlobUtil               |
-| Local Filesystem                | yes            | Implemented          | FileUtil               |
-| Azure Cosmos DB NoSQL API       | yes            | Implemented          | CosmosNoSqlUtil        |
-| Azure OpenAI                    | yes            | Implemented (1)      | OpenAiUtil             |
-| Azure Cognitive Search          | yes            | Implemented (2)      | CogSearchUtil          |
-| Azure Cosmos DB Mongo API       | no             | Not yet implemented  | CosmosMongoUtil        |
-| Azure Cosmos DB PostgreSQL API  | no             | Not yet implemented  | CosmosPgUtil           |
-| PaaS Service Provisioning       | no             | NOT Planned          | (3)                    |
+| Functionality                   | v0.9.10 Support | Codebase State       | Implementation Class   |
+| ------------------------------- | --------------- | -------------------- | ---------------------- |
+| Azure Blob Storage              | yes             | Implemented          | BlobUtil               |
+| Local Filesystem                | yes             | Implemented          | FileUtil               |
+| Azure Cosmos DB NoSQL API       | yes             | Implemented          | CosmosNoSqlUtil        |
+| Azure OpenAI                    | yes             | Implemented (1)      | OpenAiUtil             |
+| Azure Cognitive Search          | yes             | Implemented (2)      | CogSearchUtil          |
+| Azure Cosmos DB Mongo API       | no              | Not yet implemented  | CosmosMongoUtil        |
+| Azure Cosmos DB PostgreSQL API  | no              | Not yet implemented  | CosmosPgUtil           |
+| PaaS Service Provisioning       | no              | NOT Planned          | (3)                    |
 
 #### Footnotes
 
@@ -42,6 +42,6 @@ Your application should include the following:
         "@azure/storage-blob": "^12.16.0",
         "axios": "^1.5.1",
         "uuid": "^9.0.1"
-        "azu-js": "0.9.9"
+        "azu-js": "0.9.10"
     },
 ```
