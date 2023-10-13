@@ -1,5 +1,8 @@
-// Utility class for Azure Cosmos DB NoSQL APIs
-// Chris Joakim, Microsoft, 2023
+/**
+ * Utility classes for the Azure Cosmos DB NoSQL API -
+ * such as CRUD operations, bulk loading, and metadata.
+ * Chris Joakim, Microsoft, 2023
+ */
 
 import util from "util";
 import { v4 as uuidv4 } from 'uuid';

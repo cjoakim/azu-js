@@ -4,6 +4,10 @@
 ### BlobUtil.d.ts
 
 ```
+/**
+ * Utility class for Azure Blob Storage.
+ * Chris Joakim, Microsoft, 2023
+ */
 /// <reference types="node" />
 import fs from "fs";
 import { BlobDownloadResponseParsed, ContainerCreateIfNotExistsResponse, ContainerDeleteIfExistsResponse } from '@azure/storage-blob';
@@ -29,6 +33,10 @@ export declare class BlobUtil {
 ### CogSearchUtil.d.ts
 
 ```
+/**
+ * Utility classes for Azure Cognitive Search.
+ * Chris Joakim, Microsoft, 2023
+ */
 import { FileUtil } from "./FileUtil";
 export interface CogSearchResponse {
     url: string;
@@ -111,6 +119,10 @@ export declare class CogSearchUtil {
 ### Config.d.ts
 
 ```
+/**
+ * Utility class for configuration such as environment variables.
+ * Chris Joakim, Microsoft, 2023
+ */
 export declare class Config {
     static LIB_NAME: string;
     static LIB_VERSION: string;
@@ -132,6 +144,11 @@ export declare class Config {
 ### CosmosNoSqlAccountMetadata.d.ts
 
 ```
+/**
+ * Utility classes related to the metadata for Azure Cosmos DB NoSQL API
+ * databases, containers, and offers (throughput).
+ * Chris Joakim, Microsoft, 2023
+ */
 import { DatabaseDefinition, OfferDefinition, ContainerDefinition } from "@azure/cosmos";
 export declare abstract class BaseNoSqlMeta {
     raw: object;
@@ -188,6 +205,11 @@ export declare class CosmosNoSqlQuerySpecUtil {
 ### CosmosNoSqlUtil.d.ts
 
 ```
+/**
+ * Utility classes for the Azure Cosmos DB NoSQL API -
+ * such as CRUD operations, bulk loading, and metadata.
+ * Chris Joakim, Microsoft, 2023
+ */
 import { BulkOptions, ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, JSONObject, OfferDefinition, OperationInput, PartitionKeyDefinition, RequestOptions, ResourceResponse, SqlQuerySpec, ContainerDefinition, BulkOperationResponse } from "@azure/cosmos";
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 /**
@@ -260,6 +282,12 @@ export declare class CosmosNoSqlUtil {
 ### FileUtil.d.ts
 
 ```
+/**
+ * Utility class for local filesystem operations.
+ * To read huge text files, consider using a line-by-line streaming approach
+ * in your application code rather than using this class.
+ * Chris Joakim, Microsoft, 2023
+ */
 export declare class FileUtil {
     constructor();
     cwd(): string;
@@ -273,9 +301,39 @@ export declare class FileUtil {
 
 ```
 
+### index.d.ts
+
+```
+/**
+ * Define the classes exported/exposed by the azu-js NPM package.
+ * Chris Joakim, Microsoft, 2023
+ */
+import { BlobUtil } from "./BlobUtil";
+import { CogSearchResponse, CogSearchUtil } from "./CogSearchUtil";
+import { Config } from "./Config";
+import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
+import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, BulkLoadResult } from "./CosmosNoSqlUtil";
+import { FileUtil } from "./FileUtil";
+import { OpenAiUtil } from "./OpenAiUtil";
+import { BaseNoSqlMeta, NoSqlDBMeta, NoSqlContainerMeta, NoSqlOfferMeta, CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
+export { BlobUtil };
+export { CogSearchResponse, CogSearchUtil };
+export { Config };
+export { CosmosNoSqlQuerySpecUtil };
+export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, BulkLoadResult };
+export { FileUtil };
+export { BaseNoSqlMeta, NoSqlDBMeta, NoSqlContainerMeta, NoSqlOfferMeta, CosmosNoSqlAccountMeta };
+export { OpenAiUtil };
+
+```
+
 ### OpenAiUtil.d.ts
 
 ```
+/**
+ * Utility class for Azure OpenAI.
+ * Chris Joakim, Microsoft, 2023
+ */
 import { Embeddings, GetEmbeddingsOptions, OpenAIClient } from "@azure/openai";
 export declare class OpenAiUtil {
     acctUrlEnvVar: string;
@@ -291,27 +349,5 @@ export declare class OpenAiUtil {
     generateEmbeddings(input: string[], options?: GetEmbeddingsOptions): Promise<Embeddings>;
     generateUuid(): string;
 }
-
-```
-
-### index.d.ts
-
-```
-import { BlobUtil } from "./BlobUtil";
-import { CogSearchResponse, CogSearchUtil } from "./CogSearchUtil";
-import { Config } from "./Config";
-import { CosmosNoSqlQuerySpecUtil } from "./CosmosNoSqlQuerySpecUtil";
-import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy } from "./CosmosNoSqlUtil";
-import { FileUtil } from "./FileUtil";
-import { OpenAiUtil } from "./OpenAiUtil";
-import { BaseNoSqlMeta, NoSqlDBMeta, NoSqlContainerMeta, NoSqlOfferMeta, CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
-export { BlobUtil };
-export { CogSearchResponse, CogSearchUtil };
-export { Config };
-export { CosmosNoSqlQuerySpecUtil };
-export { CosmosNoSqlUtil, defaultCosmosConnectionPolicy };
-export { FileUtil };
-export { BaseNoSqlMeta, NoSqlDBMeta, NoSqlContainerMeta, NoSqlOfferMeta, CosmosNoSqlAccountMeta };
-export { OpenAiUtil };
 
 ```

@@ -1,5 +1,7 @@
-// Utility class for Azure Cognitive Search
-// Chris Joakim, Microsoft, 2023
+/**
+ * Utility classes for Azure Cognitive Search.
+ * Chris Joakim, Microsoft, 2023
+ */
 
 import util from "util";
 import { Config } from "./Config";

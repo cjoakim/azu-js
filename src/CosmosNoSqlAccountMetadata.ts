@@ -1,5 +1,8 @@
-// Utility class for Azure Cosmos DB NoSQL APIs
-// Chris Joakim, Microsoft, 2023
+/**
+ * Utility classes related to the metadata for Azure Cosmos DB NoSQL API
+ * databases, containers, and offers (throughput).
+ * Chris Joakim, Microsoft, 2023
+ */
 
 import util from "util";
 
