@@ -288,27 +288,27 @@ test("CosmosNoSqlUtil: bulk create and upsert", async () => {
     fu.writeTextFileSync('tmp/bulk_airports.json', JSON.stringify(airports, null, 2));
 
     // first create the 50 airport documents
-    let blr: BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'create', airports, false);
-    fu.writeTextFileSync('tmp/bulk_load_create_result.json', JSON.stringify(blr, null, 2));
-    expect(blr.batchCount).toBe(1);
-    expect(blr.elapsedTime).toBeGreaterThan(10);
-    expect(blr.elapsedTime).toBeLessThan(3000);
-    expect(blr.totalRUs).toBeGreaterThan(250);
-    expect(blr.totalRUs).toBeLessThan(5000);
-    expect(blr.responseCodes[200]).toBe(undefined);
-    expect(blr.responseCodes[201]).toBe(50);
-    expect(blr.responseCodes[404]).toBe(undefined);
+    let blr1: BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'create', airports, false);
+    fu.writeTextFileSync('tmp/bulk_load_create_result.json', JSON.stringify(blr1, null, 2));
+    expect(blr1.batchCount).toBe(1);
+    expect(blr1.elapsedTime).toBeGreaterThan(10);
+    expect(blr1.elapsedTime).toBeLessThan(3000);
+    expect(blr1.totalRUs).toBeGreaterThan(250);
+    expect(blr1.totalRUs).toBeLessThan(5000);
+    expect(blr1.responseCodes[200]).toBe(undefined);
+    expect(blr1.responseCodes[201]).toBe(50);
+    expect(blr1.responseCodes[404]).toBe(undefined);
 
     // next upsert the 50 airport documents
     airports.forEach(obj => { obj['updated'] = true; });
-    blr = await cu.loadContainerBulkAsync(dbName, cName, 'upsert', airports, false);
-    fu.writeTextFileSync('tmp/bulk_load_upsert_result.json', JSON.stringify(blr, null, 2));
-    expect(blr.batchCount).toBe(1);
-    expect(blr.elapsedTime).toBeGreaterThan(10);
-    expect(blr.elapsedTime).toBeLessThan(3000);
-    expect(blr.totalRUs).toBeGreaterThan(250);
-    expect(blr.totalRUs).toBeLessThan(5000);
-    expect(blr.responseCodes[200]).toBe(50);
-    expect(blr.responseCodes[201]).toBe(undefined);
-    expect(blr.responseCodes[404]).toBe(undefined);
+    let blr2 : BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'upsert', airports, false, 20);
+    fu.writeTextFileSync('tmp/bulk_load_upsert_result.json', JSON.stringify(blr2, null, 2));
+    expect(blr2.batchCount).toBe(3);  // batches of 20, 20, 10 = 3
+    expect(blr2.elapsedTime).toBeGreaterThan(10);
+    expect(blr2.elapsedTime).toBeLessThan(3000);
+    expect(blr2.totalRUs).toBeGreaterThan(250);
+    expect(blr2.totalRUs).toBeLessThan(5000);
+    expect(blr2.responseCodes[200]).toBe(50);
+    expect(blr2.responseCodes[201]).toBe(undefined);
+    expect(blr2.responseCodes[404]).toBe(undefined);
 });

@@ -37,6 +37,10 @@ import {
 
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 
+/**
+ * A CosmosClient may specify its ConnectionPolicy object.
+ * This is the default ConnectionPolicy used in azu-js.
+ */
 export const defaultCosmosConnectionPolicy: ConnectionPolicy = Object.freeze({
     connectionMode: ConnectionMode.Gateway,
     requestTimeout: 60000,
@@ -77,7 +81,6 @@ export class BulkLoadResult {
             }
             this.totalRUs = this.totalRUs + opResp.requestCharge;
         });
-        console.log(bulkOpResp);
     }
 
     start() {
@@ -103,7 +106,6 @@ export class CosmosNoSqlUtil {
     currentDb     : Database = null;
     currentContainerName : string = '';
     currentContainer     : Container = null;
-
     connectionPolicy : ConnectionPolicy = null;
     cosmosClient : CosmosClient = null;
     verbose : boolean = false;
@@ -314,31 +316,51 @@ export class CosmosNoSqlUtil {
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
         let jsonObjects : JSONObject[] = this.buildJsonObjectArray(documents, generateIds);
+        console.log('jsonObjects.length: ' + jsonObjects.length);
 
         let operationType : any = BulkOperationType.Create; // default to Create unless explicitly Upsert
         if (operationName.toLocaleLowerCase().trim() === 'upsert') {
             operationType = BulkOperationType.Upsert;
         }
+        let bulkLoadResult : BulkLoadResult = new BulkLoadResult();  // this is the method return object
+        bulkLoadResult.inputDocumentCount = documents.length;
+        bulkLoadResult.start()
 
-        let blr : BulkLoadResult = new BulkLoadResult();
-        blr.inputDocumentCount = documents.length;
-        blr.start()
+        let operations = new Array<OperationInput>();
 
-        // BulkOperationResponse
-        let operations : Array<OperationInput> = new Array<OperationInput>();
-        jsonObjects.forEach(resourceBody => {
+        for (let i = 0; i < jsonObjects.length; i++) {
+            let resourceBody = jsonObjects[i];
             let op: OperationInput = {
                 operationType,
                 resourceBody
             };
             operations.push(op);
-        });
+            // execute a batch of batchSize operations while iterating through
+            // the input document array.
+            if (operations.length >= batchSize) {
+                await this.executeBulkBatch(operations, bulkLoadResult, bulkOptions, reqOptions);
+                //operations = new Array<OperationInput>();
+                operations.length = 0
+            }
+        }
+        // execute the last batch if necessary
+        if (operations.length > 0) {
+            await this.executeBulkBatch(operations, bulkLoadResult, bulkOptions, reqOptions);
+        }
+        bulkLoadResult.finish();
+        return bulkLoadResult;
+    }
+
+    async executeBulkBatch(
+        operations : Array<OperationInput>,
+        blr : BulkLoadResult,
+        bulkOptions?: BulkOptions,
+        reqOptions?: RequestOptions) : Promise<boolean> {
 
         let bulkOpResp : BulkOperationResponse =
             await this.currentContainer.items.bulk(operations, bulkOptions, reqOptions);
         blr.increment(bulkOpResp);
-        blr.finish();
-        return blr;
+        return true;
     }
 
     buildJsonObjectArray(documents : Array<object>, generateIds : boolean) : JSONObject[] {
@@ -357,6 +379,9 @@ export class CosmosNoSqlUtil {
         return jsonObjects;
     }
 
+    /**
+     * Create and return a uuid v4 as a string value.
+     */
     generateUuid() : string {
         return uuidv4();
     }
