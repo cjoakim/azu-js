@@ -52,8 +52,49 @@ export const defaultCosmosConnectionPolicy: ConnectionPolicy = Object.freeze({
     enableBackgroundEndpointRefreshing: true,
 });
 
-export class CosmosNoSqlUtil {
+export class BulkLoadResult {
+    inputDocumentCount: number = 0;
+    startTime     : number = -1;
+    endTime       : number = -1;
+    elapsedTime   : number = -1;
+    batchCount    : number = 0;
+    totalRUs      : number = 0;
+    responseCodes : object = {};
 
+    constructor() {
+        this.startTime = this.timeNow();
+    }
+
+    increment(bulkOpResp : BulkOperationResponse) {
+        this.batchCount++;
+        //this.totalRUs = this.totalRUs + bulkOpResp.  
+        bulkOpResp.forEach(opResp => {
+            if (this.responseCodes[opResp.statusCode]) {
+                this.responseCodes[opResp.statusCode]++;
+            }
+            else {
+                this.responseCodes[opResp.statusCode] = 1;
+            }
+            this.totalRUs = this.totalRUs + opResp.requestCharge;
+        });
+        console.log(bulkOpResp);
+    }
+
+    start() {
+        this.startTime = this.timeNow();
+    }
+
+    finish() {
+        this.endTime = this.timeNow();
+        this.elapsedTime = this.endTime - this.startTime;
+    }
+
+    private timeNow() : number {
+        return new Date().getTime();
+    }
+}
+
+export class CosmosNoSqlUtil {
     acctUriEnvVar : string;
     acctKeyEnvVar : string;
     acctUri       : string;
@@ -264,25 +305,56 @@ export class CosmosNoSqlUtil {
         dbName: string,
         cName:  string,
         operationName: string,
-        documents: Array<JSONObject>,
+        documents: Array<object>,
+        generateIds?: false,
+        batchSize: number = 50,
         bulkOptions?: BulkOptions,
-        reqOptions?: RequestOptions): Promise<BulkOperationResponse> {
+        reqOptions?: RequestOptions): Promise<BulkLoadResult> {
+
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
+        let jsonObjects : JSONObject[] = this.buildJsonObjectArray(documents, generateIds);
 
         let operationType : any = BulkOperationType.Create; // default to Create unless explicitly Upsert
-        if (operationName.toLocaleLowerCase() === 'upsert') {
+        if (operationName.toLocaleLowerCase().trim() === 'upsert') {
             operationType = BulkOperationType.Upsert;
         }
+
+        let blr : BulkLoadResult = new BulkLoadResult();
+        blr.inputDocumentCount = documents.length;
+        blr.start()
+
+        // BulkOperationResponse
         let operations : Array<OperationInput> = new Array<OperationInput>();
-        documents.forEach(resourceBody => {
+        jsonObjects.forEach(resourceBody => {
             let op: OperationInput = {
                 operationType,
                 resourceBody
-              };
+            };
             operations.push(op);
         });
-        return await this.currentContainer.items.bulk(operations, bulkOptions, reqOptions);
+
+        let bulkOpResp : BulkOperationResponse =
+            await this.currentContainer.items.bulk(operations, bulkOptions, reqOptions);
+        blr.increment(bulkOpResp);
+        blr.finish();
+        return blr;
+    }
+
+    buildJsonObjectArray(documents : Array<object>, generateIds : boolean) : JSONObject[] {
+        let jsonObjects : JSONObject[] = new Array<JSONObject>();
+        documents.forEach(doc => {
+            // deal with the awkward JSONObject interface; make tsc think that the
+            // object is a dictionary and has a 'key' with both type and value string.
+            let obj = { dict: <{ [key: string]: string }> doc };
+            if (generateIds) {
+                doc['id'] = this.generateUuid();
+            }
+            // obj['dict'] is the original/given document, an object.
+            // but it may have been augmented with a new uuid.
+            jsonObjects.push(obj['dict']); 
+        });
+        return jsonObjects;
     }
 
     generateUuid() : string {

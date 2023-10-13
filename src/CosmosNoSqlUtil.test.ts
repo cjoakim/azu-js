@@ -28,7 +28,7 @@ import {
     JSONObject
   } from "@azure/cosmos";
 
-import { CosmosNoSqlUtil } from "./CosmosNoSqlUtil";
+import { CosmosNoSqlUtil, BulkLoadResult } from "./CosmosNoSqlUtil";
 import {
     BaseNoSqlMeta,
     NoSqlDBMeta,
@@ -287,17 +287,36 @@ test("CosmosNoSqlUtil: bulk create and upsert", async () => {
     let jsonObjects : JSONObject[] = new Array<JSONObject>();
     rawAirports.forEach(a => {
         // ensure that the object is a dictionary and has a 'key' with both type and value string
-        let obj = { dic: <{ [key: string]: string }> a };  
-        obj['id'] = cu.generateUuid();
-        obj['key']= a['pk'];
-        jsonObjects.push(obj);
+        let obj = { doc: <{ [key: string]: string }> a };  
+        a['id'] = cu.generateUuid();
+        jsonObjects.push(obj['doc']);
     });
+    fu.writeTextFileSync('tmp/bulk_airports.json', JSON.stringify(jsonObjects, null, 2));
 
-    let resultsArray = await cu.loadContainerBulkAsync(dbName, cName, 'create', jsonObjects);
-    console.log(resultsArray);
+    // first create the 50 airport documents
+    let blr: BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'create', jsonObjects, false);
+    fu.writeTextFileSync('tmp/bulk_load_create_result.json', JSON.stringify(blr, null, 2));
+    expect(blr.batchCount).toBe(1);
+    expect(blr.elapsedTime).toBeGreaterThan(10);
+    expect(blr.elapsedTime).toBeLessThan(3000);
+    expect(blr.totalRUs).toBeGreaterThan(250);
+    expect(blr.totalRUs).toBeLessThan(5000);
+    expect(blr.responseCodes[200]).toBe(undefined);
+    expect(blr.responseCodes[201]).toBe(50);
+    expect(blr.responseCodes[404]).toBe(undefined);
 
-    expect(resultsArray.length).toBe(50);
-    resultsArray.forEach(r => {
-        expect(r.statusCode).toBe(201);
+    // next upsert the 50 airport documents
+    jsonObjects.forEach(obj => {
+        obj['updated'] = true;
     });
+    blr = await cu.loadContainerBulkAsync(dbName, cName, 'upsert', jsonObjects, false);
+    fu.writeTextFileSync('tmp/bulk_load_upsert_result.json', JSON.stringify(blr, null, 2));
+    expect(blr.batchCount).toBe(1);
+    expect(blr.elapsedTime).toBeGreaterThan(10);
+    expect(blr.elapsedTime).toBeLessThan(3000);
+    expect(blr.totalRUs).toBeGreaterThan(250);
+    expect(blr.totalRUs).toBeLessThan(5000);
+    expect(blr.responseCodes[200]).toBe(50);
+    expect(blr.responseCodes[201]).toBe(undefined);
+    expect(blr.responseCodes[404]).toBe(undefined);
 });

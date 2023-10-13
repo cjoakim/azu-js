@@ -191,6 +191,20 @@ export declare class CosmosNoSqlQuerySpecUtil {
 import { BulkOptions, ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, JSONObject, OfferDefinition, PartitionKeyDefinition, RequestOptions, ResourceResponse, SqlQuerySpec, ContainerDefinition, BulkOperationResponse } from "@azure/cosmos";
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 export declare const defaultCosmosConnectionPolicy: ConnectionPolicy;
+export declare class BulkLoadResult {
+    inputDocumentCount: number;
+    startTime: number;
+    endTime: number;
+    elapsedTime: number;
+    batchCount: number;
+    totalRUs: number;
+    responseCodes: object;
+    constructor();
+    increment(bulkOpResp: BulkOperationResponse): void;
+    start(): void;
+    finish(): void;
+    private timeNow;
+}
 export declare class CosmosNoSqlUtil {
     acctUriEnvVar: string;
     acctKeyEnvVar: string;
@@ -223,7 +237,8 @@ export declare class CosmosNoSqlUtil {
     upsertDocumentAsync(dbName: string, cName: string, doc: Object): Promise<ItemResponse<Object>>;
     deleteDocumentAsync(dbName: string, cName: string, id: string, pk: string): Promise<ItemResponse<Object>>;
     loadContainerSequentialAsync(dbName: string, cName: string, documents: Array<Object>): Promise<number>;
-    loadContainerBulkAsync(dbName: string, cName: string, operationName: string, documents: Array<JSONObject>, bulkOptions?: BulkOptions, reqOptions?: RequestOptions): Promise<BulkOperationResponse>;
+    loadContainerBulkAsync(dbName: string, cName: string, operationName: string, documents: Array<object>, generateIds?: false, batchSize?: number, bulkOptions?: BulkOptions, reqOptions?: RequestOptions): Promise<BulkLoadResult>;
+    buildJsonObjectArray(documents: Array<object>, generateIds: boolean): JSONObject[];
     generateUuid(): string;
 }
 
