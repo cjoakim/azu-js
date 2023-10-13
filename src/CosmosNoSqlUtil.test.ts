@@ -317,7 +317,7 @@ test("CosmosNoSqlUtil: bulk create and upsert", async () => {
     // next upsert the 50 airport documents
     airports.forEach(obj => { obj['updated'] = 2; });
     let blr3 : BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'upsert', airports, false, 999);
-    fu.writeTextFileSync('tmp/bulk_load_upsert2_result.json', JSON.stringify(blr2, null, 2));
+    fu.writeTextFileSync('tmp/bulk_load_upsert2_result.json', JSON.stringify(blr3, null, 2));
     expect(blr3.batchSize).toBe(50);  // normalized from 999 to 50
     expect(blr3.batchCount).toBe(1);
     expect(blr3.elapsedTime).toBeGreaterThan(10);
