@@ -61,6 +61,7 @@ export class BulkLoadResult {
     startTime     : number = -1;
     endTime       : number = -1;
     elapsedTime   : number = -1;
+    batchSize     : number = -1;
     batchCount    : number = 0;
     totalRUs      : number = 0;
     responseCodes : object = {};
@@ -309,7 +310,7 @@ export class CosmosNoSqlUtil {
         operationName: string,
         documents: Array<object>,
         generateIds?: false,
-        batchSize: number = 50,
+        givenBatchSize: number = 50,
         bulkOptions?: BulkOptions,
         reqOptions?: RequestOptions): Promise<BulkLoadResult> {
 
@@ -317,6 +318,7 @@ export class CosmosNoSqlUtil {
         this.setCurrentContainerAsync(cName);
         let jsonObjects : JSONObject[] = this.buildJsonObjectArray(documents, generateIds);
         console.log('jsonObjects.length: ' + jsonObjects.length);
+        let batchSize = this.normalizedBatchSize(givenBatchSize);
 
         let operationType : any = BulkOperationType.Create; // default to Create unless explicitly Upsert
         if (operationName.toLocaleLowerCase().trim() === 'upsert') {
@@ -324,6 +326,7 @@ export class CosmosNoSqlUtil {
         }
         let bulkLoadResult : BulkLoadResult = new BulkLoadResult();  // this is the method return object
         bulkLoadResult.inputDocumentCount = documents.length;
+        bulkLoadResult.batchSize = batchSize;
         bulkLoadResult.start()
 
         let operations = new Array<OperationInput>();
@@ -377,6 +380,19 @@ export class CosmosNoSqlUtil {
             jsonObjects.push(obj['dict']); 
         });
         return jsonObjects;
+    }
+
+    /**
+     * Return a batch size value between 1 and 50 from the given value.
+     */
+    normalizedBatchSize(n : number) : number {
+        if (n < 1) {
+            return 1;
+        }
+        if (n > 50) {
+            return 50;
+        }
+        return n;
     }
 
     /**

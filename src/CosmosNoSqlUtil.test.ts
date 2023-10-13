@@ -290,6 +290,7 @@ test("CosmosNoSqlUtil: bulk create and upsert", async () => {
     // first create the 50 airport documents
     let blr1: BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'create', airports, false);
     fu.writeTextFileSync('tmp/bulk_load_create_result.json', JSON.stringify(blr1, null, 2));
+    expect(blr1.batchSize).toBe(50);
     expect(blr1.batchCount).toBe(1);
     expect(blr1.elapsedTime).toBeGreaterThan(10);
     expect(blr1.elapsedTime).toBeLessThan(3000);
@@ -300,9 +301,10 @@ test("CosmosNoSqlUtil: bulk create and upsert", async () => {
     expect(blr1.responseCodes[404]).toBe(undefined);
 
     // next upsert the 50 airport documents
-    airports.forEach(obj => { obj['updated'] = true; });
+    airports.forEach(obj => { obj['updated'] = 1; });
     let blr2 : BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'upsert', airports, false, 20);
-    fu.writeTextFileSync('tmp/bulk_load_upsert_result.json', JSON.stringify(blr2, null, 2));
+    fu.writeTextFileSync('tmp/bulk_load_upsert1_result.json', JSON.stringify(blr2, null, 2));
+    expect(blr2.batchSize).toBe(20);
     expect(blr2.batchCount).toBe(3);  // batches of 20, 20, 10 = 3
     expect(blr2.elapsedTime).toBeGreaterThan(10);
     expect(blr2.elapsedTime).toBeLessThan(3000);
@@ -311,4 +313,18 @@ test("CosmosNoSqlUtil: bulk create and upsert", async () => {
     expect(blr2.responseCodes[200]).toBe(50);
     expect(blr2.responseCodes[201]).toBe(undefined);
     expect(blr2.responseCodes[404]).toBe(undefined);
+
+    // next upsert the 50 airport documents
+    airports.forEach(obj => { obj['updated'] = 2; });
+    let blr3 : BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'upsert', airports, false, 999);
+    fu.writeTextFileSync('tmp/bulk_load_upsert2_result.json', JSON.stringify(blr2, null, 2));
+    expect(blr3.batchSize).toBe(50);  // normalized from 999 to 50
+    expect(blr3.batchCount).toBe(1);
+    expect(blr3.elapsedTime).toBeGreaterThan(10);
+    expect(blr3.elapsedTime).toBeLessThan(3000);
+    expect(blr3.totalRUs).toBeGreaterThan(250);
+    expect(blr3.totalRUs).toBeLessThan(5000);
+    expect(blr3.responseCodes[200]).toBe(50);
+    expect(blr3.responseCodes[201]).toBe(undefined);
+    expect(blr3.responseCodes[404]).toBe(undefined);
 });

@@ -200,6 +200,7 @@ export declare class BulkLoadResult {
     startTime: number;
     endTime: number;
     elapsedTime: number;
+    batchSize: number;
     batchCount: number;
     totalRUs: number;
     responseCodes: object;
@@ -241,9 +242,13 @@ export declare class CosmosNoSqlUtil {
     upsertDocumentAsync(dbName: string, cName: string, doc: Object): Promise<ItemResponse<Object>>;
     deleteDocumentAsync(dbName: string, cName: string, id: string, pk: string): Promise<ItemResponse<Object>>;
     loadContainerSequentialAsync(dbName: string, cName: string, documents: Array<Object>): Promise<number>;
-    loadContainerBulkAsync(dbName: string, cName: string, operationName: string, documents: Array<object>, generateIds?: false, batchSize?: number, bulkOptions?: BulkOptions, reqOptions?: RequestOptions): Promise<BulkLoadResult>;
+    loadContainerBulkAsync(dbName: string, cName: string, operationName: string, documents: Array<object>, generateIds?: false, givenBatchSize?: number, bulkOptions?: BulkOptions, reqOptions?: RequestOptions): Promise<BulkLoadResult>;
     executeBulkBatch(operations: Array<OperationInput>, blr: BulkLoadResult, bulkOptions?: BulkOptions, reqOptions?: RequestOptions): Promise<boolean>;
     buildJsonObjectArray(documents: Array<object>, generateIds: boolean): JSONObject[];
+    /**
+     * Return a batch size value between 1 and 50 from the given value.
+     */
+    normalizedBatchSize(n: number): number;
     /**
      * Create and return a uuid v4 as a string value.
      */
