@@ -278,23 +278,17 @@ test("CosmosNoSqlUtil: crud operations", async () => {
 test("CosmosNoSqlUtil: bulk create and upsert", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
     let dbName = 'dev';
-    let cName = 'unittests';
+    let cName  = 'unittests';
     cu.setCurrentDatabaseAsync(dbName);
     cu.setCurrentContainerAsync(cName);
-    let rawAirports : Array<object> = fu.readJsonArrayFile('data/world-airports-50.json');
-    expect(rawAirports.length).toBe(50);
+    let airports : Array<object> = fu.readJsonArrayFile('data/world-airports-50.json');
+    expect(airports.length).toBe(50);
 
-    let jsonObjects : JSONObject[] = new Array<JSONObject>();
-    rawAirports.forEach(a => {
-        // ensure that the object is a dictionary and has a 'key' with both type and value string
-        let obj = { doc: <{ [key: string]: string }> a };  
-        a['id'] = cu.generateUuid();
-        jsonObjects.push(obj['doc']);
-    });
-    fu.writeTextFileSync('tmp/bulk_airports.json', JSON.stringify(jsonObjects, null, 2));
+    airports.forEach(a => { a['id'] = cu.generateUuid(); });
+    fu.writeTextFileSync('tmp/bulk_airports.json', JSON.stringify(airports, null, 2));
 
     // first create the 50 airport documents
-    let blr: BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'create', jsonObjects, false);
+    let blr: BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'create', airports, false);
     fu.writeTextFileSync('tmp/bulk_load_create_result.json', JSON.stringify(blr, null, 2));
     expect(blr.batchCount).toBe(1);
     expect(blr.elapsedTime).toBeGreaterThan(10);
@@ -306,10 +300,8 @@ test("CosmosNoSqlUtil: bulk create and upsert", async () => {
     expect(blr.responseCodes[404]).toBe(undefined);
 
     // next upsert the 50 airport documents
-    jsonObjects.forEach(obj => {
-        obj['updated'] = true;
-    });
-    blr = await cu.loadContainerBulkAsync(dbName, cName, 'upsert', jsonObjects, false);
+    airports.forEach(obj => { obj['updated'] = true; });
+    blr = await cu.loadContainerBulkAsync(dbName, cName, 'upsert', airports, false);
     fu.writeTextFileSync('tmp/bulk_load_upsert_result.json', JSON.stringify(blr, null, 2));
     expect(blr.batchCount).toBe(1);
     expect(blr.elapsedTime).toBeGreaterThan(10);
