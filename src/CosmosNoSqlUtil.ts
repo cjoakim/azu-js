@@ -342,7 +342,7 @@ export class CosmosNoSqlUtil {
         cName:  string,
         operationName: string,
         documents: Array<object>,
-        generateIds?: false,
+        generateIds: boolean = false,
         givenBatchSize: number = 50,
         bulkOptions?: BulkOptions,
         reqOptions?: RequestOptions): Promise<BulkLoadResult> {

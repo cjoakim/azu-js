@@ -451,7 +451,7 @@ export declare class CosmosNoSqlUtil {
      * document counts, elapsed time, RU consumption, and response codes
      * counts.
      */
-    loadContainerBulkAsync(dbName: string, cName: string, operationName: string, documents: Array<object>, generateIds?: false, givenBatchSize?: number, bulkOptions?: BulkOptions, reqOptions?: RequestOptions): Promise<BulkLoadResult>;
+    loadContainerBulkAsync(dbName: string, cName: string, operationName: string, documents: Array<object>, generateIds?: boolean, givenBatchSize?: number, bulkOptions?: BulkOptions, reqOptions?: RequestOptions): Promise<BulkLoadResult>;
     private executeBulkBatch;
     private buildJsonObjectArray;
     /**
