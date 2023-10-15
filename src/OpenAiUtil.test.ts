@@ -1,9 +1,20 @@
 // Unit tests for class OpenAiUtil
 // Chris Joakim, Microsoft, 2023
 
+// npm test --testPathPattern OpenAiUtil
+
 import { OpenAiUtil } from "./OpenAiUtil";
 import { Config } from "./Config";
 import { FileUtil } from "./FileUtil";
+
+import {
+    AzureKeyCredential,
+    Embeddings,
+    GetEmbeddingsOptions,
+    ImageGenerationOptions,
+    ImageGenerations,
+    OpenAIClient
+} from "@azure/openai";
 
 // State retained across tests
 let acctUriEnvVar : string = Config.lookupEnvVarName('ENV_OPENAI_URL');
@@ -25,7 +36,7 @@ function epochTime() : number {
 }
 
 test("OpenAiUtil: constructor", async () => {
-    expect(true).toBe(true);
+    expect(oaiUtil.openaiClient).toBeTruthy();
 });
 
 test("OpenAiUtil: generateEmbeddings", async () => {
@@ -46,3 +57,17 @@ test("OpenAiUtil: generateEmbeddings", async () => {
     expect(tokens).toBeGreaterThan(300);
     expect(tokens).toBeLessThan(400);
 });
+
+test("OpenAiUtil: generateDalleImage and fetchGeneratedImage", async () => {
+    let fu = new FileUtil();
+    let prompt = "A watercolor painting of the planet saturn, primarily light blue with yellow stars";
+    let options : ImageGenerationOptions = null;
+    let response : ImageGenerations = await oaiUtil.generateDalleImage(prompt); // , options);
+    expect(response).toBeTruthy();
+    fu.writeTextFileSync('tmp/dalle-saturn.json', JSON.stringify(response, null, 2));
+    let imageUrl = response.data[0]['url'];
+    expect(imageUrl).toContain('https://');
+
+    let downloadResult = await oaiUtil.downloadGeneratedImage(imageUrl, 'tmp/dalle-saturn.png');
+    expect(downloadResult).toBe(true);
+}, 20000);
