@@ -350,7 +350,6 @@ export class CosmosNoSqlUtil {
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
         let jsonObjects : JSONObject[] = this.buildJsonObjectArray(documents, generateIds);
-        console.log('jsonObjects.length: ' + jsonObjects.length);
         let batchSize = this.normalizedBatchSize(givenBatchSize);
 
         let operationType : any = BulkOperationType.Create; // default to Create unless explicitly Upsert

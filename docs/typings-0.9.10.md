@@ -521,7 +521,7 @@ export declare class FileUtil {
  * Utility class for Azure OpenAI.
  * Chris Joakim, Microsoft, 2023
  */
-import { Embeddings, GetEmbeddingsOptions, OpenAIClient } from "@azure/openai";
+import { Embeddings, GetEmbeddingsOptions, ImageGenerationOptions, ImageGenerations, OpenAIClient } from "@azure/openai";
 export declare class OpenAiUtil {
     acctUrlEnvVar: string;
     acctKeyEnvVar: string;
@@ -529,7 +529,7 @@ export declare class OpenAiUtil {
     acctUrl: string;
     acctKey: string;
     embDeployment: string;
-    oaiClient: OpenAIClient;
+    openaiClient: OpenAIClient;
     verbose: boolean;
     /**
      * Pass in the names of the environment variables that contain the
@@ -546,6 +546,14 @@ export declare class OpenAiUtil {
      * Azure Cosmos DB and/or Azure Cognitive Search.
      */
     generateEmbeddings(input: string[], options?: GetEmbeddingsOptions): Promise<Embeddings>;
+    /**
+     * Generate an image with Dalle from the given text prompt, and optional options.
+     * The ImageGenerations response object contains a list of one or more objects
+     * which include a 'url' parameter that can be used to HTTP GET the actual image bytes.
+     * The url can then be passed to the 'downloadGeneratedImage(url, outfile)' method below below.
+     */
+    generateDalleImage(prompt: string, options?: ImageGenerationOptions): Promise<ImageGenerations>;
+    downloadGeneratedImage(url: string, outfile: string): Promise<boolean>;
 }
 
 ```
