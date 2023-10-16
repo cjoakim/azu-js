@@ -3,10 +3,10 @@
 - Reusable code, implemented in TypeScript, for rapid application Development in **Azure**
 - The focus is on the **Azure Cosmos DB, Azure OpenAI, Azure Cognitive Search, and Azure Blob Storage**
 - See the unit tests and the console_app/ directory for example use of the azu-js package
-- See the azu-js typings and interfaces documentation at https://github.com/cjoakim/azu-js/tree/main/docs.
+- See the azu-js typings and interfaces documentation at https://github.com/cjoakim/azu-js/tree/main/docs
 - The npm package is available here: https://www.npmjs.com/package/azu-js?activeTab=readme
 - Reference Web app at https://github.com/cjoakim/azure-cosmos-db-ts-web (by 10/31/2023)
-- Created by Chris Joakim, Azure Cosmos DB Global Black Belt
+- Developed by Chris Joakim, Azure Cosmos DB Global Black Belt
 
 ---
 
@@ -31,7 +31,7 @@
 
 ### Dependencies
 
-Your application should include the following:
+Your application package.json file should include the following:
 
 ```
     "dependencies": {
