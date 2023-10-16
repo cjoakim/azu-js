@@ -5,7 +5,7 @@
 - See the unit tests and the console_app/ directory for example use of the azu-js package
 - See the azu-js typings and interfaces documentation at https://github.com/cjoakim/azu-js/tree/main/docs.
 - The npm package is available here: https://www.npmjs.com/package/azu-js?activeTab=readme
-- Reference Express-based Web app at https://github.com/cjoakim/azure-cosmos-db-ts-web (late October 2023)
+- Reference Web app at https://github.com/cjoakim/azure-cosmos-db-ts-web (by 10/31/2023)
 - Created by Chris Joakim, Azure Cosmos DB Global Black Belt
 
 ---
