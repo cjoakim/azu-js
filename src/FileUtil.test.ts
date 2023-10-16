@@ -22,13 +22,31 @@ test("FileUtil: cwd", () => {
     expect(endsWell).toBe(true);
 });
 
-test("FileUtil: listFiles", () => {
+test("FileUtil: listFiles, deleteFile, deleteFilesInDir", () => {
     let fu = new FileUtil();
-    let files = fu.listFiles('dist');
+    let files = fu.listFilesInDir('dist');
     //console.log(files);
     expect(files).toContain('FileUtil.js');
     expect(files).toContain('FileUtil.d.ts');
     expect(files.length).toBe(30);
+
+    fu.deleteFilesInDir('tmp');
+    files = fu.listFilesInDir('tmp');
+    expect(files.length).toBe(0);
+
+    fu.writeTextFileSync('tmp/file1.txt', 'this is file 1');
+    fu.writeTextFileSync('tmp/file2.txt', 'this is file 2');
+    fu.writeTextFileSync('tmp/file3.txt', 'this is file 3');
+    files = fu.listFilesInDir('tmp');
+    expect(files.length).toBe(3);
+
+    fu.deleteFile('tmp/file2.txt');
+    files = fu.listFilesInDir('tmp');
+    expect(files.length).toBe(2);
+
+    fu.deleteFilesInDir('tmp');
+    files = fu.listFilesInDir('tmp');
+    expect(files.length).toBe(0);
 });
 
 test("FileUtil: writeTextFileSync and readTextFileSync", () => {
@@ -81,7 +99,7 @@ test("FileUtil: gen console app package.json", () => {
 
 test("FileUtil: gen documentation", () => {
     let fu = new FileUtil();
-    let filesList = fu.listFiles('dist');
+    let filesList = fu.listFilesInDir('dist');
     let outArray = [];
     //console.log(filesList);
 

@@ -14,7 +14,7 @@ The npm package is available here: https://www.npmjs.com/package/azu-js?activeTa
 
 ## azu-js Current Implementation State and Roadmap
 
-| Functionality                   | v0.9.11 Support | Codebase State       | Implementation Class   |
+| Functionality                   | v1.0.0 Support  | Codebase State       | Implementation Class   |
 | ------------------------------- | --------------- | -------------------- | ---------------------- |
 | Azure Blob Storage              | yes             | Implemented          | BlobUtil               |
 | Local Filesystem                | yes             | Implemented          | FileUtil               |
@@ -42,6 +42,6 @@ Your application should include the following:
         "@azure/storage-blob": "^12.16.0",
         "axios": "^1.5.1",
         "uuid": "^9.0.1"
-        "azu-js": "0.9.11"
+        "azu-js": "1.0.0"
     },
 ```

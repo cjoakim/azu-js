@@ -8,6 +8,7 @@
 
 import fs from "fs";
 import os from "os";
+import path from "path";
 
 export class FileUtil {
     
@@ -24,7 +25,7 @@ export class FileUtil {
     /**
      * Return a list of files in the given directory.
      */
-    listFiles(dir: string) : Array<string> {
+    listFilesInDir(dir: string) : Array<string> {
         return fs.readdirSync(dir);
     }
 
@@ -105,5 +106,35 @@ export class FileUtil {
             console.log(error);
             return null;
         }
+    }
+
+    deleteFile(fn : string) : void {
+        try {
+            fs.unlinkSync(fn);
+        }
+        catch (error) {
+            console.log(error);
+        }
+        return;
+    }
+
+    deleteFilesInDir(dir : string) : void {
+        try {
+            let filesList = this.listFilesInDir(dir);
+            for (let i = 0; i < filesList.length; i++) {
+                let fn = null;
+                if (dir.endsWith(path.sep)) {
+                    fn = dir + filesList[i];
+                }
+                else {
+                    fn = dir + path.sep + filesList[i];
+                }
+                fs.unlinkSync(fn);
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        return;
     }
 }
