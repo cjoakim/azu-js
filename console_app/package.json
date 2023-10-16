@@ -1,6 +1,6 @@
 {
     "name": "console_app",
-    "version": "0.9.10",
+    "version": "0.9.11",
     "description": "console app using azu-js",
     "homepage": "https://github.com/cjoakim/azu-js",
     "main": "dist/index.js",
@@ -36,7 +36,7 @@
         "@azure/storage-blob": "^12.16.0",
         "axios": "^1.5.1",
         "uuid": "^9.0.1",
-        "azu-js": "file:../azu-js-0.9.10.tgz"
+        "azu-js": "file:../azu-js-0.9.11.tgz"
     },
     "devDependencies": {
         "@types/jest": "^29.5.4",
