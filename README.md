@@ -1,14 +1,11 @@
 # azu-js
 
-Reusable code, implemented in TypeScript, for rapid application Development in **Azure**.
-
-The focus is on the **Azure Cosmos DB, Azure OpenAI, Azure Cognitive Search, and Azure Blob Storage** PaaS services.
-
-See the console_app/ directory, and the unit tests, for example use of the azu-js package.
-
-See the azu-js typings and interfaces documentation at https://github.com/cjoakim/azu-js/tree/main/docs.
-
-The npm package is available here: https://www.npmjs.com/package/azu-js?activeTab=readme
+- Reusable code, implemented in TypeScript, for rapid application Development in **Azure**
+- The focus is on the **Azure Cosmos DB, Azure OpenAI, Azure Cognitive Search, and Azure Blob Storage**
+- See the unit tests and the console_app/ directory for example use of the azu-js package
+- See the azu-js typings and interfaces documentation at https://github.com/cjoakim/azu-js/tree/main/docs.
+- The npm package is available here: https://www.npmjs.com/package/azu-js?activeTab=readme
+- Created by Chris Joakim, Azure Cosmos DB Global Black Belt
 
 ---
 
