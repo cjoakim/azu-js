@@ -358,7 +358,7 @@ export declare class CosmosNoSqlQuerySpecUtil {
  * such as CRUD operations, bulk loading, and metadata.
  * Chris Joakim, Microsoft, 2023
  */
-import { BulkOptions, ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PartitionKeyDefinition, RequestOptions, ResourceResponse, SqlQuerySpec, ContainerDefinition, BulkOperationResponse } from "@azure/cosmos";
+import { BulkOptions, ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PatchOperation, PartitionKeyDefinition, RequestOptions, ResourceResponse, SqlQuerySpec, ContainerDefinition, BulkOperationResponse } from "@azure/cosmos";
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 /**
  * A CosmosClient may specify its ConnectionPolicy object.
@@ -440,6 +440,7 @@ export declare class CosmosNoSqlUtil {
     pointReadAsync(dbName: string, cName: string, id: string, pk: string): Promise<ItemResponse<Object>>;
     queryAsync(dbName: string, cName: string, querySpec: SqlQuerySpec): Promise<FeedResponse<Object>>;
     upsertDocumentAsync(dbName: string, cName: string, doc: Object): Promise<ItemResponse<Object>>;
+    patchDocumentAsync(dbName: string, cName: string, id: string, pk: string, operations: Array<PatchOperation>): Promise<ItemResponse<Object>>;
     deleteDocumentAsync(dbName: string, cName: string, id: string, pk: string): Promise<ItemResponse<Object>>;
     loadContainerSequentialAsync(dbName: string, cName: string, documents: Array<Object>): Promise<number>;
     /**

@@ -197,6 +197,9 @@ test("CosmosNoSqlUtil: crud operations", async () => {
     doc['id'] = id;
     doc['pk'] = pk;
     doc['epoch'] = epoch;
+    doc['someInt'] = 42;
+    doc['someString'] = 'U2 is a band from Ireland';
+    doc['someArray'] = 'Bono,Edge,Larry,Adam'.split(',');
     let itemResp : ItemResponse<Object> = await cu.insertDocumentAsync('dev', 'unittests', doc);
     expect(itemResp.resource.id).toBe(id);
     expect(itemResp.resource['pk']).toBe(pk);
@@ -261,8 +264,26 @@ test("CosmosNoSqlUtil: crud operations", async () => {
     }
 
     // Patch the document TODO
+    id = updateDoc['id'];
+    pk = updateDoc['pk'];
+    let operations = [
+        {
+            op:    PatchOperationType.add,
+            value: 'Sphere, Las Vegas, NV',
+            path:  '/lastSeen'
+        }
+    ]
 
+    let patchResp : ItemResponse<Object> = 
+        await cu.patchDocumentAsync(dbName, cName, id, pk, operations);
 
+        // export const PatchOperationType = {
+        //     add: "add",
+        //     replace: "replace",
+        //     remove: "remove",
+        //     set: "set",
+        //     incr: "incr",
+        //   } as const;
     
     // Delete document
     // See https://learn.microsoft.com/en-us/rest/api/cosmos-db/http-status-codes-for-cosmosdb
