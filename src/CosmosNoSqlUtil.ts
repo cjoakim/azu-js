@@ -29,6 +29,7 @@ import {
     OperationInput,
     PatchOperation,
     PartitionKeyDefinition,
+    PatchRequestBody,
     PatchOperationType,
     RequestOptions,
     ResourceResponse,
@@ -305,6 +306,14 @@ export class CosmosNoSqlUtil {
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
         return await this.currentContainer.items.upsert(doc);
+    }
+
+    async patchDocumentAsync(dbName: string, cName: string, id: string, pk: string, operations: Array<PatchOperation>) : Promise<ItemResponse<Object>> {
+        // https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/cosmosdb/cosmos/test/public/functional/item/item.spec.ts
+        // https://learn.microsoft.com/en-us/azure/cosmos-db/partial-document-update-getting-started
+        this.setCurrentDatabaseAsync(dbName);
+        this.setCurrentContainerAsync(cName);
+        return await this.currentContainer.item(id, pk).patch(operations);
     }
 
     async deleteDocumentAsync(dbName: string, cName: string, id: string, pk: string) : Promise<ItemResponse<Object>> {

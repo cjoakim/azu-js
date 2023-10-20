@@ -1,18 +1,19 @@
 # azu-js
 
 - Reusable code, implemented in TypeScript, for rapid application Development in **Azure**
+- Augments the official Cosmos DB SDK for JavaScript; https://github.com/Azure/azure-sdk-for-js
 - The focus is on the **Azure Cosmos DB, Azure OpenAI, Azure Cognitive Search, and Azure Blob Storage**
 - See the unit tests and the console_app/ directory for example use of the azu-js package
 - See the azu-js typings and interfaces documentation at https://github.com/cjoakim/azu-js/tree/main/docs
 - The npm package is available here: https://www.npmjs.com/package/azu-js?activeTab=readme
-- Reference Web app at https://github.com/cjoakim/azure-cosmos-db-ts-web (by 10/31/2023)
+- Reference Web app at https://github.com/cjoakim/azure-cosmos-db-ts-web
 - Developed by Chris Joakim, Azure Cosmos DB Global Black Belt
 
 ---
 
 ## azu-js Current Implementation State and Roadmap
 
-| Functionality                   | v1.0.0 Support  | Codebase State       | Implementation Class   |
+| Functionality                   | v1.0.1 Support  | Codebase State       | Implementation Class   |
 | ------------------------------- | --------------- | -------------------- | ---------------------- |
 | Azure Blob Storage              | yes             | Implemented          | BlobUtil               |
 | Local Filesystem                | yes             | Implemented          | FileUtil               |
@@ -40,6 +41,6 @@ Your application package.json file should include the following:
         "@azure/storage-blob": "^12.16.0",
         "axios": "^1.5.1",
         "uuid": "^9.0.1"
-        "azu-js": "1.0.0"
+        "azu-js": "1.0.1"
     },
 ```

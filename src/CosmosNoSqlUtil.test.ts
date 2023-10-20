@@ -260,6 +260,10 @@ test("CosmosNoSqlUtil: crud operations", async () => {
         expect(item['message']).toBe('new attribute added');
     }
 
+    // Patch the document TODO
+
+
+    
     // Delete document
     // See https://learn.microsoft.com/en-us/rest/api/cosmos-db/http-status-codes-for-cosmosdb
     let deleteResp : ItemResponse<Object> = await cu.deleteDocumentAsync(dbName, cName, id, pk);

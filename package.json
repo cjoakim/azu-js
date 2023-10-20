@@ -1,6 +1,6 @@
 {
     "name": "azu-js",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Azure Utilities, such as for Cosmos DB, Storage, OpenAI, and Cognitive Search",
     "homepage": "https://github.com/cjoakim/azu-js",
     "main": "dist/index.js",
