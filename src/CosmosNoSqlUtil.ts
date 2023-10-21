@@ -311,6 +311,7 @@ export class CosmosNoSqlUtil {
     async patchDocumentAsync(dbName: string, cName: string, id: string, pk: string, operations: Array<PatchOperation>) : Promise<ItemResponse<Object>> {
         // https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/cosmosdb/cosmos/test/public/functional/item/item.spec.ts
         // https://learn.microsoft.com/en-us/azure/cosmos-db/partial-document-update-getting-started
+        // See the comments at the end of this module which shows the PatchOperation definition.
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
         return await this.currentContainer.item(id, pk).patch(operations);

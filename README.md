@@ -44,3 +44,11 @@ Your application package.json file should include the following:
         "azu-js": "1.0.1"
     },
 ```
+
+### Version History
+
+| Version |    Date    | Changes                                                         |
+| ------- | ---------- | --------------------------------------------------------------- |
+|  1.0.1  | 2023/10/21 | Added CosmosDBUtil#patchDocumentAsync                           |
+|  1.0.0  | 2023/10/16 | First GA release with new TypeScript codebase                   |
+|  0.1.x  | 2017       | Alpha versions, implemented in JavaScript                       |

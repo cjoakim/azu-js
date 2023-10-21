@@ -198,8 +198,8 @@ test("CosmosNoSqlUtil: crud operations", async () => {
     doc['pk'] = pk;
     doc['epoch'] = epoch;
     doc['someInt'] = 42;
-    doc['someString'] = 'U2 is a band from Ireland';
-    doc['someArray'] = 'Bono,Edge,Larry,Adam'.split(',');
+    doc['desc'] = 'U2 is a band from Ireland';
+    doc['members'] = 'Bono,Edge,Larry,Adam'.split(',');
     let itemResp : ItemResponse<Object> = await cu.insertDocumentAsync('dev', 'unittests', doc);
     expect(itemResp.resource.id).toBe(id);
     expect(itemResp.resource['pk']).toBe(pk);
@@ -252,9 +252,11 @@ test("CosmosNoSqlUtil: crud operations", async () => {
     expect(docCount).toBeGreaterThan(0);
 
     // Update the document
-    updateDoc['message'] = 'new attribute added';
+    updateDoc['message']  = 'new attribute added';
+    updateDoc['obsolete'] = 'this attribute will be deleted soon';
     let updateResp = await cu.upsertDocumentAsync(dbName, cName, updateDoc);
     expect(updateResp.statusCode).toBe(200);
+    expect(updateResp.resource['message']).toBe('new attribute added');
 
     feedResp = await cu.queryAsync(dbName, cName, spec);
     docCount = 0;
@@ -263,28 +265,39 @@ test("CosmosNoSqlUtil: crud operations", async () => {
         expect(item['message']).toBe('new attribute added');
     }
 
-    // Patch the document TODO
+    // Patch the document - with add, remove, and replace
     id = updateDoc['id'];
     pk = updateDoc['pk'];
-    let operations = [
+    let patchOperations = [
         {
             op:    PatchOperationType.add,
             value: 'Sphere, Las Vegas, NV',
             path:  '/lastSeen'
+        },
+        {
+            op:    PatchOperationType.remove,
+            path:  '/obsolete'
+        },
+        {
+            op:    PatchOperationType.replace,
+            value: 'In the howling wind comes a stinging rain',
+            path:  '/message'
+        },
+        {
+            op:    PatchOperationType.replace,
+            value: 'Bono,Edge,Larry,Adam,Chris'.split(','),
+            path:  '/members'
         }
     ]
-
     let patchResp : ItemResponse<Object> = 
-        await cu.patchDocumentAsync(dbName, cName, id, pk, operations);
+        await cu.patchDocumentAsync(dbName, cName, id, pk, patchOperations);
+    expect(patchResp.statusCode).toBe(200);
+    expect(patchResp.resource['members'].length).toBe(5);
+    expect(patchResp.resource['members']).toContain('Chris');
+    expect(patchResp.resource['message']).toBe('In the howling wind comes a stinging rain');
+    expect(patchResp.resource['obsolete']).toBeFalsy();
+    expect(patchResp.resource['epoch']).toBe(epoch);
 
-        // export const PatchOperationType = {
-        //     add: "add",
-        //     replace: "replace",
-        //     remove: "remove",
-        //     set: "set",
-        //     incr: "incr",
-        //   } as const;
-    
     // Delete document
     // See https://learn.microsoft.com/en-us/rest/api/cosmos-db/http-status-codes-for-cosmosdb
     let deleteResp : ItemResponse<Object> = await cu.deleteDocumentAsync(dbName, cName, id, pk);
