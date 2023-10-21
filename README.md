@@ -1,7 +1,7 @@
 # azu-js
 
 - Reusable code, implemented in TypeScript, for rapid application Development in **Azure**
-- Augments the official Cosmos DB SDK for JavaScript; https://github.com/Azure/azure-sdk-for-js
+- Augments the official Cosmos DB SDK for JavaScript at https://github.com/Azure/azure-sdk-for-js
 - The focus is on the **Azure Cosmos DB, Azure OpenAI, Azure Cognitive Search, and Azure Blob Storage**
 - See the unit tests and the console_app/ directory for example use of the azu-js package
 - See the azu-js typings and interfaces documentation at https://github.com/cjoakim/azu-js/tree/main/docs

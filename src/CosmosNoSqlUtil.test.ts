@@ -291,6 +291,7 @@ test("CosmosNoSqlUtil: crud operations", async () => {
     ]
     let patchResp : ItemResponse<Object> = 
         await cu.patchDocumentAsync(dbName, cName, id, pk, patchOperations);
+        
     expect(patchResp.statusCode).toBe(200);
     expect(patchResp.resource['members'].length).toBe(5);
     expect(patchResp.resource['members']).toContain('Chris');
