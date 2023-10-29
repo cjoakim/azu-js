@@ -78,8 +78,6 @@ test("CosmosNoSqlUtil: constructor, getDatabaseAccountAsync(), endpoints, nd dis
     expect(cu.acctUriEnvVar).toBe(acctUriEnvVar);
     expect(cu.acctKeyEnvVar).toBe(acctKeyEnvVar);
     expect(cu.acctUri).toBe('https://gbbcjcdbnosql.documents.azure.com:443/');
-    expect(cu.acctKey).toContain('GPwIHU');
-    
     expect(cu.connectionPolicy).toBe(cu.getDefaultConnectionPolicy());
 
     let rr : ResourceResponse<DatabaseAccount> = await cu.getDatabaseAccountAsync();
