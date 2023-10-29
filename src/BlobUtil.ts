@@ -15,14 +15,18 @@ import {
     StorageSharedKeyCredential
 } from '@azure/storage-blob';
 
+import { AzuLogger } from "./AzuLogger";
+
 // See https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blob-typescript-get-started
 
 export class BlobUtil {
     
-    public acctName: string;
-    public acctKey:  string;
+    public acctName : string;
+    public acctKey  : string;
+
     private sharedKeyCred : StorageSharedKeyCredential;
     private blobSvcClient : BlobServiceClient;
+    private logger : AzuLogger;
 
     /**
      * Pass in the names of the environment variables that contain the
@@ -30,10 +34,10 @@ export class BlobUtil {
      */
     constructor(
         public acctNameEnvVar : string,
-        public acctKeyEnvVar  : string,
-        public verbose : boolean = false) {
+        public acctKeyEnvVar  : string) {
 
         try {
+            this.logger   = AzuLogger.buildDefaultLogger('BlobUtil');
             this.acctName = process.env[acctNameEnvVar] as string;
             this.acctKey  = process.env[acctKeyEnvVar] as string;
             if (!this.acctName) {
@@ -44,10 +48,9 @@ export class BlobUtil {
                 throw Error(
                     util.format('Storage acctKey not populated per env var: %s', this.acctKeyEnvVar));
             }
-            if (this.verbose == true) {
-                console.log(util.format('  url: %s -> %s', this.acctNameEnvVar, this.acctName));
-                console.log(util.format('  key: %s -> %s', this.acctKeyEnvVar, this.acctKey));
-            }
+            this.logger.debug(util.format('  url: %s -> %s', this.acctNameEnvVar, this.acctName));
+            this.logger.debug(util.format('  key: %s -> %s', this.acctKeyEnvVar, this.acctKey));
+
             this.sharedKeyCred = new StorageSharedKeyCredential(
                 this.acctName,
                 this.acctKey
@@ -56,12 +59,10 @@ export class BlobUtil {
                 `https://${this.acctName}.blob.core.windows.net`,
                 this.sharedKeyCred
             );
-            if (this.verbose == true) {
-                console.log(util.format('  blobSvcClient: %s', this.blobSvcClient));
-            }
+            this.logger.debug(util.format('  blobSvcClient: %s', this.blobSvcClient));
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 
@@ -78,7 +79,7 @@ export class BlobUtil {
             return results;
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 
@@ -103,7 +104,7 @@ export class BlobUtil {
             return results;
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 
@@ -116,7 +117,7 @@ export class BlobUtil {
             return await containerClient.createIfNotExists();
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 
@@ -129,7 +130,7 @@ export class BlobUtil {
             return await containerClient.deleteIfExists();
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 
@@ -147,7 +148,7 @@ export class BlobUtil {
             await blockBlobClient.uploadStream(readStream);
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 
@@ -164,7 +165,7 @@ export class BlobUtil {
             return await blockBlobClient.downloadToFile(filePath);
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 }

@@ -22,11 +22,16 @@ export declare class AzuLogger {
         warn: number;
         info: number;
         debug: number;
+        trace: number;
     };
     errorLogged: number;
     warnLogged: number;
     infoLogged: number;
     debugLogged: number;
+    static buildDefaultLogger(name: string): AzuLogger;
+    static buildDefaultExceptionsOnlyLogger(name: string): AzuLogger;
+    static buildSilentLogger(name: string): AzuLogger;
+    static buildVerboseLogger(name: string): AzuLogger;
     /**
      * The Winston Logger arg is optional, but will be used if populated.
      * Otherwise, level-based console.log statements will be used.
@@ -58,16 +63,16 @@ import { BlobDownloadResponseParsed, ContainerCreateIfNotExistsResponse, Contain
 export declare class BlobUtil {
     acctNameEnvVar: string;
     acctKeyEnvVar: string;
-    verbose: boolean;
     acctName: string;
     acctKey: string;
     private sharedKeyCred;
     private blobSvcClient;
+    private logger;
     /**
      * Pass in the names of the environment variables that contain the
      * Azure Storage account Name and Key.
      */
-    constructor(acctNameEnvVar: string, acctKeyEnvVar: string, verbose?: boolean);
+    constructor(acctNameEnvVar: string, acctKeyEnvVar: string);
     /**
      * Return a list of the containers in the storage account,
      * as an array of objects with their details.
