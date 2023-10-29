@@ -5,9 +5,14 @@
 
 ```
 /**
- * Configurable logger class used by azu-js; optionally uses Winston.
+ * Lightweight and configurable logger class used by azu-js; optionally
+ * uses a Logger object from the winston npm package.
+ *
  * Logging levels for "normal" code events vs "errors/exceptions"
- * can be configured.
+ * can be configured from verbose-to-silent on a class-by-class basis
+ * in the azu-js package.  Each azj-js class is assigned a default
+ * logger in the constructor, but this value can be reassigned as needed.
+ *
  * Chris Joakim, Microsoft, 2023
  */
 import { Logger } from "winston";
@@ -60,14 +65,15 @@ export declare class AzuLogger {
 /// <reference types="node" />
 import fs from "fs";
 import { BlobDownloadResponseParsed, ContainerCreateIfNotExistsResponse, ContainerDeleteIfExistsResponse } from '@azure/storage-blob';
+import { AzuLogger } from "./AzuLogger";
 export declare class BlobUtil {
     acctNameEnvVar: string;
     acctKeyEnvVar: string;
     acctName: string;
     acctKey: string;
+    logger: AzuLogger;
     private sharedKeyCred;
     private blobSvcClient;
-    private logger;
     /**
      * Pass in the names of the environment variables that contain the
      * Azure Storage account Name and Key.
@@ -111,6 +117,7 @@ export declare class BlobUtil {
  * Utility classes for Azure Cognitive Search.
  * Chris Joakim, Microsoft, 2023
  */
+import { AzuLogger } from "./AzuLogger";
 import { FileUtil } from "./FileUtil";
 /**
  * This interface represents a response from the CogSearchUtil class
@@ -138,6 +145,7 @@ export declare class CogSearchUtil {
     fileUtil: FileUtil;
     version: string;
     doHttpReq: boolean;
+    logger: AzuLogger;
     /**
      * Pass in the names of the environment variables that contain the
      * Azure Cognitive Search URI, name, admin and query keys, and the
@@ -234,6 +242,7 @@ export declare class CogSearchUtil {
  * Utility class for configuration such as environment variables.
  * Chris Joakim, Microsoft, 2023
  */
+import { AzuLogger } from "./AzuLogger";
 export declare class Config {
     static LIB_NAME: string;
     static LIB_VERSION: string;
@@ -241,6 +250,7 @@ export declare class Config {
     static LIB_LICENSE: string;
     static ASU_JS_CONFIG_FILE: string;
     private static _config;
+    static logger: AzuLogger;
     /**
      * Return the name of the platform where this node.js process is running.
      * Possible values are 'aix', 'darwin', 'freebsd', 'linux', 'openbsd', 'sunos', and 'win32'.
@@ -409,6 +419,7 @@ export declare class CosmosNoSqlQuerySpecUtil {
  */
 import { BulkOptions, ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PatchOperation, PartitionKeyDefinition, RequestOptions, ResourceResponse, SqlQuerySpec, ContainerDefinition, BulkOperationResponse } from "@azure/cosmos";
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
+import { AzuLogger } from "./AzuLogger";
 /**
  * A CosmosClient may specify its ConnectionPolicy object.
  * This is the default ConnectionPolicy used in azu-js.
@@ -464,6 +475,7 @@ export declare class CosmosNoSqlUtil {
     connectionPolicy: ConnectionPolicy;
     cosmosClient: CosmosClient;
     verbose: boolean;
+    logger: AzuLogger;
     /**
      * Pass in the names of the environment variables that contain the
      * Azure Cosmos DB account URI and Key.  The ConnectionPolicy arg
@@ -526,7 +538,9 @@ export declare class CosmosNoSqlUtil {
  * in your application code rather than using this class.
  * Chris Joakim, Microsoft, 2023
  */
+import { AzuLogger } from "./AzuLogger";
 export declare class FileUtil {
+    logger: AzuLogger;
     constructor();
     /**
      * Return the current directory where this node.js process is running.
@@ -574,6 +588,7 @@ export declare class FileUtil {
  * Chris Joakim, Microsoft, 2023
  */
 import { Embeddings, GetEmbeddingsOptions, ImageGenerationOptions, ImageGenerations, OpenAIClient } from "@azure/openai";
+import { AzuLogger } from "./AzuLogger";
 export declare class OpenAiUtil {
     acctUrlEnvVar: string;
     acctKeyEnvVar: string;
@@ -583,6 +598,7 @@ export declare class OpenAiUtil {
     embDeployment: string;
     openaiClient: OpenAIClient;
     verbose: boolean;
+    logger: AzuLogger;
     /**
      * Pass in the names of the environment variables that contain the
      * Azure OpenAI account Url and Key.

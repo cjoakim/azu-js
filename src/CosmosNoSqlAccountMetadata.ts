@@ -10,7 +10,7 @@ import {
     DatabaseDefinition,
     OfferDefinition,
     ContainerDefinition
-  } from "@azure/cosmos";
+} from "@azure/cosmos";
 
 /**
  * Abstract base class for NoSqlDBMeta, NoSqlContainerMeta, and NoSqlOfferMeta.

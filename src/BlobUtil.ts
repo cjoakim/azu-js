@@ -21,12 +21,13 @@ import { AzuLogger } from "./AzuLogger";
 
 export class BlobUtil {
     
-    public acctName : string;
-    public acctKey  : string;
+    acctName : string;
+    acctKey  : string;
+    logger   : AzuLogger;
 
     private sharedKeyCred : StorageSharedKeyCredential;
     private blobSvcClient : BlobServiceClient;
-    private logger : AzuLogger;
+
 
     /**
      * Pass in the names of the environment variables that contain the

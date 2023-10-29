@@ -16,7 +16,7 @@ import {
     OpenAIClient
 } from "@azure/openai";
 
-import { FileUtil } from "./FileUtil";
+import { AzuLogger } from "./AzuLogger";
 
 export class OpenAiUtil {
 
@@ -28,6 +28,7 @@ export class OpenAiUtil {
     embDeployment : string;
     openaiClient  : OpenAIClient;
     verbose       : boolean = false;
+    logger        : AzuLogger;
 
     /**
      * Pass in the names of the environment variables that contain the
@@ -38,6 +39,8 @@ export class OpenAiUtil {
         acctKeyEnvVar : string,
         embDepEnvVar  : string,
         verbose?: boolean) {
+
+        this.logger = AzuLogger.buildDefaultLogger('OpenAiUtil');
 
         try {
             this.acctUrlEnvVar = acctUrlEnvVar;
@@ -61,15 +64,14 @@ export class OpenAiUtil {
                 throw Error(
                     util.format('OpenAI embeddings deployment not populated per env var: %s', this.embDepEnvVar));
             }
-            if (this.verbose == true) {
-                console.log(util.format('  url: %s -> %s', this.acctUrlEnvVar, this.acctUrl));
-                console.log(util.format('  key: %s -> %s', this.acctKeyEnvVar, this.acctKey));
-                console.log(util.format('  emb: %s -> %s', this.embDepEnvVar,  this.embDeployment));
-            }
+            this.logger.debug(util.format('  url: %s -> %s', this.acctUrlEnvVar, this.acctUrl));
+            this.logger.debug(util.format('  key: %s -> %s', this.acctKeyEnvVar, this.acctKey));
+            this.logger.debug(util.format('  emb: %s -> %s', this.embDepEnvVar,  this.embDeployment));
+
             this.openaiClient = new OpenAIClient(this.acctUrl, new AzureKeyCredential(this.acctKey));
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 
@@ -94,7 +96,7 @@ export class OpenAiUtil {
             return await this.openaiClient.getEmbeddings(this.embDeployment, input, options);
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 
@@ -141,7 +143,7 @@ export class OpenAiUtil {
             });
         }
         catch(error) {
-            console.log(error);
+            this.logger.errorException(error);
             return false;
         }
     }

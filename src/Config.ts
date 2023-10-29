@@ -5,6 +5,7 @@
 
 import os from "os";
 
+import { AzuLogger } from "./AzuLogger";
 import { FileUtil } from "./FileUtil";
 
 export class Config {
@@ -15,6 +16,8 @@ export class Config {
     public static LIB_LICENSE         : string = 'MIT';
     public static ASU_JS_CONFIG_FILE  : string = 'azu-js-config.json';
     private static _config            : Object = null;
+
+    public static logger : AzuLogger = AzuLogger.buildDefaultLogger('Config');
 
     /**
      * Return the name of the platform where this node.js process is running.
@@ -103,7 +106,7 @@ export class Config {
             return true;
         }
         catch (error) {
-            console.log(error);
+            Config.logger.errorException(error);
             return false;
         }
     }

@@ -40,6 +40,7 @@ import {
   } from "@azure/cosmos";
 
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
+import { AzuLogger } from "./AzuLogger";
 
 /**
  * A CosmosClient may specify its ConnectionPolicy object.
@@ -136,6 +137,7 @@ export class CosmosNoSqlUtil {
     connectionPolicy : ConnectionPolicy = null;
     cosmosClient : CosmosClient = null;
     verbose : boolean = false;
+    logger  : AzuLogger;
 
     /**
      * Pass in the names of the environment variables that contain the
@@ -147,6 +149,8 @@ export class CosmosNoSqlUtil {
         acctKeyEnvVar : string,
         connPolicy? : ConnectionPolicy,
         verbose?: boolean) {
+
+        this.logger = AzuLogger.buildDefaultLogger('CosmosNoSqlUtil');
 
         try {
             // set instance variables
@@ -165,10 +169,9 @@ export class CosmosNoSqlUtil {
                 throw Error(
                     util.format('Cosmos DB acctKey not populated per env var: %s', this.acctKeyEnvVar));
             }
-            if (this.verbose == true) {
-                console.log(util.format('  url: %s -> %s', this.acctUriEnvVar, this.acctUri));
-                console.log(util.format('  key: %s -> %s', this.acctKeyEnvVar, this.acctKey));
-            }
+
+            this.logger.debug(util.format('  url: %s -> %s', this.acctUriEnvVar, this.acctUri));
+            this.logger.debug(util.format('  key: %s -> %s', this.acctKeyEnvVar, this.acctKey));
             if (!connPolicy) {
                 this.connectionPolicy = defaultCosmosConnectionPolicy;
             }
@@ -180,12 +183,10 @@ export class CosmosNoSqlUtil {
                 key: this.acctKey,
                 connectionPolicy: this.connectionPolicy
             });
-            if (this.verbose == true) {
-                console.log(util.format('  cosmosClient: %s', this.cosmosClient));
-            }
+            this.logger.debug(util.format('  cosmosClient: %s', this.cosmosClient));
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 
@@ -330,10 +331,10 @@ export class CosmosNoSqlUtil {
         let count = 0;
         for (let doc of documents) {
             count++
-            console.log(util.format('---: %s of %s', count, documents.length));
-            console.log(util.format('doc: %s', doc));
+            this.logger.debug(util.format('---: %s of %s', count, documents.length));
+            this.logger.debug(util.format('doc: %s', doc));
             let result = await this.currentContainer.items.create(doc);
-            console.log(util.format('result: %s', result));
+            this.logger.debug(util.format('result: %s', result));
         }
         return count;
     }

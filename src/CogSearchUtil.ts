@@ -4,8 +4,10 @@
  */
 
 import util from "util";
-import { Config } from "./Config";
-import { FileUtil } from "./FileUtil";
+
+import { AzuLogger } from "./AzuLogger";
+import { Config }    from "./Config";
+import { FileUtil }  from "./FileUtil";
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
@@ -37,6 +39,7 @@ export class CogSearchUtil {
     fileUtil   : FileUtil = new FileUtil();
     version    : string = null;
     doHttpReq  : boolean = true;
+    logger     : AzuLogger;
 
     /**
      * Pass in the names of the environment variables that contain the
@@ -50,6 +53,8 @@ export class CogSearchUtil {
         acctQueryKeyEnvVar : string,
         apiVersion : string,
         verbose?: boolean) {
+        
+        this.logger = AzuLogger.buildDefaultLogger('CogSearchUtil');
 
         try {
             this.acctURI = process.env[acctUriEnvVar] as string;
@@ -60,7 +65,7 @@ export class CogSearchUtil {
             this.version  = Config.LIB_VERSION
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
     }
 
@@ -330,7 +335,7 @@ export class CogSearchUtil {
         }
         catch (error) {
             respObj.error = true;
-            console.log(error);
+            this.logger.errorException(error);
         }
         return respObj;
     }

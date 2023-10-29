@@ -10,9 +10,14 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
+import { AzuLogger } from "./AzuLogger";
+
 export class FileUtil {
     
+    logger : AzuLogger;
+
     constructor() {
+        this.logger = AzuLogger.buildDefaultLogger('FileUtil');
     }
 
     /**
@@ -38,7 +43,7 @@ export class FileUtil {
             return buf.toString();
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
             return null;
         }
     }
@@ -58,7 +63,7 @@ export class FileUtil {
             }
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
             return null;
         }
     }
@@ -73,7 +78,7 @@ export class FileUtil {
             return true;
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
             return false;
         }
     }
@@ -88,7 +93,7 @@ export class FileUtil {
             return JSON.parse(str);
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
             return null;
         }
     }
@@ -103,7 +108,7 @@ export class FileUtil {
             return JSON.parse(str);
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
             return null;
         }
     }
@@ -113,7 +118,7 @@ export class FileUtil {
             fs.unlinkSync(fn);
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
         return;
     }
@@ -133,7 +138,7 @@ export class FileUtil {
             }
         }
         catch (error) {
-            console.log(error);
+            this.logger.errorException(error);
         }
         return;
     }

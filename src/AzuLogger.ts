@@ -1,7 +1,12 @@
 /**
- * Configurable logger class used by azu-js; optionally uses Winston.
+ * Lightweight and configurable logger class used by azu-js; optionally
+ * uses a Logger object from the winston npm package.
+ * 
  * Logging levels for "normal" code events vs "errors/exceptions"
- * can be configured.
+ * can be configured from verbose-to-silent on a class-by-class basis
+ * in the azu-js package.  Each azj-js class is assigned a default
+ * logger in the constructor, but this value can be reassigned as needed.
+ * 
  * Chris Joakim, Microsoft, 2023
  */
 
