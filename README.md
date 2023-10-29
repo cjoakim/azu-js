@@ -49,7 +49,7 @@ Your application package.json file should include the following:
 
 | Version |    Date    | Changes                                                         |
 | ------- | ---------- | --------------------------------------------------------------- |
-|  1.0.2  | 2023/10/29 | Configurable logging                                            |
+|  1.0.2  | 2023/10/29 | Added configurable class AzuLogger, optionally uses winston     |
 |  1.0.1  | 2023/10/21 | Added CosmosDBUtil#patchDocumentAsync                           |
 |  1.0.0  | 2023/10/16 | First GA release with new TypeScript codebase                   |
 |  0.1.x  | 2017       | Alpha versions, implemented in JavaScript                       |
