@@ -16,13 +16,30 @@ export class AzuLogger {
         error:   5,
         warn:    4,
         info:    3,
-        debug:   2
+        debug:   2,
+        trace:   1
     };
 
     errorLogged : number = 0;
     warnLogged  : number = 0;
     infoLogged  : number = 0;
     debugLogged : number = 0;
+
+    public static buildDefaultLogger(name: string) : AzuLogger {
+        return new AzuLogger(name);
+    }
+
+    public static buildDefaultExceptionsOnlyLogger(name: string) : AzuLogger {
+        return new AzuLogger(name, AzuLogger.LOG_LEVELS.silent);
+    }
+
+    public static buildSilentLogger(name: string) : AzuLogger {
+        return new AzuLogger(name, AzuLogger.LOG_LEVELS.silent, AzuLogger.LOG_LEVELS.silent);
+    }
+
+    public static buildVerboseLogger(name: string) : AzuLogger {
+        return new AzuLogger(name, AzuLogger.LOG_LEVELS.trace, AzuLogger.LOG_LEVELS.trace);
+    }
 
     /**
      * The Winston Logger arg is optional, but will be used if populated.

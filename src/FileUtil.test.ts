@@ -28,7 +28,7 @@ test("FileUtil: listFiles, deleteFile, deleteFilesInDir", () => {
     //console.log(files);
     expect(files).toContain('FileUtil.js');
     expect(files).toContain('FileUtil.d.ts');
-    expect(files.length).toBe(30);
+    expect(files.length).toBe(34);
 
     fu.deleteFilesInDir('tmp');
     files = fu.listFilesInDir('tmp');

@@ -3,15 +3,12 @@
 
 // npm test --testPathPattern AzuLogger
 
-import util from "util";
 import winston from "winston";
-//import { createLogger, transports, format, Logger } from "winston";
 
 import { AzuLogger } from "./AzuLogger";
-import { FileUtil } from "./FileUtil";
 
 test("AzuLogger: default", async () => {
-    let logger : AzuLogger = new AzuLogger('Test');
+    let logger : AzuLogger = AzuLogger.buildDefaultLogger('Default');
     logger.error('error()');
     logger.warn('warn()');
     logger.info('info()');
@@ -36,9 +33,32 @@ test("AzuLogger: default", async () => {
     expect(logger.winstonLogger).toBeUndefined();
 });
 
+test("AzuLogger: exceptions only", async () => {
+    let logger : AzuLogger = AzuLogger.buildDefaultExceptionsOnlyLogger("ExcpOnly");
+    logger.error('error()');
+    logger.warn('warn()');
+    logger.info('info()');
+    logger.debug('debug()');
+
+    logger.errorException('errorException()');
+    logger.warnException('warnException()');
+    logger.infoException('infoException()');
+    logger.debugException('debugException()');
+
+    logger.errorException('errorException()');
+    logger.warnException('warnException()');
+    logger.infoException('infoException()');
+    logger.debugException('debugException()');
+
+    expect(logger.errorLogged).toBe(2);
+    expect(logger.warnLogged).toBe(2);
+    expect(logger.infoLogged).toBe(2);
+    expect(logger.debugLogged).toBe(0);
+    expect(logger.winstonLogger).toBeUndefined();
+});
+
 test("AzuLogger: silent", async () => {
-    let logger : AzuLogger = new AzuLogger(
-        'Test', AzuLogger.LOG_LEVELS.silent, AzuLogger.LOG_LEVELS.silent);
+    let logger : AzuLogger = AzuLogger.buildSilentLogger('Silent');
     logger.error('error()');
     logger.warn('warn()');
     logger.info('info()');
@@ -63,6 +83,31 @@ test("AzuLogger: silent", async () => {
     expect(logger.winstonLogger).toBeUndefined();
 });
 
+test("AzuLogger: verbose", async () => {
+    let logger : AzuLogger = AzuLogger.buildVerboseLogger('Verbose');
+    logger.error('error()');
+    logger.warn('warn()');
+    logger.info('info()');
+    logger.debug('debug()');
+
+    logger.errorException('errorException()');
+    logger.warnException('warnException()');
+    logger.infoException('infoException()');
+    logger.debugException('debugException()');
+    console.log(logger.stats());
+    // {
+    //     name: 'Test',
+    //     errorLogged: 0,
+    //     warnLogged: 0,
+    //     infoLogged: 0,
+    //     debugLogged: 0
+    //   }
+    expect(logger.errorLogged).toBe(2);
+    expect(logger.warnLogged).toBe(2);
+    expect(logger.infoLogged).toBe(2);
+    expect(logger.debugLogged).toBe(2);
+    expect(logger.winstonLogger).toBeUndefined();
+});
 
 test("AzuLogger: winston", async () => {
     let winstonLogger = winston.createLogger({
@@ -72,7 +117,7 @@ test("AzuLogger: winston", async () => {
             ]});
 
     let logger : AzuLogger = new AzuLogger(
-        'Test', AzuLogger.LOG_LEVELS.silent, AzuLogger.LOG_LEVELS.silent, winstonLogger);
+        'Winston', AzuLogger.LOG_LEVELS.silent, AzuLogger.LOG_LEVELS.silent, winstonLogger);
     logger.error('error()');
     logger.warn('warn()');
     logger.info('info()');

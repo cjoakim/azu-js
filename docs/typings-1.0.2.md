@@ -1,6 +1,50 @@
 
 ## azu-js typings, version 1.0.2
 
+### AzuLogger.d.ts
+
+```
+/**
+ * Configurable logger class used by azu-js; optionally uses Winston.
+ * Logging levels for "normal" code events vs "errors/exceptions"
+ * can be configured.
+ * Chris Joakim, Microsoft, 2023
+ */
+import { Logger } from "winston";
+export declare class AzuLogger {
+    name: string;
+    normalLevel: number;
+    exceptionLevel: number;
+    winstonLogger?: Logger;
+    static LOG_LEVELS: {
+        silent: number;
+        error: number;
+        warn: number;
+        info: number;
+        debug: number;
+    };
+    errorLogged: number;
+    warnLogged: number;
+    infoLogged: number;
+    debugLogged: number;
+    /**
+     * The Winston Logger arg is optional, but will be used if populated.
+     * Otherwise, level-based console.log statements will be used.
+     */
+    constructor(name: string, normalLevel?: number, exceptionLevel?: number, winstonLogger?: Logger);
+    error(message: string): void;
+    warn(message: string): void;
+    info(message: string): void;
+    debug(message: string): void;
+    errorException(excp: any): void;
+    warnException(excp: any): void;
+    infoException(excp: any): void;
+    debugException(excp: any): void;
+    stats(): object;
+}
+
+```
+
 ### BlobUtil.d.ts
 
 ```
@@ -568,6 +612,7 @@ export declare class OpenAiUtil {
  * Define the classes exported/exposed by the azu-js NPM package.
  * Chris Joakim, Microsoft, 2023
  */
+import { AzuLogger } from "./AzuLogger";
 import { BlobUtil } from "./BlobUtil";
 import { CogSearchResponse, CogSearchUtil } from "./CogSearchUtil";
 import { Config } from "./Config";
@@ -576,6 +621,7 @@ import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, BulkLoadResult } from "
 import { FileUtil } from "./FileUtil";
 import { OpenAiUtil } from "./OpenAiUtil";
 import { BaseNoSqlMeta, NoSqlDBMeta, NoSqlContainerMeta, NoSqlOfferMeta, CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
+export { AzuLogger };
 export { BlobUtil };
 export { CogSearchResponse, CogSearchUtil };
 export { Config };
