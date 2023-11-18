@@ -13,7 +13,7 @@
 
 ## azu-js Current Implementation State and Roadmap
 
-| Functionality                   | v1.0.2 Support  | Codebase State       | Implementation Class   |
+| Functionality                   | v1.0.3 Support  | Codebase State       | Implementation Class   |
 | ------------------------------- | --------------- | -------------------- | ---------------------- |
 | Azure Blob Storage              | yes             | Implemented          | BlobUtil               |
 | Local Filesystem                | yes             | Implemented          | FileUtil               |
@@ -41,7 +41,7 @@ Your application package.json file should include the following:
         "@azure/storage-blob": "^12.16.0",
         "axios": "^1.5.1",
         "uuid": "^9.0.1"
-        "azu-js": "1.0.2"
+        "azu-js": "1.0.3"
     },
 ```
 
@@ -49,6 +49,7 @@ Your application package.json file should include the following:
 
 | Version |    Date    | Changes                                                         |
 | ------- | ---------- | --------------------------------------------------------------- |
+|  1.0.3  | 2023/11/19 | Added optional PriorityLevel to CosmosNoSqlUtil                 |
 |  1.0.2  | 2023/10/29 | Added configurable class AzuLogger, optionally uses winston     |
 |  1.0.1  | 2023/10/21 | Added CosmosDBUtil#patchDocumentAsync                           |
 |  1.0.0  | 2023/10/16 | First GA release with new TypeScript codebase                   |

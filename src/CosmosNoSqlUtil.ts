@@ -31,6 +31,7 @@ import {
     PartitionKeyDefinition,
     PatchRequestBody,
     PatchOperationType,
+    PriorityLevel,
     RequestOptions,
     ResourceResponse,
     SqlQuerySpec,
@@ -135,6 +136,7 @@ export class CosmosNoSqlUtil {
     currentContainerName : string = '';
     currentContainer     : Container = null;
     connectionPolicy : ConnectionPolicy = null;
+    priorityLevel : PriorityLevel = null;
     cosmosClient : CosmosClient = null;
     verbose : boolean = false;
     logger  : AzuLogger;
@@ -148,6 +150,7 @@ export class CosmosNoSqlUtil {
         acctUriEnvVar : string,
         acctKeyEnvVar : string,
         connPolicy? : ConnectionPolicy,
+        priorityLevel?: PriorityLevel, 
         verbose?: boolean) {
 
         this.logger = AzuLogger.buildDefaultLogger('CosmosNoSqlUtil');
@@ -176,6 +179,9 @@ export class CosmosNoSqlUtil {
                 this.connectionPolicy = defaultCosmosConnectionPolicy;
             }
             else {
+                this.connectionPolicy = connPolicy;
+            }
+            if (connPolicy) {
                 this.connectionPolicy = connPolicy;
             }
             this.cosmosClient = new CosmosClient({

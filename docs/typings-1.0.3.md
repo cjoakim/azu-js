@@ -1,5 +1,5 @@
 
-## azu-js typings, version 1.0.2
+## azu-js typings, version 1.0.3
 
 ### AzuLogger.d.ts
 
