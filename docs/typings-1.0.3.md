@@ -417,7 +417,7 @@ export declare class CosmosNoSqlQuerySpecUtil {
  * such as CRUD operations, bulk loading, and metadata.
  * Chris Joakim, Microsoft, 2023
  */
-import { BulkOptions, ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PatchOperation, PartitionKeyDefinition, PriorityLevel, RequestOptions, ResourceResponse, SqlQuerySpec, ContainerDefinition, BulkOperationResponse } from "@azure/cosmos";
+import { BulkOptions, ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PatchOperation, PartitionKeyDefinition, PriorityLevel, RequestOptions, ResourceResponse, SharedOptions, SqlQuerySpec, ContainerDefinition, BulkOperationResponse } from "@azure/cosmos";
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 import { AzuLogger } from "./AzuLogger";
 /**
@@ -474,6 +474,8 @@ export declare class CosmosNoSqlUtil {
     currentContainer: Container;
     connectionPolicy: ConnectionPolicy;
     priorityLevel: PriorityLevel;
+    maxIntegratedCacheStalenessInMs: number;
+    sharedOptions: SharedOptions;
     cosmosClient: CosmosClient;
     verbose: boolean;
     logger: AzuLogger;
@@ -482,8 +484,9 @@ export declare class CosmosNoSqlUtil {
      * Azure Cosmos DB account URI and Key.  The ConnectionPolicy arg
      * enables you to set preferred regions and other similar params.
      */
-    constructor(acctUriEnvVar: string, acctKeyEnvVar: string, connPolicy?: ConnectionPolicy, priorityLevel?: PriorityLevel, verbose?: boolean);
+    constructor(acctUriEnvVar: string, acctKeyEnvVar: string, connPolicy?: ConnectionPolicy, priorityLevel?: PriorityLevel, maxIntegratedCacheStalenessInMs?: number, verbose?: boolean);
     getDefaultConnectionPolicy(): ConnectionPolicy;
+    buildSharedOptions(): SharedOptions;
     /**
      * Close/dispose the CosmosClient SDK instance.
      */

@@ -34,6 +34,7 @@ import {
     PriorityLevel,
     RequestOptions,
     ResourceResponse,
+    SharedOptions,
     SqlQuerySpec,
     SqlParameter,
     ContainerDefinition,
@@ -137,6 +138,8 @@ export class CosmosNoSqlUtil {
     currentContainer     : Container = null;
     connectionPolicy : ConnectionPolicy = null;
     priorityLevel : PriorityLevel = null;
+    maxIntegratedCacheStalenessInMs = -1;
+    sharedOptions : SharedOptions = null;
     cosmosClient : CosmosClient = null;
     verbose : boolean = false;
     logger  : AzuLogger;
@@ -150,10 +153,12 @@ export class CosmosNoSqlUtil {
         acctUriEnvVar : string,
         acctKeyEnvVar : string,
         connPolicy? : ConnectionPolicy,
-        priorityLevel?: PriorityLevel, 
+        priorityLevel?: PriorityLevel,
+        maxIntegratedCacheStalenessInMs?: number,
         verbose?: boolean) {
 
         this.logger = AzuLogger.buildDefaultLogger('CosmosNoSqlUtil');
+        let useSharedOptions = false;
 
         try {
             // set instance variables
@@ -181,9 +186,24 @@ export class CosmosNoSqlUtil {
             else {
                 this.connectionPolicy = connPolicy;
             }
-            if (connPolicy) {
-                this.connectionPolicy = connPolicy;
+
+            // priorityLevel and maxIntegratedCacheStalenessInMs are specified in the optional SharedOptions
+            if (priorityLevel) {
+                this.priorityLevel = priorityLevel;
+                useSharedOptions = true;
             }
+            if (maxIntegratedCacheStalenessInMs) {
+                this.maxIntegratedCacheStalenessInMs = maxIntegratedCacheStalenessInMs;
+                useSharedOptions = true;
+            }
+            else {
+                this.maxIntegratedCacheStalenessInMs = -1;
+            }
+
+            if (useSharedOptions) {
+                
+            }
+
             this.cosmosClient = new CosmosClient({
                 endpoint: this.acctUri,
                 key: this.acctKey,
@@ -198,6 +218,15 @@ export class CosmosNoSqlUtil {
 
     getDefaultConnectionPolicy() : ConnectionPolicy {
         return defaultCosmosConnectionPolicy;
+    }
+
+    buildSharedOptions() : SharedOptions {
+
+        let opts = {};
+        if (this.priorityLevel) {
+            opts['priorityLevel'] = this.priorityLevel;
+        }
+        return opts;
     }
 
     /**
