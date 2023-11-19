@@ -5,6 +5,7 @@
 
 import {
     BulkOperationType,
+    BulkOptions,
     ConnectionMode,
     ConnectionPolicy,
     Container,
@@ -22,7 +23,9 @@ import {
     PatchOperationType,
     PartitionKeyDefinition,
     PriorityLevel,
+    RequestOptions,
     ResourceResponse,
+    SharedOptions,
     SqlQuerySpec,
     SqlParameter,
     JSONArray,
@@ -74,6 +77,24 @@ function initCosmosNoSqlUtil() : CosmosNoSqlUtil {
 
 function epochTime() : number {
     return Date.now().valueOf();
+}
+
+function lowPriorityOptions() : RequestOptions {
+    let opts = {};
+    opts['priorityLevel'] = PriorityLevel.Low;
+    return opts;
+}
+
+function highPriorityOptions() : RequestOptions {
+    let opts = {};
+    opts['priorityLevel'] = PriorityLevel.High;
+    return opts;
+}
+
+function bulkOptions() : BulkOptions {
+    let opts = {};
+    opts['continueOnError'] = false;
+    return opts;
 }
 
 test("CosmosNoSqlUtil: constructor, getDatabaseAccountAsync(), endpoints, nd dispose()", async () => {
@@ -314,6 +335,31 @@ test("CosmosNoSqlUtil: crud operations", async () => {
     }
 });
 
+test("CosmosNoSqlUtil: buildSharedOptions", async () => {
+    cu.unsetPriorityLevel();
+    cu.maxIntegratedCacheStalenessInMs = -1;
+    let so = cu.buildSharedOptions();
+    expect(JSON.stringify(so)).toBe('{}');
+
+    cu.setPriorityLevel(PriorityLevel.Low);
+    so = cu.buildSharedOptions();
+    expect(JSON.stringify(so)).toBe("{\"priorityLevel\":\"Low\"}");
+
+    cu.setPriorityLevel(PriorityLevel.High);
+    so = cu.buildSharedOptions();
+    expect(JSON.stringify(so)).toBe("{\"priorityLevel\":\"High\"}");
+
+    cu.unsetPriorityLevel();
+    cu.setMaxIntegratedCacheStalenessInMs(123);
+    so = cu.buildSharedOptions();
+    expect(JSON.stringify(so)).toBe("{\"maxIntegratedCacheStalenessInMs\":123}");
+
+    cu.setPriorityLevel(PriorityLevel.High);
+    so = cu.buildSharedOptions();
+    expect(so['priorityLevel']).toBe(PriorityLevel.High);
+    expect(so['maxIntegratedCacheStalenessInMs']).toBe(123);
+});
+
 test("CosmosNoSqlUtil: bulk create and upsert", async () => {
     cu = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar, overrideConnectionPolicy);
     let dbName = 'dev';
@@ -327,7 +373,8 @@ test("CosmosNoSqlUtil: bulk create and upsert", async () => {
     fu.writeTextFileSync('tmp/bulk_airports.json', JSON.stringify(airports, null, 2));
 
     // first create the 50 airport documents
-    let blr1: BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'create', airports, false);
+    let blr1: BulkLoadResult = await cu.loadContainerBulkAsync(
+        dbName, cName, 'create', airports, false, 50, bulkOptions(), lowPriorityOptions());
     fu.writeTextFileSync('tmp/bulk_load_create_result.json', JSON.stringify(blr1, null, 2));
     expect(blr1.batchSize).toBe(50);
     expect(blr1.batchCount).toBe(1);
@@ -341,7 +388,8 @@ test("CosmosNoSqlUtil: bulk create and upsert", async () => {
 
     // next upsert the 50 airport documents
     airports.forEach(obj => { obj['updated'] = 1; });
-    let blr2 : BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'upsert', airports, false, 20);
+    let blr2 : BulkLoadResult = await cu.loadContainerBulkAsync(
+        dbName, cName, 'upsert', airports, false, 20, bulkOptions(), lowPriorityOptions());
     fu.writeTextFileSync('tmp/bulk_load_upsert1_result.json', JSON.stringify(blr2, null, 2));
     expect(blr2.batchSize).toBe(20);
     expect(blr2.batchCount).toBe(3);  // batches of 20, 20, 10 = 3
@@ -355,9 +403,10 @@ test("CosmosNoSqlUtil: bulk create and upsert", async () => {
 
     // next upsert the 50 airport documents
     airports.forEach(obj => { obj['updated'] = 2; });
-    let blr3 : BulkLoadResult = await cu.loadContainerBulkAsync(dbName, cName, 'upsert', airports, false, 999);
+    let blr3 : BulkLoadResult = await cu.loadContainerBulkAsync(
+        dbName, cName, 'upsert', airports, false, 999, bulkOptions(), highPriorityOptions());
     fu.writeTextFileSync('tmp/bulk_load_upsert2_result.json', JSON.stringify(blr3, null, 2));
-    expect(blr3.batchSize).toBe(50);  // normalized from 999 to 50
+    expect(blr3.batchSize).toBe(50);  // gets normalized from 999 to 50
     expect(blr3.batchCount).toBe(1);
     expect(blr3.elapsedTime).toBeGreaterThan(10);
     expect(blr3.elapsedTime).toBeLessThan(3000);

@@ -153,8 +153,6 @@ export class CosmosNoSqlUtil {
         acctUriEnvVar : string,
         acctKeyEnvVar : string,
         connPolicy? : ConnectionPolicy,
-        priorityLevel?: PriorityLevel,
-        maxIntegratedCacheStalenessInMs?: number,
         verbose?: boolean) {
 
         this.logger = AzuLogger.buildDefaultLogger('CosmosNoSqlUtil');
@@ -188,12 +186,6 @@ export class CosmosNoSqlUtil {
 
             // priorityLevel and maxIntegratedCacheStalenessInMs are specified in the
             // SharedOptions object
-            if (priorityLevel) {
-                this.priorityLevel = priorityLevel;
-            }
-            if (maxIntegratedCacheStalenessInMs) {
-                this.maxIntegratedCacheStalenessInMs = maxIntegratedCacheStalenessInMs;
-            }
             this.sharedOptions = this.buildSharedOptions();
 
             this.cosmosClient = new CosmosClient({
@@ -212,6 +204,25 @@ export class CosmosNoSqlUtil {
         return defaultCosmosConnectionPolicy;
     }
 
+    setPriorityLevel(level : PriorityLevel) : void {
+        this.priorityLevel = level;
+        this.sharedOptions = this.buildSharedOptions();
+    }
+
+    unsetPriorityLevel() : void {
+        this.priorityLevel = null;
+        this.sharedOptions = this.buildSharedOptions();
+    }
+
+    setMaxIntegratedCacheStalenessInMs(maxIntegratedCacheStalenessInMs : number) : void {
+        this.maxIntegratedCacheStalenessInMs = maxIntegratedCacheStalenessInMs;
+        this.sharedOptions = this.buildSharedOptions();
+    }
+
+    /**
+     * Create and return an instance of the SharedOptions interface.
+     * It may contain 'priorityLevel' and 'maxIntegratedCacheStalenessInMs'.
+     */
     buildSharedOptions() : SharedOptions {
         let opts = {};
         if (this.priorityLevel) {
@@ -220,12 +231,8 @@ export class CosmosNoSqlUtil {
         if (this.maxIntegratedCacheStalenessInMs > 0) {
             opts['maxIntegratedCacheStalenessInMs'] = this.maxIntegratedCacheStalenessInMs;
         }
+        this.logger.debug(util.format('cosmosClient, buildSharedOptions: %s', opts));
         return opts;
-    }
-
-    setPriorityLevel(level : PriorityLevel) : void {
-        this.priorityLevel = level;
-        this.sharedOptions = this.buildSharedOptions();
     }
 
     /**
@@ -260,7 +267,8 @@ export class CosmosNoSqlUtil {
     }
 
     async listContainersAsync(dbName: string) : Promise<Array<ContainerDefinition>> {
-        let feedResp = await this.cosmosClient.database(dbName).containers.readAll(this.sharedOptions).fetchAll();
+        let feedResp = await
+            this.cosmosClient.database(dbName).containers.readAll(this.sharedOptions).fetchAll();
         let containers = new Array<ContainerDefinition>();
         for (const container of feedResp.resources) {
             containers.push(container);
@@ -270,7 +278,8 @@ export class CosmosNoSqlUtil {
 
     async getAccountOffersAsync() : Promise<Array<OfferDefinition>> {
         let offerDefs : Array<OfferDefinition> = new Array<OfferDefinition>();
-        let resp = await this.cosmosClient.offers.readAll(this.sharedOptions).fetchAll();
+        let resp = await
+            this.cosmosClient.offers.readAll(this.sharedOptions).fetchAll();
         for (const offer of resp.resources) {
             offerDefs.push(offer);
         }
@@ -381,6 +390,10 @@ export class CosmosNoSqlUtil {
      * aggregated/summarized resuls of the bulk operation.  This includes
      * document counts, elapsed time, RU consumption, and response codes
      * counts.
+     * 
+     * For Low or High Priority requests, specify either PriorityLevel.Low or
+     * PriorityLevel.High as the value of 'priorityLevel' in the RequestOptions
+     * arg.
      */
     async loadContainerBulkAsync(
         dbName: string,

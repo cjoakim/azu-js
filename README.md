@@ -6,7 +6,7 @@
 - See the unit tests and the console_app/ directory for example use of the azu-js package
 - See the azu-js typings and interfaces documentation at https://github.com/cjoakim/azu-js/tree/main/docs
 - The npm package is available here: https://www.npmjs.com/package/azu-js?activeTab=readme
-- Reference Web app at https://github.com/cjoakim/azure-cosmos-db-ts-web
+- See the reference Web Application at https://github.com/cjoakim/azure-cosmos-db-ts-web
 - Developed by Chris Joakim, Azure Cosmos DB Global Black Belt
 
 ---
@@ -37,7 +37,7 @@ Your application package.json file should include the following:
 ```
     "dependencies": {
         "@azure/cosmos": "4.0.0",
-        "@azure/openai": "^1.0.0-beta.6",
+        "@azure/openai": "^1.0.0-beta.7",
         "@azure/storage-blob": "^12.16.0",
         "axios": "^1.5.1",
         "uuid": "^9.0.1"
@@ -49,8 +49,8 @@ Your application package.json file should include the following:
 
 | Version |    Date    | Changes                                                         |
 | ------- | ---------- | --------------------------------------------------------------- |
-|  1.0.3  | 2023/11/19 | Added optional PriorityLevel to CosmosNoSqlUtil                 |
+|  1.0.3  | 2023/11/19 | Added PriorityLevel and IC Staleness support to CosmosNoSqlUtil |
 |  1.0.2  | 2023/10/29 | Added configurable class AzuLogger, optionally uses winston     |
-|  1.0.1  | 2023/10/21 | Added CosmosDBUtil#patchDocumentAsync                           |
+|  1.0.1  | 2023/10/21 | Added CosmosNoSqlUtil#patchDocumentAsync                        |
 |  1.0.0  | 2023/10/16 | First GA release with new TypeScript codebase                   |
 |  0.1.x  | 2017       | Alpha versions, implemented in JavaScript                       |

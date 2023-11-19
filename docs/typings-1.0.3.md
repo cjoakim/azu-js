@@ -484,10 +484,16 @@ export declare class CosmosNoSqlUtil {
      * Azure Cosmos DB account URI and Key.  The ConnectionPolicy arg
      * enables you to set preferred regions and other similar params.
      */
-    constructor(acctUriEnvVar: string, acctKeyEnvVar: string, connPolicy?: ConnectionPolicy, priorityLevel?: PriorityLevel, maxIntegratedCacheStalenessInMs?: number, verbose?: boolean);
+    constructor(acctUriEnvVar: string, acctKeyEnvVar: string, connPolicy?: ConnectionPolicy, verbose?: boolean);
     getDefaultConnectionPolicy(): ConnectionPolicy;
-    buildSharedOptions(): SharedOptions;
     setPriorityLevel(level: PriorityLevel): void;
+    unsetPriorityLevel(): void;
+    setMaxIntegratedCacheStalenessInMs(maxIntegratedCacheStalenessInMs: number): void;
+    /**
+     * Create and return an instance of the SharedOptions interface.
+     * It may contain 'priorityLevel' and 'maxIntegratedCacheStalenessInMs'.
+     */
+    buildSharedOptions(): SharedOptions;
     /**
      * Close/dispose the CosmosClient SDK instance.
      */
@@ -517,6 +523,10 @@ export declare class CosmosNoSqlUtil {
      * aggregated/summarized resuls of the bulk operation.  This includes
      * document counts, elapsed time, RU consumption, and response codes
      * counts.
+     *
+     * For Low or High Priority requests, specify either PriorityLevel.Low or
+     * PriorityLevel.High as the value of 'priorityLevel' in the RequestOptions
+     * arg.
      */
     loadContainerBulkAsync(dbName: string, cName: string, operationName: string, documents: Array<object>, generateIds?: boolean, givenBatchSize?: number, bulkOptions?: BulkOptions, reqOptions?: RequestOptions): Promise<BulkLoadResult>;
     private executeBulkBatch;

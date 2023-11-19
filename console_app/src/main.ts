@@ -1,6 +1,12 @@
 
 import {
+    BulkOptions,
+    PriorityLevel,
+    RequestOptions } from "@azure/cosmos";
+
+import {
     BlobUtil,
+    BulkLoadResult,
     Config,
     FileUtil,
     CosmosNoSqlUtil,
@@ -231,6 +237,34 @@ async function embeddings() {
 
 function cosmos_nosql() {
     console.log('TODO - implement');
+
+    // let acctUriEnvVar : string = Config.lookupEnvVarName('ENV_NOSQL_URI');
+    // let acctKeyEnvVar : string = Config.lookupEnvVarName('ENV_NOSQL_RW_KEY');
+    // let cu : CosmosNoSqlUtil = new CosmosNoSqlUtil(acctUriEnvVar, acctKeyEnvVar);
+    // cu.setPriorityLevel(PriorityLevel.Low);
+    // let airports : Array<object> = fu.readJsonArrayFile('../data/world-airports-50.json');
+
+    // let blr1: BulkLoadResult = await cu.loadContainerBulkAsync(
+    //     'dev', 'unittests', 'create', airports, true, 50, bulkOptions(), lowPriorityOptions());
+    // fu.writeTextFileSync('tmp/bulk_load_create_result.json', JSON.stringify(blr1, null, 2));
+}
+
+function lowPriorityOptions() : RequestOptions {
+    let opts = {};
+    opts['priorityLevel'] = PriorityLevel.Low;
+    return opts;
+}
+
+function highPriorityOptions() : RequestOptions {
+    let opts = {};
+    opts['priorityLevel'] = PriorityLevel.High;
+    return opts;
+}
+
+function bulkOptions() : BulkOptions {
+    let opts = {};
+    opts['continueOnError'] = false;
+    return opts;
 }
 
 function cosmos_mongo() {
