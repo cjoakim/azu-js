@@ -21,6 +21,7 @@ import {
     PatchOperation,
     PatchOperationType,
     PartitionKeyDefinition,
+    PriorityLevel,
     ResourceResponse,
     SqlQuerySpec,
     SqlParameter,
@@ -64,6 +65,7 @@ let fu : FileUtil = new FileUtil();
 
 beforeAll(() => {
     cu = initCosmosNoSqlUtil();
+    cu.setPriorityLevel(PriorityLevel.Low);
 });
 
 function initCosmosNoSqlUtil() : CosmosNoSqlUtil {

@@ -487,6 +487,7 @@ export declare class CosmosNoSqlUtil {
     constructor(acctUriEnvVar: string, acctKeyEnvVar: string, connPolicy?: ConnectionPolicy, priorityLevel?: PriorityLevel, maxIntegratedCacheStalenessInMs?: number, verbose?: boolean);
     getDefaultConnectionPolicy(): ConnectionPolicy;
     buildSharedOptions(): SharedOptions;
+    setPriorityLevel(level: PriorityLevel): void;
     /**
      * Close/dispose the CosmosClient SDK instance.
      */

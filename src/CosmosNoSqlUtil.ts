@@ -158,7 +158,6 @@ export class CosmosNoSqlUtil {
         verbose?: boolean) {
 
         this.logger = AzuLogger.buildDefaultLogger('CosmosNoSqlUtil');
-        let useSharedOptions = false;
 
         try {
             // set instance variables
@@ -187,22 +186,15 @@ export class CosmosNoSqlUtil {
                 this.connectionPolicy = connPolicy;
             }
 
-            // priorityLevel and maxIntegratedCacheStalenessInMs are specified in the optional SharedOptions
+            // priorityLevel and maxIntegratedCacheStalenessInMs are specified in the
+            // SharedOptions object
             if (priorityLevel) {
                 this.priorityLevel = priorityLevel;
-                useSharedOptions = true;
             }
             if (maxIntegratedCacheStalenessInMs) {
                 this.maxIntegratedCacheStalenessInMs = maxIntegratedCacheStalenessInMs;
-                useSharedOptions = true;
             }
-            else {
-                this.maxIntegratedCacheStalenessInMs = -1;
-            }
-
-            if (useSharedOptions) {
-                
-            }
+            this.sharedOptions = this.buildSharedOptions();
 
             this.cosmosClient = new CosmosClient({
                 endpoint: this.acctUri,
@@ -221,12 +213,19 @@ export class CosmosNoSqlUtil {
     }
 
     buildSharedOptions() : SharedOptions {
-
         let opts = {};
         if (this.priorityLevel) {
             opts['priorityLevel'] = this.priorityLevel;
         }
+        if (this.maxIntegratedCacheStalenessInMs > 0) {
+            opts['maxIntegratedCacheStalenessInMs'] = this.maxIntegratedCacheStalenessInMs;
+        }
         return opts;
+    }
+
+    setPriorityLevel(level : PriorityLevel) : void {
+        this.priorityLevel = level;
+        this.sharedOptions = this.buildSharedOptions();
     }
 
     /**
@@ -240,7 +239,7 @@ export class CosmosNoSqlUtil {
     }
 
     async getDatabaseAccountAsync() : Promise<ResourceResponse<DatabaseAccount>> {
-        return this.cosmosClient.getDatabaseAccount();
+        return this.cosmosClient.getDatabaseAccount(this.sharedOptions);
     }
 
     async getReadEndpointAsync() : Promise<string> {
@@ -252,7 +251,7 @@ export class CosmosNoSqlUtil {
     }
 
     async listDatabasesAsync() : Promise<Array<DatabaseDefinition>> {
-        let feedResp = await this.cosmosClient.databases.readAll().fetchAll();
+        let feedResp = await this.cosmosClient.databases.readAll(this.sharedOptions).fetchAll();
         let databases = new Array<DatabaseDefinition>();
         for (const db of feedResp.resources) {
             databases.push(db);
@@ -261,7 +260,7 @@ export class CosmosNoSqlUtil {
     }
 
     async listContainersAsync(dbName: string) : Promise<Array<ContainerDefinition>> {
-        let feedResp = await this.cosmosClient.database(dbName).containers.readAll().fetchAll();
+        let feedResp = await this.cosmosClient.database(dbName).containers.readAll(this.sharedOptions).fetchAll();
         let containers = new Array<ContainerDefinition>();
         for (const container of feedResp.resources) {
             containers.push(container);
@@ -271,7 +270,7 @@ export class CosmosNoSqlUtil {
 
     async getAccountOffersAsync() : Promise<Array<OfferDefinition>> {
         let offerDefs : Array<OfferDefinition> = new Array<OfferDefinition>();
-        let resp = await this.cosmosClient.offers.readAll().fetchAll();
+        let resp = await this.cosmosClient.offers.readAll(this.sharedOptions).fetchAll();
         for (const offer of resp.resources) {
             offerDefs.push(offer);
         }
@@ -323,25 +322,25 @@ export class CosmosNoSqlUtil {
     async insertDocumentAsync(dbName: string, cName: string, doc: Object) : Promise<ItemResponse<Object>> {
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
-        return await this.currentContainer.items.create(doc);
+        return await this.currentContainer.items.create(doc, this.sharedOptions);
     }
 
     async pointReadAsync(dbName: string, cName: string, id: string, pk: string) : Promise<ItemResponse<Object>> {
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
-        return await this.currentContainer.item(id, pk).read();
+        return await this.currentContainer.item(id, pk).read(this.sharedOptions);
     }
 
     async queryAsync(dbName: string, cName: string, querySpec: SqlQuerySpec) : Promise<FeedResponse<Object>> {
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
-        return await this.currentContainer.items.query(querySpec).fetchAll()
+        return await this.currentContainer.items.query(querySpec, this.sharedOptions).fetchAll()
     }
 
     async upsertDocumentAsync(dbName: string, cName: string, doc: Object) : Promise<ItemResponse<Object>> {
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
-        return await this.currentContainer.items.upsert(doc);
+        return await this.currentContainer.items.upsert(doc, this.sharedOptions);
     }
 
     async patchDocumentAsync(dbName: string, cName: string, id: string, pk: string, operations: Array<PatchOperation>) : Promise<ItemResponse<Object>> {
@@ -350,13 +349,13 @@ export class CosmosNoSqlUtil {
         // See the comments at the end of this module which shows the PatchOperation definition.
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
-        return await this.currentContainer.item(id, pk).patch(operations);
+        return await this.currentContainer.item(id, pk).patch(operations, this.sharedOptions);
     }
 
     async deleteDocumentAsync(dbName: string, cName: string, id: string, pk: string) : Promise<ItemResponse<Object>> {
         this.setCurrentDatabaseAsync(dbName);
         this.setCurrentContainerAsync(cName);
-        return await this.currentContainer.item(id, pk).delete();
+        return await this.currentContainer.item(id, pk).delete(this.sharedOptions);
     }
 
     async loadContainerSequentialAsync(dbName: string, cName: string, documents: Array<Object>): Promise<number> {
@@ -368,7 +367,7 @@ export class CosmosNoSqlUtil {
             count++
             this.logger.debug(util.format('---: %s of %s', count, documents.length));
             this.logger.debug(util.format('doc: %s', doc));
-            let result = await this.currentContainer.items.create(doc);
+            let result = await this.currentContainer.items.create(doc, this.sharedOptions);
             this.logger.debug(util.format('result: %s', result));
         }
         return count;
