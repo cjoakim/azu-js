@@ -5,7 +5,7 @@
 
 import os from "os";
 
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 import { FileUtil } from "./FileUtil";
 
 export class Config {
@@ -17,7 +17,7 @@ export class Config {
     public static ASU_JS_CONFIG_FILE  : string = 'azu-js-config.json';
     private static _config            : Object = null;
 
-    public static logger : AzuLogger = AzuLogger.buildDefaultLogger('Config');
+    public static logger : AppLogger = AppLogger.buildDefaultLogger('Config');
 
     /**
      * Return the name of the platform where this node.js process is running.

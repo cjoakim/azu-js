@@ -14,7 +14,7 @@ import os from "os";
 import util from "util";
 import { Logger } from "winston";
 
-export class AzuLogger {
+export class AppLogger {
     
     public static LOG_LEVELS = {
         silent: 10,
@@ -30,20 +30,20 @@ export class AzuLogger {
     infoLogged  : number = 0;
     debugLogged : number = 0;
 
-    public static buildDefaultLogger(name: string) : AzuLogger {
-        return new AzuLogger(name);
+    public static buildDefaultLogger(name: string) : AppLogger {
+        return new AppLogger(name);
     }
 
-    public static buildDefaultExceptionsOnlyLogger(name: string) : AzuLogger {
-        return new AzuLogger(name, AzuLogger.LOG_LEVELS.silent);
+    public static buildDefaultExceptionsOnlyLogger(name: string) : AppLogger {
+        return new AppLogger(name, AppLogger.LOG_LEVELS.silent);
     }
 
-    public static buildSilentLogger(name: string) : AzuLogger {
-        return new AzuLogger(name, AzuLogger.LOG_LEVELS.silent, AzuLogger.LOG_LEVELS.silent);
+    public static buildSilentLogger(name: string) : AppLogger {
+        return new AppLogger(name, AppLogger.LOG_LEVELS.silent, AppLogger.LOG_LEVELS.silent);
     }
 
-    public static buildVerboseLogger(name: string) : AzuLogger {
-        return new AzuLogger(name, AzuLogger.LOG_LEVELS.trace, AzuLogger.LOG_LEVELS.trace);
+    public static buildVerboseLogger(name: string) : AppLogger {
+        return new AppLogger(name, AppLogger.LOG_LEVELS.trace, AppLogger.LOG_LEVELS.trace);
     }
 
     /**
@@ -52,8 +52,8 @@ export class AzuLogger {
      */
     constructor(
         public name: string,
-        public normalLevel:    number = AzuLogger.LOG_LEVELS.warn,
-        public exceptionLevel: number = AzuLogger.LOG_LEVELS.info,
+        public normalLevel:    number = AppLogger.LOG_LEVELS.warn,
+        public exceptionLevel: number = AppLogger.LOG_LEVELS.info,
         public winstonLogger?: Logger) {
     }
 
@@ -62,7 +62,7 @@ export class AzuLogger {
             this.winstonLogger.error(message);
         }
         else {
-            if (this.normalLevel <= AzuLogger.LOG_LEVELS.error) {
+            if (this.normalLevel <= AppLogger.LOG_LEVELS.error) {
                 this.errorLogged++;
                 console.log(util.format('azu-js %s error: %s', this.name, message));
             }
@@ -74,7 +74,7 @@ export class AzuLogger {
             this.winstonLogger.warn(message);
         }
         else {
-            if (this.normalLevel <= AzuLogger.LOG_LEVELS.warn) {
+            if (this.normalLevel <= AppLogger.LOG_LEVELS.warn) {
                 this.warnLogged++;
                 console.log(util.format('azu-js %s warn: %s', this.name, message));
             }
@@ -86,7 +86,7 @@ export class AzuLogger {
             this.winstonLogger.info(message);
         }
         else {
-            if (this.normalLevel <= AzuLogger.LOG_LEVELS.info) {
+            if (this.normalLevel <= AppLogger.LOG_LEVELS.info) {
                 this.infoLogged++;
                 console.log(util.format('azu-js %s info: %s', this.name, message));
             }
@@ -98,7 +98,7 @@ export class AzuLogger {
             this.winstonLogger.debug(message);
         }
         else {
-            if (this.normalLevel <= AzuLogger.LOG_LEVELS.debug) {
+            if (this.normalLevel <= AppLogger.LOG_LEVELS.debug) {
                 this.debugLogged++;
                 console.log(util.format('azu-js %s debug: %s', this.name, message));
             }
@@ -112,7 +112,7 @@ export class AzuLogger {
             this.winstonLogger.error(excp);
         }
         else {
-            if (this.exceptionLevel <= AzuLogger.LOG_LEVELS.error) {
+            if (this.exceptionLevel <= AppLogger.LOG_LEVELS.error) {
                 this.errorLogged++;
                 console.log(util.format('azu-js %s error: %s', this.name, excp));
             }
@@ -124,7 +124,7 @@ export class AzuLogger {
             this.winstonLogger.warn(excp);
         }
         else {
-            if (this.exceptionLevel <= AzuLogger.LOG_LEVELS.warn) {
+            if (this.exceptionLevel <= AppLogger.LOG_LEVELS.warn) {
                 this.warnLogged++;
                 console.log(util.format('azu-js %s warn: %s', this.name, excp));
             }
@@ -136,7 +136,7 @@ export class AzuLogger {
             this.winstonLogger.info(excp);
         }
         else {
-            if (this.exceptionLevel <= AzuLogger.LOG_LEVELS.info) {
+            if (this.exceptionLevel <= AppLogger.LOG_LEVELS.info) {
                 this.infoLogged++;
                 console.log(util.format('azu-js %s info: %s', this.name, excp));
             }
@@ -148,7 +148,7 @@ export class AzuLogger {
             this.winstonLogger.debug(excp);
         }
         else {
-            if (this.exceptionLevel <= AzuLogger.LOG_LEVELS.debug) {
+            if (this.exceptionLevel <= AppLogger.LOG_LEVELS.debug) {
                 this.debugLogged++;
                 console.log(util.format('azu-js %s debug: %s', this.name, excp));
             }

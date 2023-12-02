@@ -1,7 +1,7 @@
 
 ## azu-js typings, version 1.0.3
 
-### AzuLogger.d.ts
+### AppLogger.d.ts
 
 ```
 /**
@@ -16,7 +16,7 @@
  * Chris Joakim, Microsoft, 2023
  */
 import { Logger } from "winston";
-export declare class AzuLogger {
+export declare class AppLogger {
     name: string;
     normalLevel: number;
     exceptionLevel: number;
@@ -33,10 +33,10 @@ export declare class AzuLogger {
     warnLogged: number;
     infoLogged: number;
     debugLogged: number;
-    static buildDefaultLogger(name: string): AzuLogger;
-    static buildDefaultExceptionsOnlyLogger(name: string): AzuLogger;
-    static buildSilentLogger(name: string): AzuLogger;
-    static buildVerboseLogger(name: string): AzuLogger;
+    static buildDefaultLogger(name: string): AppLogger;
+    static buildDefaultExceptionsOnlyLogger(name: string): AppLogger;
+    static buildSilentLogger(name: string): AppLogger;
+    static buildVerboseLogger(name: string): AppLogger;
     /**
      * The Winston Logger arg is optional, but will be used if populated.
      * Otherwise, level-based console.log statements will be used.
@@ -65,13 +65,13 @@ export declare class AzuLogger {
 /// <reference types="node" />
 import fs from "fs";
 import { BlobDownloadResponseParsed, ContainerCreateIfNotExistsResponse, ContainerDeleteIfExistsResponse } from '@azure/storage-blob';
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 export declare class BlobUtil {
     acctNameEnvVar: string;
     acctKeyEnvVar: string;
     acctName: string;
     acctKey: string;
-    logger: AzuLogger;
+    logger: AppLogger;
     private sharedKeyCred;
     private blobSvcClient;
     /**
@@ -117,7 +117,7 @@ export declare class BlobUtil {
  * Utility classes for Azure Cognitive Search.
  * Chris Joakim, Microsoft, 2023
  */
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 import { FileUtil } from "./FileUtil";
 /**
  * This interface represents a response from the CogSearchUtil class
@@ -145,7 +145,7 @@ export declare class CogSearchUtil {
     fileUtil: FileUtil;
     version: string;
     doHttpReq: boolean;
-    logger: AzuLogger;
+    logger: AppLogger;
     /**
      * Pass in the names of the environment variables that contain the
      * Azure Cognitive Search URI, name, admin and query keys, and the
@@ -242,7 +242,7 @@ export declare class CogSearchUtil {
  * Utility class for configuration such as environment variables.
  * Chris Joakim, Microsoft, 2023
  */
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 export declare class Config {
     static LIB_NAME: string;
     static LIB_VERSION: string;
@@ -250,7 +250,7 @@ export declare class Config {
     static LIB_LICENSE: string;
     static ASU_JS_CONFIG_FILE: string;
     private static _config;
-    static logger: AzuLogger;
+    static logger: AppLogger;
     /**
      * Return the name of the platform where this node.js process is running.
      * Possible values are 'aix', 'darwin', 'freebsd', 'linux', 'openbsd', 'sunos', and 'win32'.
@@ -419,7 +419,7 @@ export declare class CosmosNoSqlQuerySpecUtil {
  */
 import { BulkOptions, ConnectionPolicy, Container, CosmosClient, Database, DatabaseAccount, DatabaseDefinition, FeedResponse, ItemResponse, OfferDefinition, PatchOperation, PartitionKeyDefinition, PriorityLevel, RequestOptions, ResourceResponse, SharedOptions, SqlQuerySpec, ContainerDefinition, BulkOperationResponse } from "@azure/cosmos";
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 /**
  * A CosmosClient may specify its ConnectionPolicy object.
  * This is the default ConnectionPolicy used in azu-js.
@@ -478,7 +478,7 @@ export declare class CosmosNoSqlUtil {
     sharedOptions: SharedOptions;
     cosmosClient: CosmosClient;
     verbose: boolean;
-    logger: AzuLogger;
+    logger: AppLogger;
     /**
      * Pass in the names of the environment variables that contain the
      * Azure Cosmos DB account URI and Key.  The ConnectionPolicy arg
@@ -553,9 +553,9 @@ export declare class CosmosNoSqlUtil {
  * in your application code rather than using this class.
  * Chris Joakim, Microsoft, 2023
  */
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 export declare class FileUtil {
-    logger: AzuLogger;
+    logger: AppLogger;
     constructor();
     /**
      * Return the current directory where this node.js process is running.
@@ -603,7 +603,7 @@ export declare class FileUtil {
  * Chris Joakim, Microsoft, 2023
  */
 import { Embeddings, GetEmbeddingsOptions, ImageGenerationOptions, ImageGenerations, OpenAIClient } from "@azure/openai";
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 export declare class OpenAiUtil {
     acctUrlEnvVar: string;
     acctKeyEnvVar: string;
@@ -613,7 +613,7 @@ export declare class OpenAiUtil {
     embDeployment: string;
     openaiClient: OpenAIClient;
     verbose: boolean;
-    logger: AzuLogger;
+    logger: AppLogger;
     /**
      * Pass in the names of the environment variables that contain the
      * Azure OpenAI account Url and Key.
@@ -648,7 +648,7 @@ export declare class OpenAiUtil {
  * Define the classes exported/exposed by the azu-js NPM package.
  * Chris Joakim, Microsoft, 2023
  */
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 import { BlobUtil } from "./BlobUtil";
 import { CogSearchResponse, CogSearchUtil } from "./CogSearchUtil";
 import { Config } from "./Config";
@@ -657,7 +657,7 @@ import { CosmosNoSqlUtil, defaultCosmosConnectionPolicy, BulkLoadResult } from "
 import { FileUtil } from "./FileUtil";
 import { OpenAiUtil } from "./OpenAiUtil";
 import { BaseNoSqlMeta, NoSqlDBMeta, NoSqlContainerMeta, NoSqlOfferMeta, CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
-export { AzuLogger };
+export { AppLogger };
 export { BlobUtil };
 export { CogSearchResponse, CogSearchUtil };
 export { Config };

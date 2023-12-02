@@ -16,7 +16,7 @@ import {
     OpenAIClient
 } from "@azure/openai";
 
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 
 export class OpenAiUtil {
 
@@ -28,7 +28,7 @@ export class OpenAiUtil {
     embDeployment : string;
     openaiClient  : OpenAIClient;
     verbose       : boolean = false;
-    logger        : AzuLogger;
+    logger        : AppLogger;
 
     /**
      * Pass in the names of the environment variables that contain the
@@ -40,7 +40,7 @@ export class OpenAiUtil {
         embDepEnvVar  : string,
         verbose?: boolean) {
 
-        this.logger = AzuLogger.buildDefaultLogger('OpenAiUtil');
+        this.logger = AppLogger.buildDefaultLogger('OpenAiUtil');
 
         try {
             this.acctUrlEnvVar = acctUrlEnvVar;

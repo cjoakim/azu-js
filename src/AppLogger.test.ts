@@ -1,14 +1,14 @@
 // Unit tests for class Logger
 // Chris Joakim, Microsoft, 2023
 
-// npm test --testPathPattern AzuLogger
+// npm test --testPathPattern AppLogger
 
 import winston from "winston";
 
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 
-test("AzuLogger: default", async () => {
-    let logger : AzuLogger = AzuLogger.buildDefaultLogger('Default');
+test("AppLogger: default", async () => {
+    let logger : AppLogger = AppLogger.buildDefaultLogger('Default');
     logger.error('error()');
     logger.warn('warn()');
     logger.info('info()');
@@ -33,8 +33,8 @@ test("AzuLogger: default", async () => {
     expect(logger.winstonLogger).toBeUndefined();
 });
 
-test("AzuLogger: exceptions only", async () => {
-    let logger : AzuLogger = AzuLogger.buildDefaultExceptionsOnlyLogger("ExcpOnly");
+test("AppLogger: exceptions only", async () => {
+    let logger : AppLogger = AppLogger.buildDefaultExceptionsOnlyLogger("ExcpOnly");
     logger.error('error()');
     logger.warn('warn()');
     logger.info('info()');
@@ -57,8 +57,8 @@ test("AzuLogger: exceptions only", async () => {
     expect(logger.winstonLogger).toBeUndefined();
 });
 
-test("AzuLogger: silent", async () => {
-    let logger : AzuLogger = AzuLogger.buildSilentLogger('Silent');
+test("AppLogger: silent", async () => {
+    let logger : AppLogger = AppLogger.buildSilentLogger('Silent');
     logger.error('error()');
     logger.warn('warn()');
     logger.info('info()');
@@ -83,8 +83,8 @@ test("AzuLogger: silent", async () => {
     expect(logger.winstonLogger).toBeUndefined();
 });
 
-test("AzuLogger: verbose", async () => {
-    let logger : AzuLogger = AzuLogger.buildVerboseLogger('Verbose');
+test("AppLogger: verbose", async () => {
+    let logger : AppLogger = AppLogger.buildVerboseLogger('Verbose');
     logger.error('error()');
     logger.warn('warn()');
     logger.info('info()');
@@ -109,15 +109,15 @@ test("AzuLogger: verbose", async () => {
     expect(logger.winstonLogger).toBeUndefined();
 });
 
-test("AzuLogger: winston", async () => {
+test("AppLogger: winston", async () => {
     let winstonLogger = winston.createLogger({
             level: 'info',
             transports: [
                 new winston.transports.Console()
             ]});
 
-    let logger : AzuLogger = new AzuLogger(
-        'Winston', AzuLogger.LOG_LEVELS.silent, AzuLogger.LOG_LEVELS.silent, winstonLogger);
+    let logger : AppLogger = new AppLogger(
+        'Winston', AppLogger.LOG_LEVELS.silent, AppLogger.LOG_LEVELS.silent, winstonLogger);
     logger.error('error()');
     logger.warn('warn()');
     logger.info('info()');

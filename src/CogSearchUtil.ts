@@ -5,7 +5,7 @@
 
 import util from "util";
 
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 import { Config }    from "./Config";
 import { FileUtil }  from "./FileUtil";
 
@@ -39,7 +39,7 @@ export class CogSearchUtil {
     fileUtil   : FileUtil = new FileUtil();
     version    : string = null;
     doHttpReq  : boolean = true;
-    logger     : AzuLogger;
+    logger     : AppLogger;
 
     /**
      * Pass in the names of the environment variables that contain the
@@ -54,7 +54,7 @@ export class CogSearchUtil {
         apiVersion : string,
         verbose?: boolean) {
         
-        this.logger = AzuLogger.buildDefaultLogger('CogSearchUtil');
+        this.logger = AppLogger.buildDefaultLogger('CogSearchUtil');
 
         try {
             this.acctURI = process.env[acctUriEnvVar] as string;

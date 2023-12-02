@@ -15,7 +15,7 @@ import {
     StorageSharedKeyCredential
 } from '@azure/storage-blob';
 
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 
 // See https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blob-typescript-get-started
 
@@ -23,7 +23,7 @@ export class BlobUtil {
     
     acctName : string;
     acctKey  : string;
-    logger   : AzuLogger;
+    logger   : AppLogger;
 
     private sharedKeyCred : StorageSharedKeyCredential;
     private blobSvcClient : BlobServiceClient;
@@ -38,7 +38,7 @@ export class BlobUtil {
         public acctKeyEnvVar  : string) {
 
         try {
-            this.logger   = AzuLogger.buildDefaultLogger('BlobUtil');
+            this.logger   = AppLogger.buildDefaultLogger('BlobUtil');
             this.acctName = process.env[acctNameEnvVar] as string;
             this.acctKey  = process.env[acctKeyEnvVar] as string;
             if (!this.acctName) {

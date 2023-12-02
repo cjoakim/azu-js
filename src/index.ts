@@ -3,7 +3,7 @@
  * Chris Joakim, Microsoft, 2023
  */
 
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 import { BlobUtil }  from "./BlobUtil";
 import { CogSearchResponse, CogSearchUtil }  from "./CogSearchUtil";
 import { Config } from "./Config"
@@ -18,7 +18,7 @@ import {
     NoSqlOfferMeta,
     CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
 
-export { AzuLogger }
+export { AppLogger }
 export { BlobUtil }
 export { CogSearchResponse, CogSearchUtil }
 export { Config }

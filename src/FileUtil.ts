@@ -10,14 +10,14 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 
 export class FileUtil {
     
-    logger : AzuLogger;
+    logger : AppLogger;
 
     constructor() {
-        this.logger = AzuLogger.buildDefaultLogger('FileUtil');
+        this.logger = AppLogger.buildDefaultLogger('FileUtil');
     }
 
     /**

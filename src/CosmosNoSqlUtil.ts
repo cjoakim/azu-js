@@ -42,7 +42,7 @@ import {
   } from "@azure/cosmos";
 
 import { CosmosNoSqlAccountMeta } from "./CosmosNoSqlAccountMetadata";
-import { AzuLogger } from "./AzuLogger";
+import { AppLogger } from "./AppLogger";
 
 /**
  * A CosmosClient may specify its ConnectionPolicy object.
@@ -142,7 +142,7 @@ export class CosmosNoSqlUtil {
     sharedOptions : SharedOptions = null;
     cosmosClient : CosmosClient = null;
     verbose : boolean = false;
-    logger  : AzuLogger;
+    logger  : AppLogger;
 
     /**
      * Pass in the names of the environment variables that contain the
@@ -155,7 +155,7 @@ export class CosmosNoSqlUtil {
         connPolicy? : ConnectionPolicy,
         verbose?: boolean) {
 
-        this.logger = AzuLogger.buildDefaultLogger('CosmosNoSqlUtil');
+        this.logger = AppLogger.buildDefaultLogger('CosmosNoSqlUtil');
 
         try {
             // set instance variables
